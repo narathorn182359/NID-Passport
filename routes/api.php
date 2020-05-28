@@ -231,11 +231,11 @@ Route::middleware('auth:api')->get('/banner', function (Request $request) {
     $user = $request->user();
 
       $ngg_banner = DB::table('ngg_banner')
-      ->Where('active','1')
+      ->Where('active_banner','1')
       ->get();
 
       $advertise_heade = DB::table('advertise_heade')
-      ->select('id','name_adver','name_thai','active','img')
+      ->select('id','name_adver','name_thai','active_adver','img')
       ->get();
 
 
@@ -728,15 +728,37 @@ Route::middleware('auth:api')->post('/get_contact', function (Request $request) 
 
 Route::middleware('auth:api')->post('/save_chat', function (Request $request) {
     $data = $request->json()->all();
-     DB::table('ngg_chat')->insert([
-              'msg' =>$data['msg'],
-             /*  'img_ad' =>$data['img_ad'], */
-              'owner_room' =>$data['owner_room'],
-              'chat_partner' =>$data['chat_partner'],
-              'createdAt' =>$data['createdAt'],
-         ]);
+    $msg = json_encode($data['msg']);
+    $check_1 = DB::table('ngg_chat')
+    ->Where('coderoom', $data['chat_partner']+$data['owner_room'])
+    ->count();
 
-    return response()->json("ok");
+
+    if( $check_1 > 0){
+        DB::table('ngg_chat')
+        ->Where('coderoom', $data['chat_partner']+$data['owner_room'])
+        ->update([
+                    'msg' => $msg,
+                   /*   'img_ad' =>$data['img_ad'], */
+                    'owner_room' =>$data['owner_room'],
+                    'chat_partner' =>$data['chat_partner'],
+                    'createdAt' =>$data['createdAt'],
+                    'coderoom' => $data['owner_room']+$data['chat_partner']
+               ]);
+    } else{
+        DB::table('ngg_chat')
+        ->insert([
+                    'msg' => $msg,
+                   /*   'img_ad' =>$data['img_ad'], */
+                    'owner_room' =>$data['owner_room'],
+                    'chat_partner' =>$data['chat_partner'],
+                    'createdAt' =>$data['createdAt'],
+                    'coderoom' => $data['owner_room']+$data['chat_partner']
+               ]);
+    }
+
+
+    return response()->json($data['msg']);
 
 });
 
@@ -746,64 +768,42 @@ Route::middleware('auth:api')->post('/get_chat', function (Request $request) {
 
     $data = $request->json()->all();
 
+
+
+
     $owner_info =  DB::table('users_detail')
     ->where('Code_Staff',$data['chat_partner'])
-    ->select('Name_Thai','img')
+    ->select('Name_Thai','img','Position')
     ->first();
 
 
 
 
-  $owner_room =  DB::table('ngg_chat')
-    ->where('owner_room', $data['owner_room'])
-    ->where('chat_partner', $data['chat_partner'])
-    ->get();
 
-    $chat_partner =  DB::table('ngg_chat')
-    ->where('owner_room', $data['chat_partner'])
-    ->where('chat_partner', $data['owner_room'])
-    ->get();
+    $owner_room  = DB::table('ngg_chat')
+    ->Where('coderoom', $data['chat_partner']+$data['owner_room'])
+    ->first();
 
-        foreach($owner_room as $owner_rooms){
-                $dataow = array(
-                 'user' =>$owner_rooms->owner_room,
-                 'owner_room' =>  $owner_rooms->owner_room,
-                 'chat_partner'  => $owner_rooms->chat_partner,
-                 'msg'  => $owner_rooms->msg,
-                'createdAt'  => $owner_rooms->createdAt,
 
-                );
-            $dataall[] =  $dataow;
-        }
 
-        foreach($chat_partner as $chat_partners){
-            $datapar = array(
-                'user' =>$chat_partners->owner_room,
-                'owner_room' =>  $chat_partners->owner_room,
-                'chat_partner'  => $chat_partners->chat_partner,
-                'msg'  => $chat_partners->msg,
-               'createdAt'  => $chat_partners->createdAt,
-
-            );
-            $dataall[] =  $datapar;
-        }
-
-          /*  if(isset($dataall)){ */
+            if(isset($owner_room)){
             return response()->json([
-                  'dataall' =>$dataall,
+                  'dataall' =>json_decode($owner_room->msg),
                   'owner_info' =>$owner_info,
                   ]);
 
 
-            /*  } *//* else{
+             }  else{
 
                   $null = array(
                         'user' =>'ข้อความจากระบบ',
                         'owner_room' =>  'null',
                         'chat_partner'  => 'null',
                         'msg'  => 'ยินดีต้อนรับค่ะ โปรดใช้คำสุภาพ',
+                        'img' =>'user.svg',
                        'createdAt'  => date('Y-m-d H:i:s'),
                   );
+
                     $dataall[] =  $null;
                   return response()->json([
                         'dataall' =>$dataall,
@@ -813,7 +813,7 @@ Route::middleware('auth:api')->post('/get_chat', function (Request $request) {
 
 
              }
- */
+
 
 
 
