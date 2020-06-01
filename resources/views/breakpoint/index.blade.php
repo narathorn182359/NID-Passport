@@ -8,7 +8,7 @@
 </div>
 @endif
   <br>
-  <div class="card shadow mb-4">
+  {{-- <div class="card shadow mb-4">
       <div class="card-header py-3">
           จุดพักข้อมูล
       </div>
@@ -26,7 +26,7 @@
         </div>
       </div>
     </div>
-    <br>
+    <br> --}}
     <div class="card shadow mb-4">
         <div class="card-header py-3">
           ข้อมูลที่ผ่าน

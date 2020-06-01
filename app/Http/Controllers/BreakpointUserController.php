@@ -247,7 +247,7 @@ class BreakpointUserController extends Controller
                         $nestedData['active'] =$status;
                         $nestedData['options'] = "
                         <a href='javascript:void(0)' class='btn btn-warning btn-circle btn-xs'>แก้ไข</a>
-                        <a href='javascript:void(0)' class='btn btn-info btn-circle btn-xs'>ปิดหรือเปิด</a>
+                        <a href='javascript:void(0)' class='btn btn-info btn-circle btn-xs EnableOrDis'  data-id='{$post->Code_Staff}'>ปิดหรือเปิด</a>
                         <a href='javascript:void(0)' class='btn btn-danger btn-circle btn-xs DeleteUsername'   data-id='{$post->Code_Staff}'>ลบ</a>";
                         $data[] = $nestedData;
                     }
@@ -276,7 +276,47 @@ class BreakpointUserController extends Controller
 
 
     }
+    public  function en_username(request $request)
+    {
 
+
+
+
+        $ch = DB::table('users_detail')->where('Code_Staff',$request->id)->first();
+
+     if($ch->active == 1 ){
+        DB::table('users_detail')
+        ->where('Code_Staff',$ch->Code_Staff)
+        ->update([
+                   'active' => '0'
+        ]);
+        DB::table('users')
+        ->where('username',$ch->Code_Staff)
+        ->update([
+                   'active' => '0'
+        ]);
+
+     }else
+     {
+        DB::table('users_detail')
+        ->where('Code_Staff',$ch->Code_Staff)
+        ->update([
+                   'active' => '1'
+        ]);
+        DB::table('users')
+        ->where('username',$ch->Code_Staff)
+        ->update([
+                   'active' => '1'
+        ]);
+
+
+     }
+
+
+
+
+
+    }
 
 
 }

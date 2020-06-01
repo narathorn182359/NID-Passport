@@ -666,7 +666,11 @@ Route::middleware('auth:api')->get('/alert_daily_c', function (Request $request)
     }else{
         $success = "N";
     }
-    return response()->json($success);
+    return response()->json([
+        'success' => $success,
+        'username' =>  $user->username
+        
+                           ]);
 });
 
 Route::middleware('auth:api')->post('/get_positin', function (Request $request) {
@@ -718,7 +722,7 @@ Route::middleware('auth:api')->post('/get_contact', function (Request $request) 
 
 Route::middleware('auth:api')->post('/save_chat', function (Request $request) {
 
- 
+
 
 
 

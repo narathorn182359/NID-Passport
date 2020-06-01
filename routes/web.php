@@ -129,6 +129,7 @@ Route::post('get_data_ok', 'BreakpointUserController@get_data_ok' )->name('get_d
 
 Route::post('delete_new_username', 'BreakpointUserController@delete_new_username' )->name('delete_new_username');
 
+Route::post('en_username', 'BreakpointUserController@en_username' )->name('en_username');
 
 
 

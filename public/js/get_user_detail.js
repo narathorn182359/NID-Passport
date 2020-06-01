@@ -56,6 +56,67 @@ $(function () {
 
 
 
+        $('body').on('click', '.EnableOrDis', function () {
+            var id = $(this).data("id");;
+            //confirm("Are You sure want to delete !");
+            Swal.fire({
+              title: 'ยืนยันการปิดหรือเปิด',
+              text: "กรุณาตรวจสอบก่อนยืนยัน!",
+              icon: 'info',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'ตกลง',
+              cancelButtonText:  'ยกเลิก',
+            }).then((result) => {
+              if (result.value) {
+                $.ajax({
+                    type: "POST",
+                    data:{
+                        _token: $('#token').val(),
+                        id:id
+                     },
+                  url: "en_username",
+                  success: function (data) {
+                    Swal.fire(
+                      'สำเร็จ!',
+                      'หากสงสัยข้อมูลกรุณาติดต่อทีมพัฒนา',
+                      'success'
+                    ).then(function(){
+                      location.reload();
+                      });
+                  },
+                  error: function (data) {
+                    Swal.fire({
+                      icon: 'error',
+                      title: 'ผิดพลาด',
+                      text: 'ไม่สามารถลบได้กรุณาติดต่อทีมพัฒนา',
+                      confirmButtonText: 'ตกลง',
+
+                    })
+                  }
+              });
+
+              }
+            })
+          });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         $('body').on('click', '.DeleteUsername', function () {
             var id = $(this).data("id");;
