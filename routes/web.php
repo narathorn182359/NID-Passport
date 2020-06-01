@@ -1,5 +1,6 @@
 <?php
 use  App\VideoStream\VideoStream;
+use App\Classes\PushBots;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,6 +14,23 @@ use  App\VideoStream\VideoStream;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/msg', function () {
+
+    $pb = new PushBots();
+// Application ID
+$appID = '5ed3e6512c9f8c1f8d3ed9c4';
+// Application Secret
+$appSecret = '9c3810d0b45d67931317c6a67343471b';
+
+$pb->App($appID, $appSecret);
+$pb->Platform(array("0","1"));
+$pb->Alias("51248");
+// Notification Settings
+$pb->Alert("test");
+$i =$pb->Push();
+return "success";
 });
 
 
@@ -102,6 +120,21 @@ Route::post('allposts_LibaryImg', 'HomeController@allposts_LibaryImg' )->name('a
 Route::post('allposts_KM360', 'HomeController@allposts_KM360' )->name('allposts_KM360');
 
 Route::post('allposts_List_KM360', 'HomeController@allposts_List_KM360' )->name('allposts_List_KM360');
+
+Route::resource('setuser', 'BreakpointUserController');
+
+Route::post('get_data_breakpoint', 'BreakpointUserController@get_data' )->name('get_data');
+
+Route::post('get_data_ok', 'BreakpointUserController@get_data_ok' )->name('get_data_ok');
+
+Route::post('delete_new_username', 'BreakpointUserController@delete_new_username' )->name('delete_new_username');
+
+
+
+
+
+
+
 
 
 

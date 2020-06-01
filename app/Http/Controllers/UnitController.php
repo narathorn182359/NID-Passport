@@ -11,7 +11,7 @@ class UnitController extends Controller
         $json = file_get_contents('http://hr.ngg.link/public_html/hrxapiemployee');
         $obj = json_decode($json);
         foreach($obj as $item){
-          
+
             $count =  DB::table('users_detail')->where('staff_id',strval($item->nem_code))->count();
             if($count == 0){
                 DB::table('users_detail')->insert([
@@ -32,7 +32,7 @@ class UnitController extends Controller
                     'brand' =>'-'
                     ]
                 ]);
-            }       
+            }
         }
 
         return "ดึงข้อมูลพนักงานสำเร็จ";
@@ -48,18 +48,18 @@ class UnitController extends Controller
         $json = file_get_contents('http://hr.ngg.link/public_html/hrxapiposition');
         $obj = json_decode($json);
         foreach($obj as $item){
-          
+
             $count =  DB::table('position')->where('name_position',strval($item->nps_name))->count();
             if($count == 0){
                 DB::table('position')->insert([
                     [
                         'name_position' => $item->nps_name,
                         'id_position' => $item->id,
-                        
-                        
+
+
                         ]
                 ]);
-            }       
+            }
         }
 
         return "ดึงข้อมูลตำแหน่งสำเร็จ";
@@ -71,16 +71,16 @@ class UnitController extends Controller
         $json = file_get_contents('http://hr.ngg.link/public_html/hrxapidepartment');
         $obj = json_decode($json);
         foreach($obj as $item){
-          
+
             $count =  DB::table('department')->where('name_department',strval($item->ndp_name))->count();
             if($count == 0){
                 DB::table('department')->insert(
-                    ['name_department' => $item->ndp_name,
+                    [
+                     'name_department' => $item->ndp_name,
                      'id_department' => $item->ndp_id,
-                    
-                    ]
+                     ]
                 );
-            }       
+            }
         }
 
         return "ดึงข้อมูลแผนกสำเร็จ";
@@ -92,16 +92,21 @@ class UnitController extends Controller
         set_time_limit(0);
        $user  = DB::table('users_detail')->get();
       // dd($user);
+      DB::table('users')->insert([
+        'username' =>'admin',
+        'id_card' => 'admin',
+        'password' => bcrypt('0=VHqE@kB-#8'),
+    ]);
         foreach($user as $item){
-          
+
             $count =  DB::table('users')->where('username',strval($item->Code_Staff))->count();
             if($count == 0 &&  $item->Code_Staff != ''){
                 DB::table('users')->insert([
                     'username' => $item->Code_Staff,
-                    'id_card' => $item->IDCardNumber,
-                    'password' => bcrypt('0000'),  
+                    'id_card' => $item->Code_Staff,
+                    'password' => bcrypt('0000'),
                 ]);
-            }       
+            }
         }
         return "เพิ่มผู้ใช้สำเร็จ";
     }
@@ -113,15 +118,35 @@ class UnitController extends Controller
         set_time_limit(0);
 
         $user  = DB::table('users_detail')->get();
-        
+
         $menu_master  = DB::table('menu_master')
         ->whereNotIn('id', [1])
         ->whereNotIn('id', [2])
         ->whereNotIn('id', [3])
         ->whereNotIn('id', [4])
-      
+        ->whereNotIn('id', [11])
+        ->whereNotIn('id', [12])
+        ->whereNotIn('id', [13])
+        ->whereNotIn('id', [14])
+        ->whereNotIn('id', [15])
         ->get();
-       
+        DB::table('user_role')->insert([
+            'username_id' => 'admin',
+            'card_id_id' => 'admin',
+            'name_menu_id' => '4',
+        ]);
+
+        DB::table('user_role')->insert([
+            'username_id' => 'admin',
+            'card_id_id' => 'admin',
+            'name_menu_id' => '11',
+        ]);
+        DB::table('user_role')->insert([
+            'username_id' => 'admin',
+            'card_id_id' => 'admin',
+            'name_menu_id' => '15',
+        ]);
+
         foreach($user as $item){
             foreach($menu_master as $items){
 
@@ -132,11 +157,11 @@ class UnitController extends Controller
                 if($role_menu == 0 &&  $item->Code_Staff != "") {
                     DB::table('user_role')->insert([
                         'username_id' => $item->Code_Staff,
-                        'card_id_id' => $item->IDCardNumber,
-                        'name_menu_id' => $items->id,  
+                        'card_id_id' => $item->Code_Staff,
+                        'name_menu_id' => $items->id,
                     ]);
                 }
-            }  
-        }  
+            }
+        }
     }
 }

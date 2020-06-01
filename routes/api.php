@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Carbon\Carbon;
+use App\Classes\PushBots;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -114,7 +116,7 @@ Route::middleware('auth:api')->post('/getDetailnew', function (Request $request)
       }else{
             $json = DB::table('advertise')->Where('type_id',$data['id'])
             ->leftJoin('ngg_banner', 'advertise.id_ad', '=', 'ngg_banner.advertise_id')
-            ->select('id_ad','subject','count_read','mc','img')
+            ->select('id_ad','subject','count_read','mc','img_ad')
             ->get();
       }
 
@@ -414,15 +416,6 @@ Route::middleware('auth:api')->get('/get_list_benefits', function (Request $requ
 
 
 
-
-
-
-
-
-
-
-
-
 Route::middleware('auth:api')->post('/micro', function (Request $request) {
 
       $user = $request->user();
@@ -430,7 +423,7 @@ Route::middleware('auth:api')->post('/micro', function (Request $request) {
       $json = DB::table('advertise')
       ->leftJoin('ngg_banner','advertise.id_ad','ngg_banner.advertise_id')
       ->Where('mc',$data['id'])
-      ->select('mc','id_ad','type_id','subject','img','count_read','img_ad')
+      ->select('mc','id_ad','type_id','subject','img_banner','count_read','img_ad')
       ->get();
       return response()->json($json);
 });
@@ -497,13 +490,10 @@ Route::middleware('auth:api')->post('/password_ch', function (Request $request) 
           DB::table('users')
           ->where('username', $user->username)
           ->update(['password' => Hash::make($data['password_new'])]);
-
-
           return response()->json([
               'success' => '200'
           ]);
       }else
-
       {
           return response()->json([
               'success' => "404"
@@ -684,15 +674,15 @@ Route::middleware('auth:api')->post('/get_positin', function (Request $request) 
     $user = $request->user();
     $data = $request->json()->all();
     $position = DB::table('users_detail')
-    ->orWhere('Position','LIKE','%'. $data['value'].'%')
-    ->orderBy('Position', 'asc')
-    ->select('Position')
+    ->orWhere('Department','LIKE','%'. $data['value'].'%')
+    ->orderBy('Department', 'asc')
+    ->select('Department')
     ->get();
     $a=array();
 
     foreach($position as  $i){
 
-        array_push($a, $i->Position);
+        array_push($a, $i->Department);
     }
     $brand_r   = array_unique( $a );
     $array = $a;
@@ -715,7 +705,7 @@ Route::middleware('auth:api')->post('/get_contact', function (Request $request) 
     $user = $request->user();
     $data = $request->json()->all();
     $em = DB::table('users_detail')
-    ->Where('Position', $data['value'])
+    ->Where('Department', $data['value'])
     ->get();
 
 
@@ -727,6 +717,11 @@ Route::middleware('auth:api')->post('/get_contact', function (Request $request) 
 
 
 Route::middleware('auth:api')->post('/save_chat', function (Request $request) {
+
+ 
+
+
+
     $data = $request->json()->all();
     $msg = json_encode($data['msg']);
     $check_1 = DB::table('ngg_chat')
@@ -767,25 +762,14 @@ Route::middleware('auth:api')->post('/save_chat', function (Request $request) {
 Route::middleware('auth:api')->post('/get_chat', function (Request $request) {
 
     $data = $request->json()->all();
-
-
-
-
     $owner_info =  DB::table('users_detail')
     ->where('Code_Staff',$data['chat_partner'])
-    ->select('Name_Thai','img','Position')
+    ->select('Name_Thai','img','Position','Code_Staff')
     ->first();
-
-
-
-
 
     $owner_room  = DB::table('ngg_chat')
     ->Where('coderoom', $data['chat_partner']+$data['owner_room'])
     ->first();
-
-
-
             if(isset($owner_room)){
             return response()->json([
                   'dataall' =>json_decode($owner_room->msg),
@@ -808,18 +792,105 @@ Route::middleware('auth:api')->post('/get_chat', function (Request $request) {
                   return response()->json([
                         'dataall' =>$dataall,
                         'owner_info' =>$owner_info,
-                        ]);
+                        ]);}
+
+
+            });
+
+Route::middleware('auth:api')->post('/get_history_chat', function (Request $request) {
+
+      $user = $request->user();
+      $data = $request->json()->all();
+
+        if($data['value'] != ""){
+            $name_search =  DB::table('users_detail')
+            ->orWhere('Name_Thai','LIKE','%'. $data['value'].'%')
+            ->first();
+
+            $room =  $user->username+ $name_search->Code_Staff;
+            $history_chat =  DB::table('ngg_chat')
+            ->Where('coderoom', $room)
+            ->select('owner_room','chat_partner','msg')
+            ->orderBy('createdAt', 'DESC')
+            ->get();
+
+            foreach($history_chat as $history_chats)
+            {
+
+                $name_thai_owner_room =  DB::table('users_detail')->where('Code_Staff',$history_chats->owner_room)->first();
+                $name_thai_chat_partner =  DB::table('users_detail')->where('Code_Staff',$history_chats->chat_partner)->first();
+                $msg = json_decode($history_chats->msg, true);
+                $last = end($msg);
+                $data = array(
+                      'owner_room' => $history_chats->owner_room,
+                      'chat_partner' => $history_chats->chat_partner,
+                      'msg' => $last,
+                      'name_thai_owner_room' =>$name_thai_owner_room->Name_Thai,
+                      'name_thai_chat_partner' =>$name_thai_chat_partner->Name_Thai
+                );
+
+                $history_chat_last[] = $data;
+
+            }
+
+            return response()->json($history_chat_last);
+
+        }else{
+
+
+            $history_chat =  DB::table('ngg_chat')
+            ->orWhere('owner_room', $user->username)
+            ->orWhere('chat_partner', $user->username)
+            ->select('owner_room','chat_partner','msg')
+            ->orderBy('createdAt', 'DESC')
+            ->get();
+
+              foreach($history_chat as $history_chats)
+              {
+
+                  $name_thai_owner_room =  DB::table('users_detail')->where('Code_Staff',$history_chats->owner_room)->first();
+                  $name_thai_chat_partner =  DB::table('users_detail')->where('Code_Staff',$history_chats->chat_partner)->first();
+                  $msg = json_decode($history_chats->msg, true);
+                  $last = end($msg);
+                  $data = array(
+                        'owner_room' => $history_chats->owner_room,
+                        'chat_partner' => $history_chats->chat_partner,
+                        'msg' => $last,
+                        'name_thai_owner_room' =>$name_thai_owner_room->Name_Thai,
+                        'name_thai_chat_partner' =>$name_thai_chat_partner->Name_Thai
+                  );
+
+                  $history_chat_last[] = $data;
+
+              }
+
+              return response()->json($history_chat_last);
+
+        }
+
+});
 
 
 
-             }
+
+Route::middleware('auth:api')->post('/get_username_all', function (Request $request) {
+
+      $user = $request->user();
+      $data = $request->json()->all();
+      $username =  DB::table('users_detail')
+      ->orWhere('Code_Staff','LIKE','%'. $data['value'].'%')
+      ->orWhere('Name_Thai','LIKE','%'. $data['value'].'%')
+      ->select('Name_Thai','Position','img')
+      ->paginate(15);
 
 
-
-
+      return response()->json($username);
 
 
 });
+
+
+
 
 
 

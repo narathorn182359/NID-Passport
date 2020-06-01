@@ -40,6 +40,12 @@
     body{
         font-family: 'Prompt', sans-serif;
     }
+    img {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
+  width: 150px;
+}
 </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -195,6 +201,7 @@
 <script src="{{asset('js/category.js')}}"></script>
 <script src="{{asset('js/libraryimg.js')}}"></script>
 <script src="{{asset('js/KM360.js')}}"></script>
+<script src="{{asset('js/get_user_detail.js')}}"></script>
 <script>
     $(function () {
       // Replace the <textarea id="editor1"> with a CKEditor

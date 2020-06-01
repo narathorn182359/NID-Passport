@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @section('content')
 @if(Session::has('flash_message') )
 <div class="card mb-4 py-3 border-left-success">
@@ -8,8 +7,6 @@
   </div>
 </div>
 @endif
-
-
   <br>
   <div class="card shadow mb-4">
       <div class="card-header py-3">
@@ -48,34 +45,4 @@
               </div>
             </div>
           </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @endsection

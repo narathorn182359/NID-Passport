@@ -23,7 +23,9 @@ protected $hidden = [
 'password', 'remember_token',
 ];
 public function findForPassport($username) {
-  return $this->orWhere('id_card', $username)->orwhere('username', $username)->first();
+
+  return $this->orWhere('id_card', $username)->orwhere('username', $username)->where('active', 1)->first();
+  
 }
 
 
