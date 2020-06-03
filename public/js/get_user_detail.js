@@ -57,7 +57,7 @@ $(function () {
 
 
         $('body').on('click', '.EnableOrDis', function () {
-            var id = $(this).data("id");;
+            var id = $(this).data("id");
             //confirm("Are You sure want to delete !");
             Swal.fire({
               title: 'ยืนยันการปิดหรือเปิด',

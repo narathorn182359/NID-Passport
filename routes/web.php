@@ -1,6 +1,7 @@
 <?php
 use  App\VideoStream\VideoStream;
 use App\Classes\PushBots;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,6 +18,8 @@ Route::get('/', function () {
 });
 
 Route::get('/msg', function () {
+
+
 
     $pb = new PushBots();
 // Application ID
@@ -130,6 +133,14 @@ Route::post('get_data_ok', 'BreakpointUserController@get_data_ok' )->name('get_d
 Route::post('delete_new_username', 'BreakpointUserController@delete_new_username' )->name('delete_new_username');
 
 Route::post('en_username', 'BreakpointUserController@en_username' )->name('en_username');
+
+Route::get('index_chat', 'ChatController@index')->name('index');
+
+Route::get('history_chat_last', 'ChatController@history_chat_last')->name('history_chat_last');
+
+Route::get('room/{id}', 'ChatController@room')->name('room');
+
+
 
 
 

@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 class UnitController extends Controller
 {
+
+
+
+
+
     public function  get_name(Request $request)
     {
         $json = file_get_contents('http://hr.ngg.link/public_html/hrxapiemployee');
@@ -95,6 +100,11 @@ class UnitController extends Controller
       DB::table('users')->insert([
         'username' =>'admin',
         'id_card' => 'admin',
+        'password' => bcrypt('0=VHqE@kB-#8'),
+    ]);
+    DB::table('users')->insert([
+        'username' =>'00000',
+        'id_card' => '00000',
         'password' => bcrypt('0=VHqE@kB-#8'),
     ]);
         foreach($user as $item){

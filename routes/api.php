@@ -669,7 +669,7 @@ Route::middleware('auth:api')->get('/alert_daily_c', function (Request $request)
     return response()->json([
         'success' => $success,
         'username' =>  $user->username
-        
+
                            ]);
 });
 
@@ -766,8 +766,15 @@ Route::middleware('auth:api')->post('/save_chat', function (Request $request) {
 Route::middleware('auth:api')->post('/get_chat', function (Request $request) {
 
     $data = $request->json()->all();
+
     $owner_info =  DB::table('users_detail')
     ->where('Code_Staff',$data['chat_partner'])
+    ->select('Name_Thai','img','Position','Code_Staff')
+    ->first();
+    $user = $request->user();
+
+    $owner_info_me =  DB::table('users_detail')
+    ->where('Code_Staff', $user->username)
     ->select('Name_Thai','img','Position','Code_Staff')
     ->first();
 
@@ -778,6 +785,7 @@ Route::middleware('auth:api')->post('/get_chat', function (Request $request) {
             return response()->json([
                   'dataall' =>json_decode($owner_room->msg),
                   'owner_info' =>$owner_info,
+                  'owner_info_me' => $owner_info_me
                   ]);
 
 
@@ -796,6 +804,7 @@ Route::middleware('auth:api')->post('/get_chat', function (Request $request) {
                   return response()->json([
                         'dataall' =>$dataall,
                         'owner_info' =>$owner_info,
+                        'owner_info_me' => $owner_info_me
                         ]);}
 
 
@@ -899,3 +908,7 @@ Route::middleware('auth:api')->post('/get_username_all', function (Request $requ
 
 
 Route::post('register', 'Api\RegisterController@register');
+
+
+
+
