@@ -816,6 +816,11 @@ Route::middleware('auth:api')->post('/get_history_chat', function (Request $requ
       $data = $request->json()->all();
 
         if($data['value'] != ""){
+
+
+
+
+
             $name_search =  DB::table('users_detail')
             ->orWhere('Name_Thai','LIKE','%'. $data['value'].'%')
             ->first();
@@ -891,9 +896,11 @@ Route::middleware('auth:api')->post('/get_username_all', function (Request $requ
       $user = $request->user();
       $data = $request->json()->all();
       $username =  DB::table('users_detail')
+
       ->orWhere('Code_Staff','LIKE','%'. $data['value'].'%')
       ->orWhere('Name_Thai','LIKE','%'. $data['value'].'%')
-      ->select('Name_Thai','Position','img')
+      ->select('Name_Thai','Position','img','Code_Staff')
+      ->orderBy('Name_Thai', 'asc')
       ->paginate(15);
 
 
@@ -905,8 +912,81 @@ Route::middleware('auth:api')->post('/get_username_all', function (Request $requ
 
 
 
+Route::middleware('auth:api')->get('/get_username_all_addroom', function (Request $request) {
+
+    $user = $request->user();
+    $data = $request->json()->all();
+    $username =  DB::table('users_detail')
+    ->whereNotIn('Code_Staff',['admin','99999', $user->username])
+    ->select('Name_Thai','Position','img','Code_Staff')
+    ->orderBy('Name_Thai', 'asc')
+    ->get();
 
 
+    return response()->json($username);
+
+
+});
+
+
+
+Route::middleware('auth:api')->post('/save_addroom', function (Request $request) {
+    $user = $request->user();
+    $data = $request->json()->all();
+    DB::table('ngg_chat_group')->insert(
+        [
+            'img' => 'default.jpg',
+            'name_room' =>$data['name_group'],
+            'msg' => 'null',
+            'createdAt' => date('Y-m-d H:i:s'),
+        ]);
+
+     $get = DB::table('ngg_chat_group')
+     ->where('name_room',$data['name_group'])
+     ->first();
+
+     DB::table('ngg_chat_group_user')->insert([
+        'code_room_id' => $get->code_room,
+        'status_confirm' =>'0',
+        'status_out_group' => '0',
+        'createdAt' => date('Y-m-d H:i:s'),
+         'code_staff' =>$user->username
+         ]);
+      foreach($data['username'] as $item){
+        DB::table('ngg_chat_group_user')->insert([
+            'code_room_id' => $get->code_room,
+            'status_confirm' =>'0',
+            'status_out_group' => '0',
+            'createdAt' => date('Y-m-d H:i:s'),
+             'code_staff' => $item
+             ]);
+
+      }
+
+
+
+
+
+
+return response()->json("200");
+});
+
+
+Route::middleware('auth:api')->post('/check_room', function (Request $request) {
+    $user = $request->user();
+    $data = $request->json()->all();
+    $check_room = DB::table('ngg_chat_group')->where('name_room',$data['check_room'])->count();
+
+     if($check_room > 0){
+        return response()->json("500");
+     }else{
+        return response()->json("200");
+     }
+
+
+
+
+});
 Route::post('register', 'Api\RegisterController@register');
 
 
