@@ -612,7 +612,7 @@ Route::middleware('auth:api')->get('/getuserid', function (Request $request) {
       ->leftJoin('users_group','users_detail.Code_Staff', '=','users_group.username_id')
       ->orWhere('username',$user->username)
       ->orWhere('id_card',$user->username)
-      ->select('username','id_card')
+      ->select('username','id_card','Name_Thai')
       ->first();
       return response()->json($data);
 });
@@ -896,7 +896,6 @@ Route::middleware('auth:api')->post('/get_username_all', function (Request $requ
       $user = $request->user();
       $data = $request->json()->all();
       $username =  DB::table('users_detail')
-
       ->orWhere('Code_Staff','LIKE','%'. $data['value'].'%')
       ->orWhere('Name_Thai','LIKE','%'. $data['value'].'%')
       ->select('Name_Thai','Position','img','Code_Staff')
@@ -905,7 +904,6 @@ Route::middleware('auth:api')->post('/get_username_all', function (Request $requ
 
 
       return response()->json($username);
-
 
 });
 
@@ -933,34 +931,97 @@ Route::middleware('auth:api')->get('/get_username_all_addroom', function (Reques
 Route::middleware('auth:api')->post('/save_addroom', function (Request $request) {
     $user = $request->user();
     $data = $request->json()->all();
-    DB::table('ngg_chat_group')->insert(
-        [
-            'img' => 'default.jpg',
-            'name_room' =>$data['name_group'],
-            'msg' => 'null',
-            'createdAt' => date('Y-m-d H:i:s'),
-        ]);
+    $check_room = DB::table('ngg_chat_group')->where('name_room',$data['name_group'])->count();
+    $null = array([
+      'user' =>'ข้อความจากระบบ',
+      'owner_room' =>  'null',
+      'chat_partner'  => 'null',
+      'msg'  => 'ยินดีต้อนรับค่ะ โปรดใช้คำสุภาพ',
+      'img' =>'user.svg',
+     'createdAt'  => date('Y-m-d H:i:s'),
+    ]);
 
-     $get = DB::table('ngg_chat_group')
-     ->where('name_room',$data['name_group'])
-     ->first();
+    if($check_room > 0){
 
-     DB::table('ngg_chat_group_user')->insert([
-        'code_room_id' => $get->code_room,
-        'status_confirm' =>'0',
-        'status_out_group' => '0',
-        'createdAt' => date('Y-m-d H:i:s'),
-         'code_staff' =>$user->username
-         ]);
-      foreach($data['username'] as $item){
-        DB::table('ngg_chat_group_user')->insert([
+      return response()->json("500");
+     }else{
+
+      DB::table('ngg_chat_group')->insert(
+            [
+                'img' => 'default.png',
+                'name_room' =>$data['name_group'],
+                'msg' => json_encode($null),
+                'createdAt' => date('Y-m-d H:i:s'),
+            ]);
+
+         $get = DB::table('ngg_chat_group')
+         ->where('name_room',$data['name_group'])
+         ->first();
+
+         DB::table('ngg_chat_group_user')->insert([
             'code_room_id' => $get->code_room,
-            'status_confirm' =>'0',
+            'status_confirm' =>'1',
             'status_out_group' => '0',
             'createdAt' => date('Y-m-d H:i:s'),
-             'code_staff' => $item
+             'code_staff' =>$user->username
              ]);
+          foreach($data['username'] as $item){
+            DB::table('ngg_chat_group_user')->insert([
+                'code_room_id' => $get->code_room,
+                'status_confirm' =>'0',
+                'status_out_group' => '0',
+                'createdAt' => date('Y-m-d H:i:s'),
+                 'code_staff' => $item
+                 ]);
 
+          }
+
+
+      return response()->json("200");
+
+
+      }
+
+});
+
+
+Route::middleware('auth:api')->post('/get_group_chat', function (Request $request) {
+    $user = $request->user();
+    $data = $request->json()->all();
+
+
+    $getgroup =  DB::table('ngg_chat_group_user')
+    ->leftJoin('ngg_chat_group','ngg_chat_group_user.code_room_id','ngg_chat_group.code_room')
+    ->select('code_staff','code_room_id','status_confirm','status_out_group','name_room','img','msg')
+    ->where('code_staff',$user->username)
+    ->where('status_confirm','1')
+    ->get();
+
+      if($getgroup->count() > 0){
+
+
+            foreach($getgroup as $getgroups){
+
+
+                  $msg = json_decode($getgroups->msg, true);
+                  $last = end($msg);
+                 $data  =  array(
+                       'code_room_id' =>$getgroups->code_room_id,
+                       'name_room' =>$getgroups->name_room,
+                       'msg' => $last ,
+                       'img' => $getgroups->img
+
+                 );
+                 $getgroup_last[] = $data;
+
+            }
+
+
+
+
+            return response()->json($getgroup_last);
+      }else{
+            return response()->json("404");
       }
 
 
@@ -968,25 +1029,104 @@ Route::middleware('auth:api')->post('/save_addroom', function (Request $request)
 
 
 
-return response()->json("200");
-});
-
-
-Route::middleware('auth:api')->post('/check_room', function (Request $request) {
-    $user = $request->user();
-    $data = $request->json()->all();
-    $check_room = DB::table('ngg_chat_group')->where('name_room',$data['check_room'])->count();
-
-     if($check_room > 0){
-        return response()->json("500");
-     }else{
-        return response()->json("200");
-     }
-
 
 
 
 });
+
+
+
+
+
+Route::middleware('auth:api')->post('/get_chat_group', function (Request $request) {
+
+      $data = $request->json()->all();
+      $user = $request->user();
+      $ngg_chat_group =  DB::table('ngg_chat_group')
+      ->where('code_room',$data['id_room'])
+      ->first();
+
+
+       return response()->json([
+
+                    'dataall' =>json_decode($ngg_chat_group->msg),
+                    'name_room' =>$ngg_chat_group->name_room,
+
+          ]);
+
+});
+
+
+Route::middleware('auth:api')->post('/save_chat_group', function (Request $request) {
+
+      $data = $request->json()->all();
+      $user = $request->user();
+      DB::table('ngg_chat_group')
+      ->where('code_room',$data['id_room'])
+      ->update([
+            'msg' => json_encode($data['chat_partner']),
+            'createdAt' => date('Y-m-d H:i:s'),
+      ]);
+
+
+      return response()->json("200");
+});
+
+
+Route::middleware('auth:api')->get('/status_confirm_join_group', function (Request $request) {
+
+      $user = $request->user();
+      $data = $request->json()->all();
+      $status_confirm =  DB::table('ngg_chat_group_user')
+      ->leftJoin('ngg_chat_group','ngg_chat_group_user.code_room_id','ngg_chat_group.code_room')
+      ->select('code_staff','code_room_id','status_confirm','status_out_group','name_room','img','msg')
+      ->where('code_staff',$user->username)
+      ->where('status_confirm','0')
+      ->get();
+
+
+      return response()->json($status_confirm);
+
+
+  });
+
+
+
+  Route::middleware('auth:api')->post('/confirm', function (Request $request) {
+
+      $data = $request->json()->all();
+      $user = $request->user();
+      if($data['confirm'] == "1"){
+
+            $ngg_chat_group =  DB::table('ngg_chat_group_user')
+            ->where('code_room_id',$data['id'])
+            ->where('code_staff',$user->username)
+            ->update([
+                  'status_confirm'=>'1'
+            ]);
+      }else{
+
+            $ngg_chat_group =  DB::table('ngg_chat_group_user')
+            ->where('code_room_id',$data['id'])
+            ->where('code_staff',$user->username)
+            ->delete();
+      }
+
+
+
+       return response()->json("200");
+
+});
+
+
+
+
+
+
+
+
+
+
 Route::post('register', 'Api\RegisterController@register');
 
 
