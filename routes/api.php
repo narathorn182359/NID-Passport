@@ -308,7 +308,7 @@ Route::middleware('auth:api')->post('/get_detail_staff', function (Request $requ
       $user = $request->user();
       $data = $request->json()->all();
       $json = DB::table('users_detail')
-      ->Where('Code_Staff',$data['id'])->get();
+      ->Where('Code_Staff',$data['id'])->first();
 
       return response()->json($json);
 
@@ -1120,7 +1120,23 @@ Route::middleware('auth:api')->get('/status_confirm_join_group', function (Reque
 
 
 
+Route::middleware('auth:api')->post('/exit_group_chat', function (Request $request) {
 
+ 
+      $user = $request->user();
+      $data = $request->json()->all();
+
+            $ngg_chat_group =  DB::table('ngg_chat_group_user')
+            ->where('code_room_id',$data['id'])
+            ->where('code_staff',$user->username)
+            ->delete();
+      
+
+
+
+       return response()->json("200");
+
+});
 
 
 
