@@ -723,14 +723,44 @@ Route::middleware('auth:api')->post('/get_contact', function (Request $request) 
 Route::middleware('auth:api')->post('/save_chat', function (Request $request) {
 
 
-
-
-
     $data = $request->json()->all();
     $msg = json_encode($data['msg']);
     $check_1 = DB::table('ngg_chat')
     ->Where('coderoom', $data['chat_partner']+$data['owner_room'])
     ->count();
+
+ /*    $msg_cut = json_decode($msg, true);
+    $last = end($msg_cut);
+
+    print_r($last);
+    $pb = new PushBots();
+    // Application ID
+    $appID = '5ed3e6512c9f8c1f8d3ed9c4';
+    // Application Secret
+    $appSecret = '9c3810d0b45d67931317c6a67343471b';
+
+
+    $user = $request->user();
+
+    if($user->username != $last['owner_room']){
+        $pb->App($appID, $appSecret);
+        $pb->Platform(array("0","1"));
+        $pb->Alias("94019");
+        // Notification Settings
+        $pb->Alert($last['msg']);
+        $pb->Push();
+    }
+
+    if($user->username != $last['chat_partner']){
+        $pb->App($appID, $appSecret);
+        $pb->Platform(array("0","1"));
+        $pb->Alias("94019");
+        // Notification Settings
+        $pb->Alert($last['msg']);
+        $pb->Push();
+    } */
+
+
 
 
     if( $check_1 > 0){
@@ -1122,7 +1152,7 @@ Route::middleware('auth:api')->get('/status_confirm_join_group', function (Reque
 
 Route::middleware('auth:api')->post('/exit_group_chat', function (Request $request) {
 
- 
+
       $user = $request->user();
       $data = $request->json()->all();
 
@@ -1130,7 +1160,7 @@ Route::middleware('auth:api')->post('/exit_group_chat', function (Request $reque
             ->where('code_room_id',$data['id'])
             ->where('code_staff',$user->username)
             ->delete();
-      
+
 
 
 

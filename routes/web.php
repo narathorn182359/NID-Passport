@@ -1,7 +1,7 @@
 <?php
 use  App\VideoStream\VideoStream;
 use App\Classes\PushBots;
-
+use Illuminate\Support\Facades\DB;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,11 +17,54 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+
+
+
+Route::get('/update', function () {
+
+   $data =  DB::table('ngg_breakpoint_users_detail')->get();
+
+      foreach($data as $item){
+          DB::table('users_detail')
+          ->where('Card_Staff',$item->Card_Staff)
+          ->update([
+             'Company' => $item->Company
+          ]);
+
+      }
+
+
+
+return "succexx";
+
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Route::get('/msg', function () {
 
 
 
-    $pb = new PushBots();
+$pb = new PushBots();
 // Application ID
 $appID = '5ed3e6512c9f8c1f8d3ed9c4';
 // Application Secret
