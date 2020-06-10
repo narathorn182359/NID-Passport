@@ -1,5 +1,4 @@
 <?php
-use  App\VideoStream\VideoStream;
 use App\Classes\PushBots;
 use Illuminate\Support\Facades\DB;
 /*
@@ -11,77 +10,47 @@ use Illuminate\Support\Facades\DB;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-
-
-
-
 Route::get('/update', function () {
 
-   $data =  DB::table('ngg_breakpoint_users_detail')->get();
+    $data = DB::table('ngg_breakpoint_users_detail')->get();
 
-      foreach($data as $item){
-          DB::table('users_detail')
-          ->where('Card_Staff',$item->Card_Staff)
-          ->update([
-             'Company' => $item->Company
-          ]);
+    foreach ($data as $item) {
+        DB::table('users_detail')
+            ->where('Card_Staff', $item->Card_Staff)
+            ->update([
+                'Company' => $item->Company,
+            ]);
 
-      }
+    }
 
-
-
-return "succexx";
-
+    return "succexx";
 
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Route::get('/msg', function () {
 
-
-
-$pb = new PushBots();
+    $pb = new PushBots();
 // Application ID
-$appID = '5ed3e6512c9f8c1f8d3ed9c4';
+    $appID = '5ed3e6512c9f8c1f8d3ed9c4';
 // Application Secret
-$appSecret = '9c3810d0b45d67931317c6a67343471b';
+    $appSecret = '9c3810d0b45d67931317c6a67343471b';
 
-$pb->App($appID, $appSecret);
-$pb->Platform(array("0","1"));
-$pb->Alias("51248");
+    $pb->App($appID, $appSecret);
+    $pb->Platform(array("0", "1"));
+    $pb->Alias("51248");
 // Notification Settings
-$pb->Alert("test");
-$i =$pb->Push();
-return "success";
+    $pb->Alert("test");
+    $i = $pb->Push();
+    return "success";
 });
 
-
-
-Route::get('/clear-cache', function() {
+Route::get('/clear-cache', function () {
     Artisan::call('cache:clear');
     return "Cache is cleared";
 });
@@ -157,42 +126,28 @@ Route::post('/editnew_detail_km_category/{id}', 'HomeController@editnew_detail_k
 
 Route::post('/delete_km_category_detail', 'HomeController@delete_km_category_detail')->name('delete_km_category_detail');
 
-Route::post('allposts_listnew', 'HomeController@allposts_listnew' )->name('allposts_listnew');
+Route::post('allposts_listnew', 'HomeController@allposts_listnew')->name('allposts_listnew');
 
-Route::post('allposts_category', 'HomeController@allposts_category' )->name('allposts_category');
+Route::post('allposts_category', 'HomeController@allposts_category')->name('allposts_category');
 
-Route::post('allposts_LibaryImg', 'HomeController@allposts_LibaryImg' )->name('allposts_LibaryImg');
+Route::post('allposts_LibaryImg', 'HomeController@allposts_LibaryImg')->name('allposts_LibaryImg');
 
-Route::post('allposts_KM360', 'HomeController@allposts_KM360' )->name('allposts_KM360');
+Route::post('allposts_KM360', 'HomeController@allposts_KM360')->name('allposts_KM360');
 
-Route::post('allposts_List_KM360', 'HomeController@allposts_List_KM360' )->name('allposts_List_KM360');
+Route::post('allposts_List_KM360', 'HomeController@allposts_List_KM360')->name('allposts_List_KM360');
 
 Route::resource('setuser', 'BreakpointUserController');
 
-Route::post('get_data_breakpoint', 'BreakpointUserController@get_data' )->name('get_data');
+Route::post('get_data_breakpoint', 'BreakpointUserController@get_data')->name('get_data');
 
-Route::post('get_data_ok', 'BreakpointUserController@get_data_ok' )->name('get_data_ok');
+Route::post('get_data_ok', 'BreakpointUserController@get_data_ok')->name('get_data_ok');
 
-Route::post('delete_new_username', 'BreakpointUserController@delete_new_username' )->name('delete_new_username');
+Route::post('delete_new_username', 'BreakpointUserController@delete_new_username')->name('delete_new_username');
 
-Route::post('en_username', 'BreakpointUserController@en_username' )->name('en_username');
+Route::post('en_username', 'BreakpointUserController@en_username')->name('en_username');
 
 Route::get('index_chat', 'ChatController@index')->name('index');
 
 Route::get('history_chat_last', 'ChatController@history_chat_last')->name('history_chat_last');
 
 Route::get('room/{id}', 'ChatController@room')->name('room');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
