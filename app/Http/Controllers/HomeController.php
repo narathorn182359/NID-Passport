@@ -106,47 +106,43 @@ class HomeController extends Controller
     {
 
       /*  $i = 0; */
-        if($request->file('image')){
-            $file=$request->file('image');
+        if($request->file('image_') && $request->file('image') != " "){
+            $image_2 =$request->image_info;
+            list($type, $image_2) = explode(';',$image_2);
+            list(, $image_2) = explode(',',$image_2);
+            $image_2 = base64_decode($image_2);
+            $image_name_2 = 'info'.time().'.png';
+
             DB::table('advertise')->insert([
-                'img_ad' => $file->getClientOriginalName(),
+                'img_ad' => $image_name_2,
                 'type_id' => $request->type_id,
                 'subject' => $request->subject,
                 'explain' => $request->explain,
                 'mc' => $request->micocat,
             ]);
-            $file->move(public_path(). '/imgnew', $file->getClientOriginalName());
+            file_put_contents('imgnew/'.$image_name_2, $image_2);
             $id_ad = DB::table('advertise')->Where('subject',$request->subject)->first();
 
-         /*    $file=$request->file('image');
 
-            foreach($file as $files){
-                $i++;
-                DB::table('ngg_img_group_advertise')->insert([
-                    'advertise_id_img' => $id_ad->id_ad,
-                    'name_img' => $files->getClientOriginalName(),
-                    'count' => $i
-                ]);
-                $files->move(public_path(). '/imgnew', $files->getClientOriginalName());
-            }
-
-             */
-
-
-
-            $filebanner=$request->file('imagebanner');
           if($request->get_banner == 1){
                $i = 1;
              }else{
                  $i =0;
              }
+
+             $image_3 =$request->imagebanner;
+             list($type, $image_3) = explode(';',$image_3);
+             list(, $image_3) = explode(',',$image_3);
+             $image_3 = base64_decode($image_3);
+             $image_name_3 = 'banner'.time().'.png';
+
             DB::table('ngg_banner')->insert([
                 'advertise_id' => $id_ad->id_ad,
-                'img_banner' => $filebanner->getClientOriginalName(),
+                'img_banner' => $image_name_3,
                 'active_banner' => $i
 
                 ]);
-                $filebanner->move(public_path(). '/imgnew', $filebanner->getClientOriginalName());
+                file_put_contents('imgnew/'.$image_name_3, $image_3);
         }
 
 
@@ -300,96 +296,97 @@ class HomeController extends Controller
     }
 
     public function editnew_list_save(Request $request ,$id){
-    /*     $i = 0; */
-        if($request->file('image')){
-            $files=$request->file('image');
+
+
+        if($request->file('image_') != " "){
+            $image_2 =$request->image_info;
+            list($type, $image_2) = explode(';',$image_2);
+            list(, $image_2) = explode(',',$image_2);
+            $image_2 = base64_decode($image_2);
+            $image_name_2 = 'info'.time().'.png';
 
             DB::table('advertise')
             ->where('id_ad',$id)
             ->update([
-                'img_ad' => "null",
                 'type_id' => $request->type_id,
-                'img_ad' => $files->getClientOriginalName(),
+                'img_ad' =>  $image_name_2,
                 'subject' => $request->subject,
                 'explain' => $request->explain,
                 'mc' => $request->micocat,
             ]);
 
-            $files->move(public_path(). '/imgnew', $files->getClientOriginalName());
-/*
-            $id_ad = DB::table('advertise')->Where('subject',$request->subject)->first();
-            foreach($file as $files){
-                $i++;
-                DB::table('ngg_img_group_advertise')
-                ->where('advertise_id_img',$id_ad->id_ad)
-                ->where('count',$i)
-                ->update([
+            file_put_contents('imgnew/'.$image_name_2, $image_2);
 
-                    'name_img' => $files->getClientOriginalName(),
 
-                ]);
-                $files->move(public_path(). '/imgnew', $files->getClientOriginalName());
-            } */
-if(  $filebanner=$request->file('imagebanner')){
-    if($request->get_banner == 1){
-        $i = 1;
-      }else{
-          $i =0;
-      }
-     DB::table('ngg_banner')
-     ->where('advertise_id',$id)
-     ->update([
-         'advertise_id' => $id,
-         'img' => $filebanner->getClientOriginalName(),
-         'active' => $i
+    }
 
-         ]);
-         $filebanner->move(public_path(). '/imgnew', $filebanner->getClientOriginalName());
-}else{
-
-    if($request->get_banner == 1){
-        $i = 1;
-      }else{
-          $i =0;
-      }
-     DB::table('ngg_banner')
-     ->where('advertise_id',$id)
-     ->update([
-         'advertise_id' => $id,
-         'active' => $i
-
-         ]);
-        }
-
-    }else
+    else
 
         {
 
            DB::table('advertise')
            ->where('id_ad',$id)
            ->update([
-               'img_ad' => "null",
                'type_id' => $request->type_id,
                'subject' => $request->subject,
                'explain' => $request->explain,
                'mc' => $request->micocat,
            ]);
 
-
-         if($request->get_banner == 1){
-              $i = 1;
-            }else{
-                $i =0;
-            }
-           DB::table('ngg_banner')
-           ->where('advertise_id',$id)
-           ->update([
-               'advertise_id' => $id,
-
-               'active' => $i
-
-               ]);
         }
+
+
+
+        if($request->file('image') != ""){
+
+            $image_3 =$request->imagebanner;
+            list($type, $image_3) = explode(';',$image_3);
+            list(, $image_3) = explode(',',$image_3);
+            $image_3 = base64_decode($image_3);
+            $image_name_3 = 'banner'.time().'.png';
+            if($request->get_banner == 1){
+                $i = 1;
+              }else{
+                  $i =0;
+              }
+
+             DB::table('ngg_banner')
+             ->where('advertise_id',$id)
+             ->update([
+                 'advertise_id' => $id,
+                 'img_banner' => $image_name_3,
+                 'active_banner' => $i
+
+                 ]);
+                 file_put_contents('imgnew/'.$image_name_3, $image_3);
+        }else{
+
+            if($request->get_banner == 1){
+                $i = 1;
+              }else{
+                  $i =0;
+              }
+             DB::table('ngg_banner')
+             ->where('advertise_id',$id)
+             ->update([
+                 'advertise_id' => $id,
+                 'active_banner' => $i
+
+                 ]);
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
         Session::flash('flash_message','บันทึกเรียบร้อย!! ');
         return redirect('settinnew');
     }

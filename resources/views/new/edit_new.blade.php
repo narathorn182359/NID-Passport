@@ -1,4 +1,99 @@
 @extends('layouts.app')
+@section('js')
+
+
+<script type="text/javascript">
+
+
+    var resize1 = $('#upload-demo').croppie({
+        enableExif: true,
+        enableOrientation: true,
+        viewport: { // Default { width: 100, height: 100, type: 'square' }
+            width: 581,
+            height: 227,
+            type: 'square' //square
+        },
+        boundary: {
+            width: 600,
+            height: 300
+        }
+    });
+
+
+    $('#image').on('change', function () {
+      var reader = new FileReader();
+        reader.onload = function (e) {
+          resize1.croppie('bind',{
+            url: e.target.result
+          }).then(function(){
+            console.log('jQuery bind complete');
+          });
+        }
+        reader.readAsDataURL(this.files[0]);
+
+
+    });
+
+
+    var resize_info = $('#upload-info').croppie({
+        enableExif: true,
+        enableOrientation: true,
+        viewport: { // Default { width: 100, height: 100, type: 'square' }
+            width: 500,
+            height: 500,
+            type: 'square' //square
+        },
+        boundary: {
+            width: 600,
+            height: 600
+        }
+    });
+
+
+    $('#image_').on('change', function () {
+      var reader_i = new FileReader();
+           reader_i.onload = function (e) {
+            resize_info.croppie('bind',{
+            url: e.target.result
+          }).then(function(){
+            console.log('jQuery bind complete');
+          });
+        }
+        reader_i.readAsDataURL(this.files[0]);
+
+
+    });
+
+    </script>
+
+<script>
+    function mycroppie() {
+
+        resize1.croppie('result', {
+        type: 'canvas',
+        size: 'viewport'
+      }).then(function (img) {
+        document.getElementById("imagebanner").value = img;
+        console.log(img)
+
+      });
+
+      resize_info.croppie('result', {
+        type: 'canvas',
+        size: 'viewport'
+      }).then(function (img) {
+        document.getElementById("image_info").value = img;
+        console.log(img)
+
+      });
+
+
+
+
+    }
+    </script>
+
+@endsection
 @section('content')
 
 <a href="{{url('/settinnew')}}">ย้อนกลับ</a>
@@ -16,9 +111,20 @@
         <form class="user"  action="{{url('/editnew_list_save/'.$advertise->id_ad)}}" method="POST"  enctype="multipart/form-data">
             @csrf
             <div class="form-group">
-              <label>รูปข่าว banner</label>
-              <input type="file"   class="form-control form-control-user" name="imagebanner"   >
-               </div>
+                <label>รูปข่าว banner</label>
+                <div class="col-md-6">
+                  <div class="form-group">
+                   <div class="col-md-4 text-center">
+                    <div id="upload-demo" ></div>
+                    </div>
+                    <div class="col-md-4" style="padding:5%;">
+                    <strong>Select image to crop:</strong>
+                    <input type="file" id="image"  name="image" required>
+                    </div>
+                  </div>
+                </div>
+                <input type="hidden" name="imagebanner" value="" id="imagebanner">
+                 </div>
                <div class="form-group">
                    @if($ngg_banner->active_banner == '1')
                    <input  type="checkbox"  value="1"  name="get_banner" id="get_banner"  checked> ให้แสดงหน้า Home Banner
@@ -27,10 +133,24 @@
                    @endif
 
               </div>
-                <div class="form-group">
-                  <label>รูปข่าวเนื้อหา</label>
-                 <input type="file"   class="form-control form-control-user" name="image"   >
+              <div class="form-group">
+                <label>รูปข่าวเนื้อหา</label>
+                <div class="col-md-6">
+                  <div class="form-group">
+                   <div class="col-md-4 text-center">
+                       <div  style="width: 50%">
+
+                       </div>
+                    <div id="upload-info" ></div>
+                    </div>
+                    <div class="col-md-4" style="padding:5%;">
+                    <strong>Select image to crop:</strong>
+                    <input type="file" id="image_"   name="image_" required>
+                    </div>
                   </div>
+                </div>
+                <input type="hidden" name="image_info" value="" id="image_info">
+                </div>
 
                 <div class="form-group">
                 <input type="text" class="form-control form-control-user" id="subject" placeholder="เรื่องข่าว" name="subject"  value="{{$advertise->subject}}" required>
@@ -85,7 +205,7 @@
 
                     </label>
                   </div>
-              <input type="submit"   class="btn btn-success" value="บันทึก" >
+              <input type="submit"   class="btn btn-success" value="บันทึก"  onclick="mycroppie()">
         </form>
         </div>
       </div>
