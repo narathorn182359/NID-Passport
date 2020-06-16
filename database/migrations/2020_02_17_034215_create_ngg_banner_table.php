@@ -14,11 +14,12 @@ class CreateNggBannerTable extends Migration
     public function up()
     {
         Schema::create('ngg_banner', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigIncrements('id_banner');
             $table->string('advertise_id');
-            $table->string('img');
-            $table->string('active')->default('0');
-            $table->timestamps();
+            $table->string('img_banner');
+            $table->string('active_banner')->default('0');
+            $table->dateTime('created_at_banner');
+            $table->dateTime('updated_at_banner');
         });
     }
 

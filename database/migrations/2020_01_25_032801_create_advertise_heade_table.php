@@ -17,9 +17,10 @@ class CreateAdvertiseHeadeTable extends Migration
             $table->bigIncrements('id');
             $table->string('img');
             $table->string('name_adver');
-            $table->string('name_thai');            
+            $table->string('name_thai');
             $table->string('active')->default('1');
-            $table->timestamps();
+            $table->dateTime('created_at_adver');
+            $table->dateTime('updated_at_adver');
         });
     }
 

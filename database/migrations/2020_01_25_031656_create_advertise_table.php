@@ -16,7 +16,7 @@ class CreateAdvertiseTable extends Migration
         Schema::create('advertise', function (Blueprint $table) {
             $table->bigIncrements('id_ad');
             $table->string('type_id');
-            $table->string('img');
+            $table->string('img_ad');
             $table->string('subject');
             $table->text('explain');
             $table->string('active')->default('1');

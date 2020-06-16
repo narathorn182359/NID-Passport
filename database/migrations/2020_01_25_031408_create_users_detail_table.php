@@ -58,6 +58,7 @@ class CreateUsersDetailTable extends Migration
             $table->string('Absence_from_work')->nullable();
             $table->string('img')->default('user.svg');
             $table->string('active')->default('1');
+            $table->string('Company')->nullable();
             $table->timestamps();
         });
     }
