@@ -572,11 +572,17 @@ Route::middleware('auth:api')->post('/get_positin', function (Request $request) 
 
     $user = $request->user();
     $data = $request->json()->all();
+    $user_id = DB::table('users_detail')->where('Code_Staff', $user->username)->first();
     $position = DB::table('users_detail')
-        ->orWhere('Department', 'LIKE', '%' . $data['value'] . '%')
+    ->whereNotIn('Code_Staff', [ $user->username])
+    ->Where('Company', $user_id->Company)
+    ->Where('Department', 'LIKE', '%' . $data['value'] . '%')
         ->orderBy('Department', 'asc')
         ->select('Department')
         ->get();
+
+       //$position_2   = $position->orWhere('Department', 'LIKE', '%' . $data['value'] . '%')->get();
+
     $a = array();
 
     foreach ($position as $i) {
@@ -606,67 +612,173 @@ Route::middleware('auth:api')->post('/get_contact', function (Request $request) 
 });
 
 Route::middleware('auth:api')->post('/save_chat', function (Request $request) {
-
-    $data = $request->json()->all();
-    $msg = json_encode($data['msg']);
-    $check_1 = DB::table('ngg_chat')
-        ->Where('coderoom', $data['chat_partner'] + $data['owner_room'])
-        ->count();
-
-    /*    $msg_cut = json_decode($msg, true);
-    $last = end($msg_cut);
-
-    print_r($last);
-    $pb = new PushBots();
-    // Application ID
-    $appID = '5ed3e6512c9f8c1f8d3ed9c4';
-    // Application Secret
-    $appSecret = '9c3810d0b45d67931317c6a67343471b';
-
-    $user = $request->user();
-
-    if($user->username != $last['owner_room']){
-    $pb->App($appID, $appSecret);
-    $pb->Platform(array("0","1"));
-    $pb->Alias("94019");
-    // Notification Settings
-    $pb->Alert($last['msg']);
-    $pb->Push();
-    }
-
-    if($user->username != $last['chat_partner']){
-    $pb->App($appID, $appSecret);
-    $pb->Platform(array("0","1"));
-    $pb->Alias("94019");
-    // Notification Settings
-    $pb->Alert($last['msg']);
-    $pb->Push();
-    } */
-
-    if ($check_1 > 0) {
-        DB::table('ngg_chat')
+        $data = $request->json()->all();
+        $user = $request->user();
+        $msg = json_encode($data['msg']);
+        $check_1 = DB::table('ngg_chat')
             ->Where('coderoom', $data['chat_partner'] + $data['owner_room'])
-            ->update([
-                'msg' => $msg,
-                /*   'img_ad' =>$data['img_ad'], */
-                'owner_room' => $data['owner_room'],
-                'chat_partner' => $data['chat_partner'],
-                'createdAt' => $data['createdAt'],
-                'coderoom' => $data['owner_room'] + $data['chat_partner'],
-            ]);
-    } else {
-        DB::table('ngg_chat')
-            ->insert([
-                'msg' => $msg,
-                /*   'img_ad' =>$data['img_ad'], */
-                'owner_room' => $data['owner_room'],
-                'chat_partner' => $data['chat_partner'],
-                'createdAt' => $data['createdAt'],
-                'coderoom' => $data['owner_room'] + $data['chat_partner'],
-            ]);
-    }
+            ->count();
+           $msg_cut = json_decode($msg, true);
+           $last = end($msg_cut);
 
-    return response()->json($data['msg']);
+         $msg_info = DB::table('users_detail')->where('Code_Staff',$user->username)->first();
+         if($user->username != $last['owner_room']){
+
+            $content = array(
+                "en" => $last['msg']
+            );
+            $heading = array(
+            "en" => $msg_info->Name_Thai."(".$msg_info->Nickname.")"
+             );
+
+           $setmeg_noti = DB::table('ngg_key_notification')->where('Code_Staff',$last['owner_room'])
+             ->where('login_status','1')
+             ->get();
+
+            }else if($user->username != $last['chat_partner']){
+
+            $content = array(
+                "en" => $last['msg']
+            );
+            $heading = array(
+                "en" => $msg_info->Name_Thai."(".$msg_info->Nickname.")"
+             );
+              $setmeg_noti = DB::table('ngg_key_notification')->where('Code_Staff',$last['chat_partner'])
+             ->where('login_status','1')
+             ->get();
+
+         }
+
+            if( $setmeg_noti->count() > 0){
+                $list_noti =  array();
+                foreach($setmeg_noti as $item){
+                    array_push($list_noti,$item->player_id);
+                }
+                $fields = array(
+                    'app_id' => "16adf426-0420-49fa-b189-d71af438789a",
+                    'include_player_ids' =>  $list_noti,
+                    'data' => array("foo" => "bar"),
+                    'contents' => $content,
+                    'headings' => $heading,
+
+                );
+                $fields = json_encode($fields);
+                /*  print("\nJSON sent:\n");
+                 print($fields); */
+
+                 $ch = curl_init();
+                 curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+                 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8'));
+                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+                 curl_setopt($ch, CURLOPT_HEADER, FALSE);
+                 curl_setopt($ch, CURLOPT_POST, TRUE);
+                 curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+                 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+
+                 $response = curl_exec($ch);
+                 curl_close($ch);
+
+            }
+
+
+
+        if ($check_1 > 0) {
+
+            $check = DB::table('ngg_chat')
+            ->Where('coderoom', $data['chat_partner'] + $data['owner_room'])->first();
+
+
+
+            if( $check->owner_room == $user->username)
+            {
+
+
+                $count = DB::table('ngg_noti_chat')
+                ->Where('codestaff',$check->chat_partner)
+                ->Where('coderoom', $data['chat_partner'] + $data['owner_room'])
+                ->first();
+
+                 DB::table('ngg_noti_chat')
+                        ->Where('codestaff',$check->chat_partner)
+                        ->Where('coderoom', $data['chat_partner'] + $data['owner_room'])
+                        ->update([
+                           'count' =>  $count->count =  $count->count + 1
+                           ]);
+
+
+            }else{
+
+
+                $count = DB::table('ngg_noti_chat')
+                ->Where('codestaff',$check->owner_room)
+                ->Where('coderoom', $data['chat_partner'] + $data['owner_room'])
+                ->first();
+
+                 DB::table('ngg_noti_chat')
+                        ->Where('codestaff',$check->owner_room)
+                        ->Where('coderoom', $data['chat_partner'] + $data['owner_room'])
+                        ->update([
+
+                           'count' =>  $count->count =  $count->count + 1
+
+                           ]);
+
+            }
+
+
+
+                DB::table('ngg_chat')
+                ->Where('coderoom', $data['chat_partner'] + $data['owner_room'])
+                ->update([
+                    'msg' => $msg,
+                    /*   'img_ad' =>$data['img_ad'], */
+                    'owner_room' => $data['owner_room'],
+                    'chat_partner' => $data['chat_partner'],
+                    'createdAt' => $data['createdAt'],
+                    'coderoom' => $data['owner_room'] + $data['chat_partner'],
+
+
+                ]);
+
+        } else {
+
+            if( $data['owner_room'] != $user->usrname)
+            {
+                DB::table('ngg_noti_chat')
+                ->insert([
+                    'codestaff' => $data['chat_partner'],
+                    'coderoom' => $data['owner_room'] + $data['chat_partner'],
+                    'count'   => '1'
+
+                ]);
+                DB::table('ngg_noti_chat')
+                ->insert([
+                    'codestaff' => $data['owner_room'],
+                    'coderoom' => $data['owner_room'] + $data['chat_partner'],
+
+                ]);
+
+
+            }
+
+
+            DB::table('ngg_chat')
+                ->insert([
+                    'msg' => $msg,
+                    'owner_room' => $data['owner_room'],
+                    'chat_partner' => $data['chat_partner'],
+                    'createdAt' => $data['createdAt'],
+                    'coderoom' => $data['owner_room'] + $data['chat_partner'],
+                ]);
+
+
+
+
+        }
+
+
+        return response()->json($data['msg']);
+
 
 });
 
@@ -727,31 +839,87 @@ Route::middleware('auth:api')->post('/get_history_chat', function (Request $requ
             ->first();
 
         $room = $user->username + $name_search->Code_Staff;
+
         $history_chat = DB::table('ngg_chat')
             ->Where('coderoom', $room)
             ->select('owner_room', 'chat_partner', 'msg')
             ->orderBy('createdAt', 'DESC')
             ->get();
 
-        foreach ($history_chat as $history_chats) {
+        if ($history_chat->count() > 0) {
 
-            $name_thai_owner_room = DB::table('users_detail')->where('Code_Staff', $history_chats->owner_room)->first();
-            $name_thai_chat_partner = DB::table('users_detail')->where('Code_Staff', $history_chats->chat_partner)->first();
-            $msg = json_decode($history_chats->msg, true);
-            $last = end($msg);
-            $data = array(
-                'owner_room' => $history_chats->owner_room,
-                'chat_partner' => $history_chats->chat_partner,
-                'msg' => $last,
-                'name_thai_owner_room' => $name_thai_owner_room->Name_Thai,
-                'name_thai_chat_partner' => $name_thai_chat_partner->Name_Thai,
-            );
+            foreach ($history_chat as $history_chats) {
 
-            $history_chat_last[] = $data;
+                $name_thai_owner_room = DB::table('users_detail')->where('Code_Staff', $history_chats->owner_room)->first();
+                $name_thai_chat_partner = DB::table('users_detail')->where('Code_Staff', $history_chats->chat_partner)->first();
+                $msg = json_decode($history_chats->msg, true);
+                $last = end($msg);
+                $data = array(
+                    'owner_room' => $history_chats->owner_room,
+                    'chat_partner' => $history_chats->chat_partner,
+                    'msg' => $last,
+                    'name_thai_owner_room' => $name_thai_owner_room->Name_Thai,
+                    'name_thai_chat_partner' => $name_thai_chat_partner->Name_Thai,
 
+                );
+
+                $history_chat_last[] = $data;
+            }
+
+             foreach($history_chat_last as $item){
+
+                 if($user->username ==  $item['owner_room'] ){
+                    $no_ti = DB::table('ngg_noti_chat')
+                    ->where('codestaff', $user->username)
+                    ->where('coderoom',  $room)
+                    ->first();
+
+                     $img_d = $item['chat_partner'].".jpg";
+                     $msg = json_encode($item['msg'], true);
+                      $data = array(
+                        'img' => $img_d,
+                        'username'=>  $item['chat_partner'],
+                        'msg'=>$item['msg']  ,
+                        'name_thai'=>  $item['name_thai_chat_partner'],
+                        'noti' => $no_ti->count
+
+
+                      );
+
+                      $history_chat_last_gen[] = $data;
+
+                 }
+                 else if($user->username ==  $item['chat_partner'])
+                 {
+
+                    $no_ti = DB::table('ngg_noti_chat')
+                    ->where('codestaff', $user->username)
+                    ->where('coderoom',  $room)
+                    ->first();
+                    $img_d = $item['owner_room'].".jpg";
+                    $msg = json_encode($item['msg'], true);
+                    $data = array(
+                      'img' => $img_d,
+                      'username'=>  $item['owner_room'],
+                      'msg'=>  $item['msg'],
+                      'name_thai'=>  $item['name_thai_owner_room'],
+                      'noti' => $no_ti->count
+
+                    );
+
+                    $history_chat_last_gen[] = $data;
+
+                 }
+
+             }
+
+
+        return response()->json($history_chat_last_gen);
+
+        } else {
+
+            return response()->json("null");
         }
-
-        return response()->json($history_chat_last);
 
     } else {
 
@@ -762,27 +930,90 @@ Route::middleware('auth:api')->post('/get_history_chat', function (Request $requ
             ->orderBy('createdAt', 'DESC')
             ->get();
 
-        foreach ($history_chat as $history_chats) {
+            if( $history_chat->count() > 0){
 
-            $name_thai_owner_room = DB::table('users_detail')->where('Code_Staff', $history_chats->owner_room)->first();
-            $name_thai_chat_partner = DB::table('users_detail')->where('Code_Staff', $history_chats->chat_partner)->first();
-            $msg = json_decode($history_chats->msg, true);
-            $last = end($msg);
-            $data = array(
-                'owner_room' => $history_chats->owner_room,
-                'chat_partner' => $history_chats->chat_partner,
-                'msg' => $last,
-                'name_thai_owner_room' => $name_thai_owner_room->Name_Thai,
-                'name_thai_chat_partner' => $name_thai_chat_partner->Name_Thai,
-            );
+                foreach ($history_chat as $history_chats) {
 
-            $history_chat_last[] = $data;
+                    $name_thai_owner_room = DB::table('users_detail')->where('Code_Staff', $history_chats->owner_room)->first();
+                    $name_thai_chat_partner = DB::table('users_detail')->where('Code_Staff', $history_chats->chat_partner)->first();
+                    $msg = json_decode($history_chats->msg, true);
+                    $last = end($msg);
+                    $data = array(
+                        'owner_room' => $history_chats->owner_room,
+                        'chat_partner' => $history_chats->chat_partner,
+                        'msg' => $last,
+                        'name_thai_owner_room' => $name_thai_owner_room->Name_Thai,
+                        'name_thai_chat_partner' => $name_thai_chat_partner->Name_Thai,
 
-        }
+                    );
 
-        return response()->json($history_chat_last);
+                    $history_chat_last[] = $data;
+
+                }
+
+
+                     foreach($history_chat_last as $item){
+                         if($user->username ==  $item['owner_room'] ){
+
+                            $no_ti = DB::table('ngg_noti_chat')
+                            ->where('codestaff', $item['owner_room'])
+                            ->where('coderoom', $user->username  + $item['chat_partner'])
+                            ->first();
+
+                             $img_d = $item['chat_partner'].".jpg";
+                             $msg = json_encode($item['msg'], true);
+                              $data = array(
+                                'img' => $img_d,
+                                'username'=>  $item['chat_partner'],
+                                'msg'=>$item['msg']  ,
+                                'name_thai'=>  $item['name_thai_chat_partner'],
+                                'noti' => $no_ti->count
+
+
+
+
+                              );
+
+                              $history_chat_last_gen[] = $data;
+
+                         }
+                         else if($user->username ==  $item['chat_partner'])
+                         {
+
+                            $no_ti = DB::table('ngg_noti_chat')
+                            ->where('codestaff', $item['chat_partner'])
+                            ->where('coderoom', $user->username  + $item['owner_room'])
+                            ->first();
+
+                            $img_d = $item['owner_room'].".jpg";
+                            $msg = json_encode($item['msg'], true);
+                            $data = array(
+                              'img' => $img_d,
+                              'username'=>  $item['owner_room'],
+                              'msg'=>  $item['msg'],
+                              'name_thai'=>  $item['name_thai_owner_room'],
+                              'noti' => $no_ti->count
+
+
+
+                            );
+
+                            $history_chat_last_gen[] = $data;
+
+                         }
+
+                     }
+
+                return response()->json($history_chat_last_gen);
+
+
+
+
+            }
+
 
     }
+
 
 });
 
@@ -790,9 +1021,12 @@ Route::middleware('auth:api')->post('/get_username_all', function (Request $requ
 
     $user = $request->user();
     $data = $request->json()->all();
+    $user_id = DB::table('users_detail')->where('Code_Staff', $user->username)->first();
+
     $username = DB::table('users_detail')
-        ->orWhere('Code_Staff', 'LIKE', '%' . $data['value'] . '%')
-        ->orWhere('Name_Thai', 'LIKE', '%' . $data['value'] . '%')
+        ->whereNotIn('Code_Staff', [ $user->username])
+        ->Where('Name_Thai', 'LIKE', '%' . $data['value'] . '%')
+        ->Where('Company', $user_id->Company)
         ->select('Name_Thai', 'Position', 'img', 'Code_Staff')
         ->orderBy('Name_Thai', 'asc')
         ->paginate(15);
@@ -805,8 +1039,10 @@ Route::middleware('auth:api')->get('/get_username_all_addroom', function (Reques
 
     $user = $request->user();
     $data = $request->json()->all();
+    $user_id = DB::table('users_detail')->where('Code_Staff', $user->username)->first();
     $username = DB::table('users_detail')
         ->whereNotIn('Code_Staff', ['admin', '99999', $user->username])
+        ->Where('Company', $user_id->Company)
         ->select('Name_Thai', 'Position', 'img', 'Code_Staff')
         ->orderBy('Name_Thai', 'asc')
         ->get();
@@ -858,7 +1094,7 @@ Route::middleware('auth:api')->post('/save_addroom', function (Request $request)
                 'status_confirm' => '0',
                 'status_out_group' => '0',
                 'createdAt' => date('Y-m-d H:i:s'),
-                'code_staff' => $item,
+                'code_staff' => $item['Code_Staff'],
             ]);
 
         }
@@ -946,11 +1182,11 @@ Route::middleware('auth:api')->get('/status_confirm_join_group', function (Reque
         ->where('status_confirm', '0')
         ->get();
 
-    if (isset($status_confirm)) {
+    if ($status_confirm->count() > 0) {
 
         return response()->json($status_confirm);
     } else {
-        return response()->json("404");
+        return response()->json("null");
     }
 
 });
@@ -992,5 +1228,146 @@ Route::middleware('auth:api')->post('/exit_group_chat', function (Request $reque
     return response()->json("200");
 
 });
+
+
+
+
+Route::middleware('auth:api')->post('/save_key_player', function (Request $request) {
+
+    $data = $request->json()->all();
+    $user = $request->user();
+
+    $ngg_key_notification = DB::table('ngg_key_notification')
+        ->where('player_id', $data['key'])
+        ->count();
+    if(  $ngg_key_notification > 0){
+        DB::table('ngg_key_notification')
+        ->where('player_id', $data['key'])
+        ->update([
+         'player_id'  =>  $data['key'],
+         'code_staff' => $user->username,
+         'login_status' => '1',
+
+         'updated_at' => Carbon::now(),
+        ]);
+
+    }
+    else
+    {
+        DB::table('ngg_key_notification')
+        ->insert([
+         'player_id'  =>  $data['key'],
+         'code_staff' => $user->username,
+         'login_status' => '1',
+         'created_at' => Carbon::now(),
+         'updated_at' => Carbon::now(),
+
+        ]);
+    }
+
+    return response()->json("200");
+
+});
+
+Route::middleware('auth:api')->post('/logout_key', function (Request $request) {
+
+    $data = $request->json()->all();
+    $user = $request->user();
+    DB::table('ngg_key_notification')
+    ->where('player_id', $data['key'])
+    ->update([
+
+     'login_status' => '0'
+    ]);
+
+
+});
+
+
+
+Route::middleware('auth:api')->post('/add_staff_ingroup', function (Request $request) {
+
+    $data = $request->json()->all();
+    $user = $request->user();
+    $user_id = DB::table('users_detail')->where('Code_Staff', $user->username)->first();
+    $check = DB::table('ngg_chat_group_user')
+    ->where('code_room_id', $data['room'])
+    ->get();
+
+    if($check->count() > 0){
+        foreach($check as  $checks){
+
+            $get[] =  $checks->code_staff;
+        }
+
+        $username = DB::table('users_detail')
+        ->whereNotIn('Code_Staff',  $get)
+        ->Where('Company', $user_id->Company)
+        ->select('Name_Thai', 'Position', 'img', 'Code_Staff')
+        ->orderBy('Name_Thai', 'asc')
+        ->get();
+
+    }else{
+        $username = DB::table('users_detail')
+        ->Where('Company', $user_id->Company)
+        ->select('Name_Thai', 'Position', 'img', 'Code_Staff')
+        ->orderBy('Name_Thai', 'asc')
+        ->get();
+    }
+
+
+
+         return response()->json($username);
+});
+
+
+Route::middleware('auth:api')->post('/save_staff_ingroup', function (Request $request) {
+    $data = $request->json()->all();
+    $user = $request->user();
+    foreach ($data['username'] as $item) {
+        DB::table('ngg_chat_group_user')->insert([
+            'code_room_id' =>$data['room'],
+            'status_confirm' => '0',
+            'status_out_group' => '0',
+            'createdAt' => date('Y-m-d H:i:s'),
+            'code_staff' => $item['Code_Staff'],
+        ]);
+
+    }
+
+    return response()->json('200');
+});
+
+
+
+Route::middleware('auth:api')->post('/remove_noti', function (Request $request) {
+    $data = $request->json()->all();
+    $user = $request->user();
+    $username = DB::table('ngg_noti_chat')
+    ->Where('coderoom', $user->username + $data['username'])
+    ->get();
+    foreach($username as $item){
+        if($user->username == $item->codestaff){
+            DB::table('ngg_noti_chat')
+            ->where('codestaff',$user->username)
+            ->where('coderoom',$user->username + $data['username'])
+            ->update([
+                'count' =>'0'
+            ]);
+
+        }
+
+    }
+
+
+
+
+
+    return response()->json('200');
+});
+
+
+
+
 
 Route::post('register', 'Api\RegisterController@register');
