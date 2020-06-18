@@ -1144,9 +1144,21 @@ Route::middleware('auth:api')->post('/get_chat_group', function (Request $reques
 
     $data = $request->json()->all();
     $user = $request->user();
+
+
+
+
+
+
+
     $ngg_chat_group = DB::table('ngg_chat_group')
         ->where('code_room', $data['id_room'])
         ->first();
+
+
+
+
+
 
     return response()->json([
 
@@ -1161,11 +1173,99 @@ Route::middleware('auth:api')->post('/save_chat_group', function (Request $reque
 
     $data = $request->json()->all();
     $user = $request->user();
-    DB::table('ngg_chat_group')
+    $msg = json_encode($data['chat_partner']);
+    $msg_cut = json_decode($msg, true);
+    $last = end($msg_cut);
+    $msg_info = DB::table('users_detail')->where('Code_Staff',$user->username)->first();
+
+    $content = array(
+        "en" => $last['msg']
+    );
+    $heading = array(
+    "en" => $msg_info->Name_Thai."(".$msg_info->Nickname.")"
+     );
+
+
+     $setmeg_noti = DB::table('ngg_chat_group_user')
+     ->whereNotIn('code_staff', [ $user->username])
+     ->where('code_room_id',$data['id_room'])
+     ->where('off_noti','1')
+     ->get();
+
+      if($setmeg_noti->count() > 0){
+
+        $list_noti =  array();
+        foreach($setmeg_noti as $item){
+
+            $setmeg_noti = DB::table('ngg_key_notification')
+            ->where('code_staff',$item->code_staff)
+            ->where('code_staff','1')
+            ->get();
+            if( $setmeg_noti->count() > 0){
+                foreach($setmeg_noti as $item){
+                    array_push($list_noti,$item->player_id);
+
+                }
+
+
+
+            }
+        }
+
+        if(count($list_noti) > 0){
+
+            $fields = array(
+                'app_id' => "16adf426-0420-49fa-b189-d71af438789a",
+                'include_player_ids' =>  $list_noti,
+                'data' => array("foo" => "bar"),
+                'contents' => $content,
+                'headings' => $heading,
+            );
+
+            $fields = json_encode($fields);
+             $ch = curl_init();
+             curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8'));
+             curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+             curl_setopt($ch, CURLOPT_HEADER, FALSE);
+             curl_setopt($ch, CURLOPT_POST, TRUE);
+             curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+             $response = curl_exec($ch);
+             curl_close($ch);
+        }
+      }
+
+      $noti =  DB::table('ngg_chat_group_user')
+      ->where('code_room_id', $data['id_room'])
+      ->first();
+
+
+     $user_update  =  DB::table('ngg_chat_group_user')
+      ->whereNotIn('code_staff', [ $user->username])
+      ->where('code_room_id', $data['id_room'])
+      ->get();
+
+     foreach( $user_update as $item){
+
+        DB::table('ngg_chat_group_user')
+        ->where('code_staff',$item->code_staff)
+        ->where('code_room_id', $data['id_room'])
+        ->update([
+          'no_ti' => $noti->no_ti =   $noti->no_ti + 1
+        ]);
+
+     }
+
+
+
+
+       DB::table('ngg_chat_group')
         ->where('code_room', $data['id_room'])
         ->update([
             'msg' => json_encode($data['chat_partner']),
             'createdAt' => date('Y-m-d H:i:s'),
+
         ]);
 
     return response()->json("200");
