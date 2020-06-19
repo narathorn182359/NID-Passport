@@ -625,7 +625,7 @@ Route::middleware('auth:api')->post('/save_chat', function (Request $request) {
          if($user->username != $last['owner_room']){
 
             $content = array(
-                "en" => $last['msg']
+                "en" => 'ข้อความ:'.$last['msg']
             );
             $heading = array(
             "en" => $msg_info->Name_Thai."(".$msg_info->Nickname.")"
@@ -638,7 +638,7 @@ Route::middleware('auth:api')->post('/save_chat', function (Request $request) {
             }else if($user->username != $last['chat_partner']){
 
             $content = array(
-                "en" => $last['msg']
+                "en" => 'ข้อความ:'.$last['msg']
             );
             $heading = array(
                 "en" => $msg_info->Name_Thai."(".$msg_info->Nickname.")"
@@ -1179,19 +1179,19 @@ Route::middleware('auth:api')->post('/save_chat_group', function (Request $reque
     $msg_cut = json_decode($msg, true);
     $last = end($msg_cut);
     $msg_info = DB::table('users_detail')->where('Code_Staff',$user->username)->first();
-
+    $room_info = DB::table('ngg_chat_group')->where('code_room',$data['id_room'])->first();
     $content = array(
-        "en" => $last['msg']
+        "en" => 'ข้อความ:'.$last['msg']
     );
     $heading = array(
-    "en" => $msg_info->Name_Thai."(".$msg_info->Nickname.")"
+    "en" => "กลุ่ม ". $room_info->name_room." ".$msg_info->Name_Thai."(".$msg_info->Nickname.")"
      );
 
 
      $setmeg_noti = DB::table('ngg_chat_group_user')
-     ->whereNotIn('code_staff', [ $user->username])
-     ->where('code_room_id',$data['id_room'])
-     ->where('off_noti','1')
+     ->whereNotIn('code_staff', [$user->username])
+     ->where('code_room_id','=',$data['id_room'])
+     ->where('off_noti','=','1')
      ->get();
 
       if($setmeg_noti->count() > 0){
@@ -1201,7 +1201,7 @@ Route::middleware('auth:api')->post('/save_chat_group', function (Request $reque
 
             $setmeg_noti = DB::table('ngg_key_notification')
             ->where('code_staff',$item->code_staff)
-            ->where('code_staff','1')
+            ->where('login_status','1')
             ->get();
             if( $setmeg_noti->count() > 0){
                 foreach($setmeg_noti as $item){
@@ -1209,11 +1209,9 @@ Route::middleware('auth:api')->post('/save_chat_group', function (Request $reque
 
                 }
 
-
-
             }
         }
-
+        print_r($last);
         if(count($list_noti) > 0){
 
             $fields = array(
@@ -1461,15 +1459,26 @@ Route::middleware('auth:api')->post('/remove_noti', function (Request $request) 
 
     }
 
+    return response()->json('200');
+});
+
+
+
+Route::middleware('auth:api')->post('/remove_noti_group', function (Request $request) {
+    $data = $request->json()->all();
+    $user = $request->user();
+            DB::table('ngg_chat_group_user')
+            ->where('code_staff',$user->username)
+            ->where('code_room_id',$data['room'])
+            ->update([
+                'no_ti' =>'0'
+            ]);
+
 
 
 
 
     return response()->json('200');
 });
-
-
-
-
 
 Route::post('register', 'Api\RegisterController@register');
