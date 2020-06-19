@@ -1111,7 +1111,7 @@ Route::middleware('auth:api')->post('/get_group_chat', function (Request $reques
 
     $getgroup = DB::table('ngg_chat_group_user')
         ->leftJoin('ngg_chat_group', 'ngg_chat_group_user.code_room_id', 'ngg_chat_group.code_room')
-        ->select('code_staff', 'code_room_id', 'status_confirm', 'status_out_group', 'name_room', 'img', 'msg')
+        ->select('code_staff', 'code_room_id', 'status_confirm', 'status_out_group', 'name_room', 'img', 'msg','no_ti')
         ->where('code_staff', $user->username)
         ->where('status_confirm', '1')
         ->get();
@@ -1123,10 +1123,12 @@ Route::middleware('auth:api')->post('/get_group_chat', function (Request $reques
             $msg = json_decode($getgroups->msg, true);
             $last = end($msg);
             $data = array(
+
                 'code_room_id' => $getgroups->code_room_id,
                 'name_room' => $getgroups->name_room,
                 'msg' => $last,
                 'img' => $getgroups->img,
+                'no_ti' =>$getgroups->no_ti
 
             );
             $getgroup_last[] = $data;
