@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 17, 2020 at 01:49 PM
+-- Generation Time: Jun 19, 2020 at 04:41 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.3.16
 
@@ -50,12 +50,12 @@ INSERT INTO `advertise` (`id_ad`, `type_id`, `img_ad`, `subject`, `explain`, `ac
 (6, '8', 'ทำไมแมวชอบทำอะไรแปลกๆ.jpg', 'ทำไมแมวถึงชอบทำอะไรแปลก ๆ', NULL, '1', NULL, '3', NULL, NULL),
 (8, '8', 'ปัญหาการสื่อสารเกิดขึ้นได้อย่างไร.jpg', 'ปัญหาการสื่อสารเกิดขึ้นได้อย่างไร (และเราจะหลีกเลี่ยงได้อย่างไร)', NULL, '1', NULL, '3', NULL, NULL),
 (10, '7', 'โรคอ้วนคืออะไร.jpg', 'โรคอ้วนคืออะไร', NULL, '1', NULL, NULL, NULL, NULL),
-(12, '7', 'ตับมีหน้าที่อะไรบ้าง.jpg', 'ตับมีหน้าที่อะไรบ้าง?', NULL, '1', NULL, NULL, NULL, NULL),
+(12, '7', 'ตับมีหน้าที่อะไรบ้าง.jpg', 'ตับมีหน้าที่อะไรบ้าง?', NULL, '1', 1, NULL, NULL, NULL),
 (14, '7', 'จะเกิดอะไรขึ้นถ้าคุณไม่ดื่มน้ำ.jpg', 'จะเกิดอะไรขึ้นถ้าคุณไม่ดื่มน้ำ', NULL, '1', NULL, NULL, NULL, NULL),
 (16, '8', 'เคล็ดลับ5ประการ.jpg', 'เคล็ดลับ 5 ประการในการพัฒนาการคิดวิเคราะห์', NULL, '1', NULL, NULL, NULL, NULL),
 (18, '7', 'วิธีบริหารดวงตาให้กลับมาชัดแจ๋ว.jpg', '5 วิธีบริหารดวงตาให้กลับมาชัดแจ๋ว', NULL, '1', NULL, NULL, NULL, NULL),
 (20, '7', '4วิธีดูแลปอดให้ปลอดภัย.jpg', '4 วิธีดูแล “ปอด” ให้ปลอดภัย อยู่คู่กับร่างกายไปนาน ๆ', NULL, '1', NULL, NULL, NULL, NULL),
-(22, '7', 'มหัศจรรย์ของปอด.jpg', 'มหัศจรรย์ของปอด', NULL, '1', NULL, NULL, NULL, NULL),
+(22, '7', 'มหัศจรรย์ของปอด.jpg', 'มหัศจรรย์ของปอด', NULL, '1', 1, NULL, NULL, NULL),
 (24, '7', 'ไตของคุณทำงานอย่างไร.jpg', 'ไตของคุณทำงานอย่างไร', NULL, '1', NULL, NULL, NULL, NULL),
 (26, '2', 'คู่มือการใช้งาน.jpg', 'คู่มือการใช้งาน NID', NULL, '1', NULL, NULL, NULL, NULL),
 (28, '4', 'e-learning.jpg', 'Future Skills ทักษะที่จำเป็นในโลกอนาคต', NULL, '1', NULL, NULL, NULL, NULL),
@@ -64,16 +64,16 @@ INSERT INTO `advertise` (`id_ad`, `type_id`, `img_ad`, `subject`, `explain`, `ac
 (33, '8', 'Agile.jpg', 'Agile', NULL, '1', NULL, '3', NULL, NULL),
 (34, '8', 'people-manager.jpg', 'People manager', NULL, '1', NULL, '3', NULL, NULL),
 (36, '8', 'project-management-fandamental.jpg', 'Project management', NULL, '1', NULL, '3', NULL, NULL),
-(38, '8', 'sale-force.jpg', 'Sale force', NULL, '1', NULL, '2', NULL, NULL),
+(38, '8', 'sale-force.jpg', 'Sale force', NULL, '1', 3, '2', NULL, NULL),
 (40, '1', '20200608_Cover_กู้บ้าน-ธอส.jpg', 'HAPPY HOME กู้บ้านกับ ธอส.', NULL, '1', NULL, NULL, NULL, NULL),
-(42, '3', 'Cover_5วิธีสร้างความสัมพันธ์ในที่ทำงาน.jpg', '5 วิธีสร้างความสัมพันธ์ในที่ทำงาน', NULL, '1', NULL, NULL, NULL, NULL),
+(42, '3', 'Cover_5วิธีสร้างความสัมพันธ์ในที่ทำงาน.jpg', '5 วิธีสร้างความสัมพันธ์ในที่ทำงาน', NULL, '1', 1, NULL, NULL, NULL),
 (43, '2', '20200608_Cover_ISO.jpg', 'มาทำความรู้จัก ISO14001:2015 กันเถอะ', NULL, '1', NULL, NULL, NULL, NULL),
 (44, '2', '20200608_Cover_5วิธีผ่อนคลายความเครียด.jpg', '5 วิธีผ่อนคลายความเครียดหลังเลิกงาน', NULL, '1', NULL, NULL, NULL, NULL),
 (45, '2', '20200608_Covid_5คาถาโควิท-1.jpg', '5 คาถากันภัยทางการเงิน แคล้วคลาดสู้วิกฤติ โควิด-19', NULL, '1', NULL, NULL, NULL, NULL),
 (46, '2', '20200609_Cover_SSF-RMF.jpg', 'SSF และ RMF ใหม่! เป็นอย่างไร', NULL, '1', NULL, NULL, NULL, NULL),
 (47, '2', '20200609_Cover_Covid-stand.jpg', 'การแพร่ระบาดของโควิด-19 (9 มิ.ย. 63)', NULL, '1', NULL, NULL, NULL, NULL),
-(48, '4', 'Cover_Novi.jpg', 'Facebook รีแบรนด์วอลเล็ตใช้กับลิบราเป็น ‘Novi’ ย้ำเป้าหมาย โอนรับเงินง่ายเหมือนแชตหากันยังไม่เปลี่ยน', NULL, '1', NULL, NULL, NULL, NULL),
-(49, '4', '97294587_2925772154175084_8582840933819613184_n.png', 'Facebook เปิดตัว Facebook Shops สร้างร้านค้าออนไลน์ทั้งในอินสตราแกรมและเฟซบุ๊ก', NULL, '1', NULL, NULL, NULL, NULL),
+(48, '4', 'Cover_Novi.jpg', 'Facebook รีแบรนด์วอลเล็ตใช้กับลิบราเป็น ‘Novi’ ย้ำเป้าหมาย โอนรับเงินง่ายเหมือนแชตหากันยังไม่เปลี่ยน', NULL, '1', 1, NULL, NULL, NULL),
+(49, '4', '97294587_2925772154175084_8582840933819613184_n.png', 'Facebook เปิดตัว Facebook Shops สร้างร้านค้าออนไลน์ทั้งในอินสตราแกรมและเฟซบุ๊ก', NULL, '1', 1, NULL, NULL, NULL),
 (50, '3', '20200609_Cover_ฉันในอดีตVS.ฉันในอนาคต.jpg', 'ฉันในอดีต VS. ฉันในอนาคต', NULL, '1', NULL, NULL, NULL, NULL),
 (51, '2', '20200609_Cover_ต่อใบขับขี่.jpg', 'วิธีอบรมต่ออายุใบขับขี่รถยนต์', NULL, '1', NULL, NULL, NULL, NULL),
 (52, '8', '4-เคล็ดลับความสำเร็จของ-Amazon-ที่ทำให้เจฟฟ์-เบโซส์-รวยที่สุดในโลก.jpg', '4 เคล็ดลับความสำเร็จของ Amazon ที่ทำให้เจฟฟ์ เบโซส์ รวยที่สุดในโลก', NULL, '1', NULL, NULL, NULL, NULL),
@@ -134,7 +134,8 @@ CREATE TABLE `alert_daily` (
 INSERT INTO `alert_daily` (`id_alert`, `code_staff`, `feeling`, `created_at`, `updated_at`) VALUES
 (1, '94018', 'ฉันรู้สึกเฉยๆ', '2020-06-16 17:00:00', NULL),
 (2, '94013', 'ฉันรู้สึกเฉยๆ', '2020-06-16 17:00:00', NULL),
-(3, '51248', 'ฉันรู้สึกเฉยๆ', '2020-06-16 17:00:00', NULL);
+(3, '51248', 'ฉันรู้สึกเฉยๆ', '2020-06-16 17:00:00', NULL),
+(4, '94018', 'ฉันรู้สึกเฉยๆ', '2020-06-17 17:00:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -505,7 +506,7 @@ CREATE TABLE `ngg_chat_group` (
 --
 
 INSERT INTO `ngg_chat_group` (`code_room`, `img`, `name_room`, `msg`, `createdAt`) VALUES
-(4, 'default.png', 'It', '[{\"user\":\"\\u0e02\\u0e49\\u0e2d\\u0e04\\u0e27\\u0e32\\u0e21\\u0e08\\u0e32\\u0e01\\u0e23\\u0e30\\u0e1a\\u0e1a\",\"owner_room\":\"null\",\"chat_partner\":\"null\",\"msg\":\"\\u0e22\\u0e34\\u0e19\\u0e14\\u0e35\\u0e15\\u0e49\\u0e2d\\u0e19\\u0e23\\u0e31\\u0e1a\\u0e04\\u0e48\\u0e30 \\u0e42\\u0e1b\\u0e23\\u0e14\\u0e43\\u0e0a\\u0e49\\u0e04\\u0e33\\u0e2a\\u0e38\\u0e20\\u0e32\\u0e1e\",\"img\":\"user.svg\",\"createdAt\":\"2020-06-17 14:46:25\"},{\"msg\":\"44\",\"img\":\"94013.jpg\",\"user\":null,\"chat_partner\":\"94013\",\"coderoom\":null,\"coderoomgroup\":\"4\",\"name_thai\":\"\\u0e19\\u0e32\\u0e22\\u0e20\\u0e32\\u0e2a\\u0e01\\u0e23 \\u0e27\\u0e23\\u0e01\\u0e34\\u0e08\\u0e1e\\u0e39\\u0e19\\u0e1c\\u0e25\",\"createdAt\":\"2020-06-17T11:15:58.574Z\"},{\"msg\":\"777\",\"img\":\"94013.jpg\",\"user\":null,\"chat_partner\":\"94013\",\"coderoom\":null,\"coderoomgroup\":\"4\",\"name_thai\":\"\\u0e19\\u0e32\\u0e22\\u0e20\\u0e32\\u0e2a\\u0e01\\u0e23 \\u0e27\\u0e23\\u0e01\\u0e34\\u0e08\\u0e1e\\u0e39\\u0e19\\u0e1c\\u0e25\",\"createdAt\":\"2020-06-17T11:16:05.189Z\"},{\"msg\":\";;;\",\"img\":\"94018.jpg\",\"user\":null,\"chat_partner\":\"94018\",\"coderoom\":null,\"coderoomgroup\":\"4\",\"name_thai\":\"\\u0e19\\u0e32\\u0e22\\u0e19\\u0e23\\u0e32\\u0e18\\u0e23 \\u0e02\\u0e49\\u0e2d\\u0e07\\u0e2b\\u0e25\\u0e34\\u0e21\",\"createdAt\":\"2020-06-17T11:16:11.661Z\"}]', '2020-06-17 18:16:12');
+(4, 'default.png', 'It', '[{\"user\":\"\\u0e02\\u0e49\\u0e2d\\u0e04\\u0e27\\u0e32\\u0e21\\u0e08\\u0e32\\u0e01\\u0e23\\u0e30\\u0e1a\\u0e1a\",\"owner_room\":\"null\",\"chat_partner\":\"null\",\"msg\":\"\\u0e22\\u0e34\\u0e19\\u0e14\\u0e35\\u0e15\\u0e49\\u0e2d\\u0e19\\u0e23\\u0e31\\u0e1a\\u0e04\\u0e48\\u0e30 \\u0e42\\u0e1b\\u0e23\\u0e14\\u0e43\\u0e0a\\u0e49\\u0e04\\u0e33\\u0e2a\\u0e38\\u0e20\\u0e32\\u0e1e\",\"img\":\"user.svg\",\"createdAt\":\"2020-06-17 14:46:25\"},{\"msg\":\"44\",\"img\":\"94013.jpg\",\"user\":null,\"chat_partner\":\"94013\",\"coderoom\":null,\"coderoomgroup\":\"4\",\"name_thai\":\"\\u0e19\\u0e32\\u0e22\\u0e20\\u0e32\\u0e2a\\u0e01\\u0e23 \\u0e27\\u0e23\\u0e01\\u0e34\\u0e08\\u0e1e\\u0e39\\u0e19\\u0e1c\\u0e25\",\"createdAt\":\"2020-06-17T11:15:58.574Z\"},{\"msg\":\"777\",\"img\":\"94013.jpg\",\"user\":null,\"chat_partner\":\"94013\",\"coderoom\":null,\"coderoomgroup\":\"4\",\"name_thai\":\"\\u0e19\\u0e32\\u0e22\\u0e20\\u0e32\\u0e2a\\u0e01\\u0e23 \\u0e27\\u0e23\\u0e01\\u0e34\\u0e08\\u0e1e\\u0e39\\u0e19\\u0e1c\\u0e25\",\"createdAt\":\"2020-06-17T11:16:05.189Z\"},{\"msg\":\";;;\",\"img\":\"94018.jpg\",\"user\":null,\"chat_partner\":\"94018\",\"coderoom\":null,\"coderoomgroup\":\"4\",\"name_thai\":\"\\u0e19\\u0e32\\u0e22\\u0e19\\u0e23\\u0e32\\u0e18\\u0e23 \\u0e02\\u0e49\\u0e2d\\u0e07\\u0e2b\\u0e25\\u0e34\\u0e21\",\"createdAt\":\"2020-06-17T11:16:11.661Z\"},{\"msg\":\"dv\",\"img\":\"94018.jpg\",\"user\":null,\"chat_partner\":\"94018\",\"coderoom\":null,\"coderoomgroup\":\"4\",\"name_thai\":\"\\u0e19\\u0e32\\u0e22\\u0e19\\u0e23\\u0e32\\u0e18\\u0e23 \\u0e02\\u0e49\\u0e2d\\u0e07\\u0e2b\\u0e25\\u0e34\\u0e21\",\"createdAt\":\"2020-06-18T03:43:05.002Z\"},{\"msg\":\"fv\",\"img\":\"94018.jpg\",\"user\":null,\"chat_partner\":\"94018\",\"coderoom\":null,\"coderoomgroup\":\"4\",\"name_thai\":\"\\u0e19\\u0e32\\u0e22\\u0e19\\u0e23\\u0e32\\u0e18\\u0e23 \\u0e02\\u0e49\\u0e2d\\u0e07\\u0e2b\\u0e25\\u0e34\\u0e21\",\"createdAt\":\"2020-06-18T03:43:53.905Z\"},{\"msg\":\"fv\",\"img\":\"94018.jpg\",\"user\":null,\"chat_partner\":\"94018\",\"coderoom\":null,\"coderoomgroup\":\"4\",\"name_thai\":\"\\u0e19\\u0e32\\u0e22\\u0e19\\u0e23\\u0e32\\u0e18\\u0e23 \\u0e02\\u0e49\\u0e2d\\u0e07\\u0e2b\\u0e25\\u0e34\\u0e21\",\"createdAt\":\"2020-06-18T03:44:20.670Z\"},{\"msg\":\"fv\",\"img\":\"94018.jpg\",\"user\":null,\"chat_partner\":\"94018\",\"coderoom\":null,\"coderoomgroup\":\"4\",\"name_thai\":\"\\u0e19\\u0e32\\u0e22\\u0e19\\u0e23\\u0e32\\u0e18\\u0e23 \\u0e02\\u0e49\\u0e2d\\u0e07\\u0e2b\\u0e25\\u0e34\\u0e21\",\"createdAt\":\"2020-06-18T03:44:23.682Z\"},{\"msg\":\"tg\",\"img\":\"94018.jpg\",\"user\":null,\"chat_partner\":\"94018\",\"coderoom\":null,\"coderoomgroup\":\"4\",\"name_thai\":\"\\u0e19\\u0e32\\u0e22\\u0e19\\u0e23\\u0e32\\u0e18\\u0e23 \\u0e02\\u0e49\\u0e2d\\u0e07\\u0e2b\\u0e25\\u0e34\\u0e21\",\"createdAt\":\"2020-06-18T03:45:26.024Z\"},{\"msg\":\"df\",\"img\":\"94018.jpg\",\"user\":null,\"chat_partner\":\"94018\",\"coderoom\":null,\"coderoomgroup\":\"4\",\"name_thai\":\"\\u0e19\\u0e32\\u0e22\\u0e19\\u0e23\\u0e32\\u0e18\\u0e23 \\u0e02\\u0e49\\u0e2d\\u0e07\\u0e2b\\u0e25\\u0e34\\u0e21\",\"createdAt\":\"2020-06-18T03:47:08.875Z\"},{\"msg\":\"dvdv\",\"img\":\"94018.jpg\",\"user\":null,\"chat_partner\":\"94018\",\"coderoom\":null,\"coderoomgroup\":\"4\",\"name_thai\":\"\\u0e19\\u0e32\\u0e22\\u0e19\\u0e23\\u0e32\\u0e18\\u0e23 \\u0e02\\u0e49\\u0e2d\\u0e07\\u0e2b\\u0e25\\u0e34\\u0e21\",\"createdAt\":\"2020-06-18T03:48:09.429Z\"},{\"msg\":\"fb\",\"img\":\"94018.jpg\",\"user\":null,\"chat_partner\":\"94018\",\"coderoom\":null,\"coderoomgroup\":\"4\",\"name_thai\":\"\\u0e19\\u0e32\\u0e22\\u0e19\\u0e23\\u0e32\\u0e18\\u0e23 \\u0e02\\u0e49\\u0e2d\\u0e07\\u0e2b\\u0e25\\u0e34\\u0e21\",\"createdAt\":\"2020-06-18T03:51:33.729Z\"}]', '2020-06-18 10:51:34');
 
 -- --------------------------------------------------------
 
@@ -519,6 +520,8 @@ CREATE TABLE `ngg_chat_group_user` (
   `code_room_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `status_confirm` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `status_out_group` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `no_ti` int(10) DEFAULT 0,
+  `off_noti` tinyint(1) NOT NULL DEFAULT 1,
   `createdAt` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -526,9 +529,9 @@ CREATE TABLE `ngg_chat_group_user` (
 -- Dumping data for table `ngg_chat_group_user`
 --
 
-INSERT INTO `ngg_chat_group_user` (`id`, `code_staff`, `code_room_id`, `status_confirm`, `status_out_group`, `createdAt`) VALUES
-(23, '94018', '4', '1', '0', '2020-06-17 14:46:25'),
-(36, '94013', '4', '1', '0', '2020-06-17 18:15:20');
+INSERT INTO `ngg_chat_group_user` (`id`, `code_staff`, `code_room_id`, `status_confirm`, `status_out_group`, `no_ti`, `off_noti`, `createdAt`) VALUES
+(23, '94018', '4', '1', '0', 2, 1, '2020-06-17 14:46:25'),
+(36, '94013', '4', '1', '0', 3, 1, '2020-06-17 18:15:20');
 
 -- --------------------------------------------------------
 
@@ -581,7 +584,7 @@ CREATE TABLE `ngg_img_group_advertise` (
 
 CREATE TABLE `ngg_key_notification` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `player_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `player_id` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
   `code_staff` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `login_status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -2550,7 +2553,7 @@ ALTER TABLE `advertise_heade`
 -- AUTO_INCREMENT for table `alert_daily`
 --
 ALTER TABLE `alert_daily`
-  MODIFY `id_alert` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_alert` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `brand`
