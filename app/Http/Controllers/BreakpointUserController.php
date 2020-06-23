@@ -239,7 +239,7 @@ class BreakpointUserController extends Controller
 
                             $status = "<small class='badge badge-danger'>ปิด</small>";
                         }
-                        $nestedData['img'] = "<img src='http://18.140.109.247/nidapi/img/{$post->img}' alt=''>";
+                        $nestedData['img'] = "<img src='https://111loves.com/img/{$post->img}' alt=''>";
                         $nestedData['Code_Staff'] = $post->Code_Staff;
                         $nestedData['Name_Thai'] = $post->Name_Thai;
                         $nestedData['Position'] = $post->Position;

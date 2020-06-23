@@ -119,7 +119,7 @@
                     </div>
                     <div class="col-md-4" style="padding:5%;">
                     <strong>Select image to crop:</strong>
-                    <input type="file" id="image"  name="image" required>
+                    <input type="file" id="image"  name="image" >
                     </div>
                   </div>
                 </div>
@@ -145,7 +145,7 @@
                     </div>
                     <div class="col-md-4" style="padding:5%;">
                     <strong>Select image to crop:</strong>
-                    <input type="file" id="image_"   name="image_" required>
+                    <input type="file" id="image_"   name="image_" >
                     </div>
                   </div>
                 </div>

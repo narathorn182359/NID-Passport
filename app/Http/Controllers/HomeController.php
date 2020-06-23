@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
+use File;
 class HomeController extends Controller
 {
     /**
@@ -497,12 +498,12 @@ class HomeController extends Controller
     {
         if($request->file('image')){
             $file=$request->file('image');
+            $imageName = time().'.'.$file->getClientOriginalExtension();
             DB::table('ngg_km_category')
-
             ->where('id_km_cat',$id)
             ->update([
 
-                'img' => $file->getClientOriginalName(),
+                'img' => $imageName,
                 'name_category_eng' => $request->name_category_eng,
                 'name_category_thai' => $request->name_category_thai,
 
@@ -511,7 +512,7 @@ class HomeController extends Controller
                  ]);
 
 
-            $file->move(public_path(). '/imgnew', $file->getClientOriginalName());
+            $file->move(public_path(). '/imgnew',$imageName);
         }
 
 
@@ -712,18 +713,24 @@ class HomeController extends Controller
     public function  add_img(request $request)
     {
         $files=$request->file('name_img');
-
+        $imageName = time().'.'.$files->getClientOriginalExtension();
         DB::table('ngg_libary_img')
         ->insert([
-            'name_img'=> $files->getClientOriginalName(),
-            'name_part'=> 'http://'.$_SERVER['HTTP_HOST'].'/nidapi/imgnew/'.$files->getClientOriginalName()
+            'name_img'=> $imageName,
+            'name_part'=> 'http://'.$_SERVER['HTTP_HOST'].'/imgnew/'.$imageName
         ]);
-        $files->move(public_path(). '/imgnew', $files->getClientOriginalName());
+        $files->move(public_path(). '/imgnew', $imageName);
         return redirect('settinnew');
     }
 
     public function  delete_libary_img(request $request)
     {
+      $img = DB::table('ngg_libary_img')
+        ->where('id_img',$request->id)
+        ->first();
+
+        $image_path = public_path().'/imgnew/'.$img->name_img;
+        unlink($image_path);
 
         DB::table('ngg_libary_img')
         ->where('id_img',$request->id)
@@ -969,7 +976,7 @@ class HomeController extends Controller
                  foreach ($posts as $post)
                      {
                         $nestedData['id_img'] = $post->id_img;
-                        $nestedData['name_img'] = "<img src='http://18.140.109.247/nidapi/imgnew/{$post->name_img}' width='50%'>";
+                        $nestedData['name_img'] = "<img src='https://111loves.com/imgnew/{$post->name_img}' width='50%'>";
                         $nestedData['name_part'] =  $post->name_part;
                         $nestedData['options'] = "<a href='javascript:void(0)' class='btn btn-danger btn-circle btn-xs  DeleteLibraryImg' data-id='{$post->id_img}'>ลบ</a>";
                         $data[] = $nestedData;
@@ -1046,7 +1053,7 @@ class HomeController extends Controller
                      {
                         $edit =  route('editkmhead',$post->id_km_cat);
                         $nestedData['id_km_cat'] = $post->id_km_cat;
-                        $nestedData['img'] = "  <img src='http://18.140.109.247/nidapi/imgnew/{$post->img}'  width='50px'>";
+                        $nestedData['img'] = "<img src='https://111loves.com/imgnew/{$post->img}'  width='50px'>";
                         $nestedData['name_category_eng'] = $post->name_category_eng;
                         $nestedData['name_category_thai'] =  $post->name_category_thai;
                         $nestedData['options'] = " <a href='{$edit}' class='btn btn-warning btn-circle btn-xs'>แก้ไข</a>

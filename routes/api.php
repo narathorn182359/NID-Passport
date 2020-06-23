@@ -1475,9 +1475,6 @@ Route::middleware('auth:api')->post('/remove_noti_group', function (Request $req
             ]);
 
 
-
-
-
     return response()->json('200');
 });
 

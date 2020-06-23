@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>AdminLTE 3 | Log in</title>
+  <title>NID  | Log in</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -17,15 +17,29 @@
   <link rel="stylesheet" href="{{asset('/adminlte/dist/css/adminlte.min.css')}}">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300&display=swap" rel="stylesheet">
+  <style>
+    body{
+        font-family: 'Prompt', sans-serif;
+    }
+    img {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
+  width: 150px;
+}
+</style>
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-  <a href="{{url('/')}}"><b>Admin</b>NID</a>
+  <a href="{{url('/login')}}">
+  <img src="{{url('imgnew/Logo_NID.png')}}" alt="" width="10%">
+</a>
   </div>
   <!-- /.login-logo -->
   <div class="card">
-    
+
     <div class="card-body login-card-body">
       @if(session()->has('login_error'))
     <div class="alert alert-warning">
@@ -53,7 +67,7 @@
           </div>
         </div>
         <div class="row">
-         
+
           <!-- /.col -->
           <div class="col">
             <button type="submit" class="btn btn-danger btn-block">เข้าระบบ</button>
