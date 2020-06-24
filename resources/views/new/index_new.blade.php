@@ -10,11 +10,30 @@
   </div>
 </div>
 @endif
+<br>
 <div class="row">
 
   </div>
-  <br>
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">วิดิโอ  <a href="{{url('/addnew_libary_video')}}" class="btn btn-success btn-xs">วิดิโอ</a></h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+          <table class="table table-bordered table-sm" id="posts_video">
+              <thead>
+                  <th>วิดิโอ</th>
+                  <th>ชื่อภาษาอังกฤษ</th>
+                  <th>ชื่อภาษาไทย</th>
+                  <th>URL</th>
+                  <th>เพิ่มเติม</th>
+              </thead>
+         </table>
 
+      </div>
+    </div>
+  </div>
+  <br>
   <div class="card shadow mb-4">
       <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">ชุดรูปภาพ  <a href="{{url('/addnew_libary_img')}}" class="btn btn-success btn-xs">เพิ่มชุดรูปภาพ</a></h6>
@@ -23,12 +42,12 @@
         <div class="table-responsive">
             <table class="table table-bordered table-sm" id="posts_libraryimg">
                 <thead>
-                    <th>ชื่อหมวดหมู่</th>
+                    <th>รูป</th>
                     <th>ชื่อหมวดหมู่ไทย</th>
                     <th>เพิ่มเติม</th>
                 </thead>
            </table>
-         
+
         </div>
       </div>
     </div>

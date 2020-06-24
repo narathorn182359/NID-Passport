@@ -151,3 +151,19 @@ Route::get('index_chat', 'ChatController@index')->name('index');
 Route::get('history_chat_last', 'ChatController@history_chat_last')->name('history_chat_last');
 
 Route::get('room/{id}', 'ChatController@room')->name('room');
+
+Route::get('/addnew_libary_img_add', 'HomeController@addnew_libary_img_add')->name('addnew_libary_img_add');
+
+Route::post('/add_img_add', 'HomeController@add_img_add')->name('add_img_add');
+
+Route::post('/addnew_video', 'HomeController@addnew_video')->name('addnew_video');
+
+Route::get('/addnew_libary_video', 'HomeController@addnew_libary_video')->name('addnew_libary_video');
+
+Route::post('/allposts_video', 'HomeController@allposts_video')->name('allposts_video');
+
+
+
+Route::post('/delete_new_video', 'HomeController@delete_new_video')->name('delete_new_video');
+
+

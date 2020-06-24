@@ -47,6 +47,11 @@
   width: 150px;
 }
 </style>
+<style>
+    .progress { position:relative; width:100%; border: 1px solid #7F98B2; padding: 1px; border-radius: 3px; height: 20px; }
+    .bar { background-color: #B4F5B4; width:0%; height:50px; border-radius: 3px; }
+    .percent { position:absolute; display:inline-block; top:3px; left:48%; color: #7F98B2;}
+</style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
     <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
@@ -66,9 +71,9 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
-    <img src="{{url('/adminlte/dist/img/AdminLTELogo.png')}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+    <img src="{{url('/imgnew/Logo_NID.png')}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
            style="opacity: .8">
-      <span class="brand-text font-weight-light">AdminNID</span>
+      <span class="brand-text font-weight-light">NiD</span>
     </a>
 
     <!-- Sidebar -->
@@ -76,10 +81,10 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-        <img src="{{url('/adminlte/dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image">
+
         </div>
         <div class="info">
-          <a href="#" class="d-block">Hi</a>
+          <a href="#" class="d-block">ยินดีตอนรับ</a>
         </div>
       </div>
 
@@ -202,6 +207,7 @@
 <script src="{{asset('js/libraryimg.js')}}"></script>
 <script src="{{asset('js/KM360.js')}}"></script>
 <script src="{{asset('js/get_user_detail.js')}}"></script>
+<script src="{{asset('js/libraryvideo.js')}}"></script>
 <script>
     $(function () {
       // Replace the <textarea id="editor1"> with a CKEditor
