@@ -1,8 +1,5 @@
 @extends('layouts.app')
 @section('content')
-
-
-
 @if(Session::has('flash_message') )
 <div class="card mb-4 py-3 border-left-success">
   <div class="card-body">
@@ -16,7 +13,7 @@
   </div>
   <div class="card shadow mb-4">
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary">วิดิโอ  <a href="{{url('/addnew_libary_video')}}" class="btn btn-success btn-xs">วิดิโอ</a></h6>
+      <h6 class="m-0 font-weight-bold text-primary">เพิ่มวิดิโอ  <a href="{{url('/addnew_libary_video')}}" class="btn btn-success btn-xs">วิดิโอ</a></h6>
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -29,7 +26,6 @@
                   <th>เพิ่มเติม</th>
               </thead>
          </table>
-
       </div>
     </div>
   </div>

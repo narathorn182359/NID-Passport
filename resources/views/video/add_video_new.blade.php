@@ -2,7 +2,7 @@
 @section('content')
 
 
-<a href="{{url('/settinnew')}}">ย้อนกลับ</a>
+<a href="{{url('/addnew_list')}}">ย้อนกลับ</a>
 <br>
 <br>
 <div class="row">
@@ -86,7 +86,7 @@
         complete: function(xhr) {
             status.html(xhr.responseText);
             alert('Uploaded Successfully');
-            window.location.href = "/settinnew";
+            window.location.href = "/addnew_list";
         }
     });
 
@@ -95,5 +95,3 @@
 
 
 @endsection
-
-

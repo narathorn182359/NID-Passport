@@ -274,7 +274,7 @@ class HomeController extends Controller
     public function editnew_list_save(Request $request, $id)
     {
 
-        dd($request->file('image_'));
+
         if ($request->file('image_') != null) {
             $image_2 = $request->image_info;
             list($type, $image_2) = explode(';', $image_2);
@@ -1044,15 +1044,18 @@ class HomeController extends Controller
 
     public function addnew_video(request $request)
     {
+
         $image_name = $request->file('video')->getRealPath();
         Cloudder::uploadVideo($image_name, null);
         $image_url = Cloudder::getResult();
+        dd($image_url);
         $getPublicId = Cloudder::getPublicId();
+          $sub  =   explode("//",$image_url['url']);
         DB::table('ngg_video')->insert([
 
             'new_video_en' => $request->new_video_en,
             'new_video_th' => $request->new_video_th,
-            'url_vedio' => $image_url['url'],
+            'url_vedio' => "https://".$sub[1],
             'getPublicId' => $getPublicId,
         ]);
 
@@ -1061,6 +1064,8 @@ class HomeController extends Controller
 
     public function allposts_video(request $request)
     {
+
+
         $columns = array(
             0 => 'id_video',
             1 => 'new_video_en',
@@ -1138,6 +1143,17 @@ class HomeController extends Controller
 
     }
 
+    public function addnew_libary_video_new(request $request)
+    {
+        $listmenu = DB::table('user_role')
+            ->leftJoin('menu_master', 'user_role.name_menu_id', '=', 'menu_master.id')
+            ->where('username_id', Auth::user()->username)
+            ->get();
+        $data = array(
+            'listmenu' => $listmenu,
+        );
 
+        return view('video/add_video_new', $data);
+    }
 
 }

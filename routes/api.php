@@ -348,8 +348,47 @@ Route::middleware('auth:api')->post('/count_read', function (Request $request) {
 Route::middleware('auth:api')->get('/get_list_benefits', function (Request $request) {
     $user = $request->user();
     $data = $request->json()->all();
-    $json = DB::table('ngg_list_benefits')->get();
-    return response()->json($json);
+    $ngg_list_benefits = DB::table('ngg_list_benefits')->get();
+
+     foreach($ngg_list_benefits as $item){
+        $ngg_benefits = DB::table('ngg_benefits')
+        ->where('id_list_be',$item->id)
+        ->where('code_staff',$user->username)
+        ->get();
+        foreach($ngg_benefits as $items){
+
+                $datas = array(
+                    'head' => $items->be_name,
+                    'detail' => $items->be_detail
+                  );
+
+                  $i[] = $datas;
+
+
+        }
+        if(isset($i)){
+            $lastdata = array(
+                'icon' => $item->icon,
+                'name' => $item->name_benefits,
+                'list' =>$i
+
+           );
+           unset($i);
+        }else{
+            $lastdata = array(
+                'icon' => $item->icon,
+                'name' => $item->name_benefits,
+                'list' =>  array(
+                    'head' => "ไม่พบข้อมูล",
+                    'detail' => "ไม่พบข้อมูล",
+                  )
+
+           );
+        }
+
+        $final_data[] =  $lastdata;
+     }
+    return response()->json($final_data);
 });
 
 Route::middleware('auth:api')->post('/micro', function (Request $request) {
@@ -1464,6 +1503,8 @@ Route::middleware('auth:api')->post('/remove_noti', function (Request $request) 
 
 
 
+
+
 Route::middleware('auth:api')->post('/remove_noti_group', function (Request $request) {
     $data = $request->json()->all();
     $user = $request->user();
@@ -1473,9 +1514,18 @@ Route::middleware('auth:api')->post('/remove_noti_group', function (Request $req
             ->update([
                 'no_ti' =>'0'
             ]);
-
-
     return response()->json('200');
 });
+
+
+
+
+
+
+
+
+
+
+
 
 Route::post('register', 'Api\RegisterController@register');

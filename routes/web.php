@@ -162,8 +162,8 @@ Route::get('/addnew_libary_video', 'HomeController@addnew_libary_video')->name('
 
 Route::post('/allposts_video', 'HomeController@allposts_video')->name('allposts_video');
 
-
-
 Route::post('/delete_new_video', 'HomeController@delete_new_video')->name('delete_new_video');
+
+Route::get('addnew_libary_video_new', 'HomeController@addnew_libary_video_new')->name('addnew_libary_video_new');
 
 

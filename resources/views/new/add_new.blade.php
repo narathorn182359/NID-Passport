@@ -95,7 +95,28 @@
 @section('content')
 <a href="{{url('/settinnew')}}">ย้อนกลับ</a>
 <br>
-<br>
+<div class="row">
+
+  </div>
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">เพิ่มวิดิโอ  <a href="{{url('/addnew_libary_video_new')}}" class="btn btn-success btn-xs">วิดิโอ</a></h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+          <table class="table table-bordered table-sm" id="posts_video">
+              <thead>
+                  <th>วิดิโอ</th>
+                  <th>ชื่อภาษาอังกฤษ</th>
+                  <th>ชื่อภาษาไทย</th>
+                  <th>URL</th>
+                  <th>เพิ่มเติม</th>
+              </thead>
+         </table>
+      </div>
+    </div>
+  </div>
+  <br>
 <div  class="row">
     <div class="col-md-12">
     <div class="card shadow mb-4">
