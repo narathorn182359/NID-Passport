@@ -490,12 +490,24 @@ class HomeController extends Controller
         $i = 0;
         if ($request->file('image')) {
 
-            DB::table('ngg_km_category_detail')->insert([
-                'id_km_cat' => $request->type_id,
-                'km_title' => $request->km_title,
-                'km_important' => $request->km_important,
 
-            ]);
+            if($request->type_id == "3"){
+                DB::table('ngg_km_category_detail')->insert([
+                    'id_km_cat' => $request->type_id,
+                    'km_title' => $request->km_title,
+                    'km_important' => $request->km_important,
+                    'km_hr' => '1',
+
+                ]);
+            }else{
+                DB::table('ngg_km_category_detail')->insert([
+                    'id_km_cat' => $request->type_id,
+                    'km_title' => $request->km_title,
+                    'km_important' => $request->km_important,
+
+                ]);
+            }
+
 
             $file = $request->file('image');
             $id_ad = DB::table('ngg_km_category_detail')->Where('km_title', $request->km_title)->first();
