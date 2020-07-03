@@ -292,9 +292,9 @@ Route::middleware('auth:api')->get('/getkm360list_search', function (Request $re
     $user = $request->user();
     $data = $request->json()->all();
     $json = DB::table('ngg_km_category_detail')
-    ->leftJoin('ngg_km_img_category_detail','ngg_km_category_detail.id','ngg_km_img_category_detail.id_km_detail')
-    ->select('id','km_title','km_remark','km_name_img','created_at')
-    ->get();
+        ->leftJoin('ngg_km_img_category_detail', 'ngg_km_category_detail.id', 'ngg_km_img_category_detail.id_km_detail')
+        ->select('id', 'km_title', 'km_remark', 'km_name_img', 'created_at')
+        ->get();
     return response()->json($json);
 });
 
@@ -1551,52 +1551,43 @@ Route::middleware('auth:api')->post('/save_img_chat', function (Request $request
     file_put_contents('imgchat/' . $imageName, base64_decode($image));
 
     return response()->json([
-        'url' => 'https://111loves.com/imgchat/'.$imageName,
+        'url' => 'https://111loves.com/imgchat/' . $imageName,
         'name_img' => $imageName,
     ]);
 });
 
-
-
+Route::middleware('auth:api')->post('/listkmhr', function (Request $request) {
+    $data = $request->json()->all();
+    $user = $request->user();
+    $json = DB::table('ngg_km_category_detail')
+        ->leftJoin('ngg_km_img_category_detail', 'ngg_km_category_detail.id', 'ngg_km_img_category_detail.id_km_detail')
+        ->where('km_hr', $data['type'])
+        ->select('id', 'km_title', 'km_remark', 'km_name_img', 'created_at')
+        ->get();
+    return response()->json($json);
+});
 
 Route::middleware('auth:api')->post('/listkmhr', function (Request $request) {
     $data = $request->json()->all();
     $user = $request->user();
     $json = DB::table('ngg_km_category_detail')
-           ->leftJoin('ngg_km_img_category_detail','ngg_km_category_detail.id','ngg_km_img_category_detail.id_km_detail')
-           ->where('km_hr',  $data['type'])
-           ->select('id','km_title','km_remark','km_name_img','created_at')
-           ->get();
-    return response()->json( $json);
+        ->leftJoin('ngg_km_img_category_detail', 'ngg_km_category_detail.id', 'ngg_km_img_category_detail.id_km_detail')
+        ->where('km_hr', $data['type'])
+        ->select('id', 'km_title', 'km_remark', 'km_name_img', 'created_at')
+        ->get();
+    return response()->json($json);
 });
-
-
-Route::middleware('auth:api')->post('/listkmhr', function (Request $request) {
-    $data = $request->json()->all();
-    $user = $request->user();
-    $json = DB::table('ngg_km_category_detail')
-           ->leftJoin('ngg_km_img_category_detail','ngg_km_category_detail.id','ngg_km_img_category_detail.id_km_detail')
-           ->where('km_hr',  $data['type'])
-           ->select('id','km_title','km_remark','km_name_img','created_at')
-           ->get();
-    return response()->json( $json);
-});
-
-
-
 
 Route::middleware('auth:api')->post('/listkmhrdetail', function (Request $request) {
     $data = $request->json()->all();
     $user = $request->user();
     $json = DB::table('ngg_km_category_detail')
-           ->leftJoin('ngg_km_img_category_detail','ngg_km_category_detail.id','ngg_km_img_category_detail.id_km_detail')
-           ->where('id',  $data['type'])
-           ->select('id','km_title','km_remark','km_name_img','created_at','km_important')
-           ->first();
-    return response()->json( $json);
+        ->leftJoin('ngg_km_img_category_detail', 'ngg_km_category_detail.id', 'ngg_km_img_category_detail.id_km_detail')
+        ->where('id', $data['type'])
+        ->select('id', 'km_title', 'km_remark', 'km_name_img', 'created_at', 'km_important')
+        ->first();
+    return response()->json($json);
 });
-
-
 
 Route::middleware('auth:api')->post('/save_img_profile', function (Request $request) {
     $data = $request->json()->all();
@@ -1611,7 +1602,63 @@ Route::middleware('auth:api')->post('/save_img_profile', function (Request $requ
     return response()->json('200');
 });
 
+Route::middleware('auth:api')->post('/role_com', function (Request $request) {
+    $data = $request->json()->all();
+    $user = $request->user();
 
+    $json = DB::table('ngg_role_company')
+        ->where('code_staff', $user->username)
+        ->where('role_name', $data['type'])
+        ->count();
+    $company_s = DB::table('users_detail')
+        ->where('Code_Staff', $user->username)
+        ->select('Company')
+        ->first();
+    $company = DB::table('users_detail')
+        ->whereNotIn('Company', [$company_s->Company])
+        ->select('Company')
+        ->get();
 
+    $a = array();
+
+    foreach ($company as $i) {
+
+        array_push($a, $i->Company);
+    }
+    $brand_r = array_unique($a);
+    $array = $a;
+    $unique = array();
+    foreach ($array as $v) {
+        isset($k[$v]) || ($k[$v] = 1) && $unique[] = $v;
+    }
+
+    if ($json > 0) {
+        return response()->json([
+            'company' => $unique,
+            'status' => 'Y',
+
+        ]);
+    } else {
+        return response()->json([
+
+            'status' => 'N',
+
+        ]);
+    }
+
+});
+
+Route::middleware('auth:api')->post('/get_em_company', function (Request $request) {
+    $data = $request->json()->all();
+    $user = $request->user();
+
+    $company_em = DB::table('users_detail')
+        ->Where('Name_Thai', 'LIKE', '%' . $data['name'] . '%')
+        ->where('Company', $data['type'])
+        ->get();
+
+        return response()->json($company_em);
+
+});
 
 Route::post('register', 'Api\RegisterController@register');
