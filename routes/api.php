@@ -1596,7 +1596,7 @@ Route::middleware('auth:api')->post('/save_img_profile', function (Request $requ
     ->where('code_staff', $user->username)
     ->first();
     $image_path = public_path() . '/img/' . $get->img;
-    unlink($image_path);
+   // unlink($image_path);
     $image = $data['image']; // your base64 encoded
     $image = str_replace('data:image/jpeg;base64,', '', $image);
     $image = str_replace(' ', '+', $image);
