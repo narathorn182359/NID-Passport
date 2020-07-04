@@ -1592,13 +1592,22 @@ Route::middleware('auth:api')->post('/listkmhrdetail', function (Request $reques
 Route::middleware('auth:api')->post('/save_img_profile', function (Request $request) {
     $data = $request->json()->all();
     $user = $request->user();
+    $get = DB::table('users_detail')
+    ->where('code_staff', $user->username)
+    ->first();
+    $image_path = public_path() . '/img/' . $get->img;
+    unlink($image_path);
     $image = $data['image']; // your base64 encoded
     $image = str_replace('data:image/jpeg;base64,', '', $image);
     $image = str_replace(' ', '+', $image);
-    $imageName = $user->username . '.' . 'jpg';
+    $imageName = str_random(10) . '.' . 'jpg';
     //  \File::put(public_path(). 'imgchat/' . $imageName, base64_decode($image));
     file_put_contents('img/' . $imageName, base64_decode($image));
-
+    DB::table('users_detail')
+    ->where('code_staff', $user->username)
+    ->update([
+        'img'=>$imageName
+    ]);
     return response()->json('200');
 });
 
