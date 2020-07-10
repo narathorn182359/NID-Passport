@@ -166,4 +166,6 @@ Route::post('/delete_new_video', 'HomeController@delete_new_video')->name('delet
 
 Route::get('addnew_libary_video_new', 'HomeController@addnew_libary_video_new')->name('addnew_libary_video_new');
 
+Route::post('save_setbanner', 'HomeController@save_setbanner')->name('save_setbanner');
+
 

@@ -79,6 +79,7 @@
                     <th>หมวดหมู่</th>
                     <th>ชื่อ</th>
                     <th>สถานะโชว์</th>
+                    <th>ลำดับการแสดง</th>
                     <th>เพิ่มเติม</th>
                 </thead>
            </table>
@@ -88,5 +89,31 @@
       </div>
 
 
+      <div class="modal fade" id="modal-Setbanner">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">กำหนดลำดับการแสดง</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form id="FromSaveBanner">
+              <div class="modal-body">
+                <input   type="hidden" id="id_number" name="id_number" />
+              <input  type="number"  min="0"  class="form-control"  name="number"  id="number"   required placeholder="1"/>
+              </div>
+              <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
+                <button type="submit" class="btn btn-primary">บันทึก</button>
+              </div>
+            </form>
+          
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
 
 @endsection

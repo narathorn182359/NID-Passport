@@ -225,6 +225,11 @@
 
                     </label>
                   </div>
+                  ข้อความสำหรับการแจ้งเตือน
+                  <textarea rows="4" class="form-control" name="noti" placeholder="ข้อความสำหรับการแจ้งเตือน" required>
+  
+                  </textarea>
+                  <br>
               <input type="submit"   class="btn btn-success" value="บันทึก" onclick="mycroppie()"  >
         </form>
         </div>

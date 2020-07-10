@@ -203,6 +203,7 @@ Route::middleware('auth:api')->get('/banner', function (Request $request) {
 
     $ngg_banner = DB::table('ngg_banner')
         ->Where('active_banner', '1')
+        ->orderBy('section_banner','ASC')
         ->get();
 
     $advertise_heade = DB::table('advertise_heade')
@@ -1264,9 +1265,20 @@ Route::middleware('auth:api')->post('/save_chat_group', function (Request $reque
     $last = end($msg_cut);
     $msg_info = DB::table('users_detail')->where('Code_Staff', $user->username)->first();
     $room_info = DB::table('ngg_chat_group')->where('code_room', $data['id_room'])->first();
-    $content = array(
-        "en" => 'ข้อความ:' . $last['msg'],
-    );
+
+
+    if ($last['msg'] != strip_tags($last['msg'])) {
+        $content = array(
+            "en" => 'ข้อความ: รูปภาพ',
+        );
+
+    } else {
+        $content = array(
+            "en" => 'ข้อความ:' . $last['msg'],
+        );
+
+    }
+
     $heading = array(
         "en" => "กลุ่ม " . $room_info->name_room . " " . $msg_info->Name_Thai . "(" . $msg_info->Nickname . ")",
     );
@@ -1294,7 +1306,7 @@ Route::middleware('auth:api')->post('/save_chat_group', function (Request $reque
 
             }
         }
-        print_r($last);
+        
         if (count($list_noti) > 0) {
 
             $fields = array(

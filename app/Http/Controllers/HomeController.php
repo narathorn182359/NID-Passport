@@ -138,6 +138,58 @@ class HomeController extends Controller
             file_put_contents('imgnew/' . $image_name_3, $image_3);
         }
 
+
+
+      
+
+        $list_noti = array();
+        $setmeg_noti = DB::table('ngg_key_notification')
+        ->where('login_status', '1')
+        ->get();
+        foreach ($setmeg_noti as $item) {
+            array_push($list_noti, $item->player_id);
+
+        }
+ 
+        if (count($list_noti) > 0) {
+
+            $heading = array(
+                "en" => "ประชาสัมพันธ์",
+            );
+
+            $content = array(
+                "en" => $request->noti,
+            );
+
+            $fields = array(
+                'app_id' => "16adf426-0420-49fa-b189-d71af438789a",
+                'include_player_ids' => $list_noti,
+                'data' => array("foo" => "bar"),
+                'contents' => $content,
+                'headings' =>  $heading,
+            );
+
+            $fields = json_encode($fields);
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8'));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HEADER, false);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            $response = curl_exec($ch);
+            curl_close($ch);
+
+
+        }
+      
+
+
+
+
+
+
         Session::flash('flash_message', 'บันทึกเรียบร้อย!! ');
         return redirect('settinnew');
 
@@ -522,6 +574,50 @@ class HomeController extends Controller
             }
 
         }
+
+
+        $list_noti = array();
+        $setmeg_noti = DB::table('ngg_key_notification')
+        ->where('login_status', '1')
+        ->get();
+        foreach ($setmeg_noti as $item) {
+            array_push($list_noti, $item->player_id);
+
+        }
+ 
+        if (count($list_noti) > 0) {
+
+            $heading = array(
+                "en" => "ประชาสัมพันธ์",
+            );
+
+            $content = array(
+                "en" => $request->noti,
+            );
+
+            $fields = array(
+                'app_id' => "16adf426-0420-49fa-b189-d71af438789a",
+                'include_player_ids' => $list_noti,
+                'data' => array("foo" => "bar"),
+                'contents' => $content,
+                'headings' =>  $heading,
+            );
+
+            $fields = json_encode($fields);
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8'));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HEADER, false);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            $response = curl_exec($ch);
+            curl_close($ch);
+
+
+        }
+      
         Session::flash('flash_message', 'บันทึกเรียบร้อย!! ');
         return redirect('km360');
     }
@@ -741,7 +837,10 @@ class HomeController extends Controller
                 $nestedData['name_adver'] = $post->name_adver;
                 $nestedData['subject'] = $post->subject;
                 $nestedData['active_banner'] = $post->active_banner;
-                $nestedData['options'] = "&emsp;<a href='{$edit}' class='btn btn-warning btn-circle btn-xs'>แก้ไข</a>
+                $nestedData['section_banner'] = $post->section_banner;
+                $nestedData['options'] = "
+                          &emsp;<a href='javascript:void(0)' class='btn btn-success btn-circle btn-xs Setbanner' data-id='{$post->id_banner}'>จัดลำดับ</a>
+                          &emsp;<a href='{$edit}' class='btn btn-warning btn-circle btn-xs'>แก้ไข</a>
                           &emsp;<a href='javascript:void(0)' class='btn btn-info btn-circle btn-xs  ShoweBanner'  data-id='{$post->id_ad}'   >แสดง Banner</a>
                           &emsp;<a href='javascript:void(0)' class='btn btn-danger btn-circle btn-xs  DeleteListNew' data-id='{$post->id_ad}'>ลบ</a>
 
@@ -1167,5 +1266,20 @@ class HomeController extends Controller
 
         return view('video/add_video_new', $data);
     }
+
+    public function save_setbanner(request $request){
+    
+
+      DB::table('ngg_banner')->where('id_banner',$request->id_number)
+      ->update(
+          [
+              'section_banner' => $request->number
+          ]
+          );
+ 
+
+
+    }
+    
 
 }
