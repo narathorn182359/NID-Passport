@@ -13,7 +13,8 @@
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Tempusdominus Bbootstrap 4 -->
   <link rel="stylesheet" href="{{asset('adminlte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')}}">
-
+  <link rel="stylesheet" href="{{asset('adminlte/plugins/select2/css/select2.min.css')}}">
+  <link rel="stylesheet" href="{{asset('adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
     <!-- DataTables -->
     <link rel="stylesheet" href="{{asset('adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
     <link rel="stylesheet" href="{{asset('adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
@@ -202,14 +203,18 @@
 <script src="{{asset('adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
 <script src="{{asset('adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
 <script src="{{asset('adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
+<!-- Select2 -->
+<script src="{{asset('adminlte/plugins/select2/js/select2.full.min.js')}}"></script>
 <script src="{{asset('js/listnew.js')}}"></script>
 <script src="{{asset('js/category.js')}}"></script>
 <script src="{{asset('js/libraryimg.js')}}"></script>
 <script src="{{asset('js/KM360.js')}}"></script>
 <script src="{{asset('js/get_user_detail.js')}}"></script>
 <script src="{{asset('js/libraryvideo.js')}}"></script>
+
 <script>
     $(function () {
+      $('.select2').select2();
       // Replace the <textarea id="editor1"> with a CKEditor
       // instance, using default configuration.
       CKEDITOR.replace('explain')

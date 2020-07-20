@@ -168,4 +168,8 @@ Route::get('addnew_libary_video_new', 'HomeController@addnew_libary_video_new')-
 
 Route::post('save_setbanner', 'HomeController@save_setbanner')->name('save_setbanner');
 
+Route::post('save_uername', 'BreakpointUserController@save_uername')->name('save_uername');
 
+Route::get('get_uername', 'BreakpointUserController@get_uername')->name('get_uername');
+
+Route::post('importDataUser', 'BreakpointUserController@importDataUser')->name('importDataUser');

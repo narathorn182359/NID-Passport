@@ -29,13 +29,6 @@ public function findForPassport($username) {
 
 }
 
-public function validateForPassportPasswordGrant($password)
-{
-    if ($this->active) {
-        return true;
-    }
-
-}
 
 
 
