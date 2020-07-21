@@ -407,8 +407,8 @@ class BreakpointUserController extends Controller
                 ]);
 
                 DB::table('user_role')->insert(  [
-                    'username_id' => $value->Code_Staff, 
-                    'card_id_id' => $value->Code_Staff, 
+                    'username_id' => $request->usernameText,
+                    'card_id_id' => $request->usernameText,
                     'name_menu_id' => '7',
                      ]);
 

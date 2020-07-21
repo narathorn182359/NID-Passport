@@ -323,7 +323,8 @@ Route::middleware('auth:api')->get('/get_km360', function (Request $request) {
     $user = $request->user();
     $data = $request->json()->all();
     $json = DB::table('ngg_km_category')
-        ->select('id_km_cat', 'img')
+        ->select('id_km_cat', 'img','section')
+        ->orderBy('section', 'asc')
         ->get();
     return response()->json($json);
 });
