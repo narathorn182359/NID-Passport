@@ -78,6 +78,7 @@
             <div class="content">
                 <div class="title m-b-md">
                 <img src="{{url('imgnew/Logo_NID.png')}}" alt="" width="40%">
+                <center> <p><h2>TEST DEVELOP</h2> </p></center>
                 </div>
 
                 <div class="links">

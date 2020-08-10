@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
  */
 
 Route::get('/', function () {
+    dd(bcrypt('_$-+^;)&#=%.'));
     return view('welcome');
 });
 

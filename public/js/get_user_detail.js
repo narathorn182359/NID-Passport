@@ -5,47 +5,43 @@ $(document).ready(function () {
         },
     });
 
-  
-        $("#get_data_breakpoint").DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: "/get_data_breakpoint",
-                dataType: "json",
-                type: "POST",
-                data: { _token: $("#token").val() },
-            },
-            columns: [
-                { data: "Code_Staff" },
-                { data: "Name_Thai" },
-                { data: "Position" },
-                { data: "Department" },
-                { data: "options" },
-            ],
-        });
-   
+    $("#get_data_breakpoint").DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: "/get_data_breakpoint",
+            dataType: "json",
+            type: "POST",
+            data: { _token: $("#token").val() },
+        },
+        columns: [
+            { data: "Code_Staff" },
+            { data: "Name_Thai" },
+            { data: "Position" },
+            { data: "Department" },
+            { data: "options" },
+        ],
+    });
 
-
-        $("#get_data_ok").DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: "/get_data_ok",
-                dataType: "json",
-                type: "POST",
-                data: { _token: $("#token").val() },
-            },
-            columns: [
-                { data: "img" },
-                { data: "Code_Staff" },
-                { data: "Name_Thai" },
-                { data: "Position" },
-                { data: "Department" },
-                { data: "active" },
-                { data: "options" },
-            ],
-        });
-   
+    $("#get_data_ok").DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: "/get_data_ok",
+            dataType: "json",
+            type: "POST",
+            data: { _token: $("#token").val() },
+        },
+        columns: [
+            { data: "img" },
+            { data: "Code_Staff" },
+            { data: "Name_Thai" },
+            { data: "Position" },
+            { data: "Department" },
+            { data: "active" },
+            { data: "options" },
+        ],
+    });
 
     $("body").on("click", ".EnableOrDis", function () {
         var id = $(this).data("id");
@@ -112,23 +108,22 @@ $(document).ready(function () {
                     },
                     url: "delete_new_username",
                     success: function (data) {
-                      if(data == '404'){
-                        Swal.fire({
-                          icon: "error",
-                          title: "ผิดพลาด",
-                          text: "ไม่สามารถลบได้กรุณาปิดการใช้งานก่อนลบ",
-                          confirmButtonText: "ตกลง",
-                      });
-                      }else{
-                        Swal.fire(
-                          "ลบข้อมูลสำเร็จ!",
-                          "หากสงสัยข้อมูลกรุณาติดต่อทีมพัฒนา",
-                          "success"
-                      ).then(function () {
-                          location.reload();
-                      });
-                      }
-                        
+                        if (data == "404") {
+                            Swal.fire({
+                                icon: "error",
+                                title: "ผิดพลาด",
+                                text: "ไม่สามารถลบได้กรุณาปิดการใช้งานก่อนลบ",
+                                confirmButtonText: "ตกลง",
+                            });
+                        } else {
+                            Swal.fire(
+                                "ลบข้อมูลสำเร็จ!",
+                                "หากสงสัยข้อมูลกรุณาติดต่อทีมพัฒนา",
+                                "success"
+                            ).then(function () {
+                                location.reload();
+                            });
+                        }
                     },
                     error: function (data) {
                         Swal.fire({
@@ -145,7 +140,7 @@ $(document).ready(function () {
 
     $("body").on("click", ".addusername", function () {
         $("#form-addusername").trigger("reset");
-        $("#id").val('')
+        $("#id").val("");
         $("#modal-username").modal("show");
         $("#headText").html("เพิ่มผู้ใช้");
     });
@@ -157,7 +152,7 @@ $(document).ready(function () {
             data: $("#form-addusername").serialize(),
             url: "save_uername",
             success: function (data) {
-              console.log(data);
+                console.log(data);
                 Swal.fire(
                     "บันทึกสำเร็จสำเร็จ!",
                     "หากสงสัยข้อมูลกรุณาติดต่อทีมพัฒนา",
@@ -168,7 +163,7 @@ $(document).ready(function () {
             },
             error: function (data) {
                 Swal.fire({
-                  icon: "error",
+                    icon: "error",
                     title: "ผิดพลาด",
                     text: "ไม่สามารถบันทึกได้",
                     confirmButtonText: "ตกลง",
@@ -177,31 +172,20 @@ $(document).ready(function () {
         });
     });
 
+    $("body").on("click", ".Edituser", function () {
+        var id = $(this).data("id");
+        $("#id").val(id);
+        $.getJSON("/get_uername", { id: id }, function (data) {
+            $("#modal-username").modal("show");
+            $("#headText").html("แก้ไขผู้ใช้");
+            $("#usernameText").val(data.Card_Staff);
+            $("#nameText").val(data.Name_Thai);
+            $("#factionText").val(data.Faction);
+            $("#departmentText").val(data.Department);
+            $("#positionText").val(data.Position);
+            $("#companyText").val(data.Company);
 
-    $('body').on('click', '.Edituser', function () {
-      var id = $(this).data('id');
-      $("#id").val(id)
-      $.getJSON("/get_uername", { id: id }, function (data) {
-        $("#modal-username").modal("show");
-        $("#headText").html("แก้ไขผู้ใช้");
-        $("#usernameText").val(data.Card_Staff)
-        $("#nameText").val(data.Name_Thai)
-        $("#factionText").val(data.Faction)
-        $("#departmentText").val(data.Department)
-        $("#positionText").val(data.Position)
-        $("#companyText").val(data.Company)
-        
-          console.log(data);
-      })
-  });
-
-
-
-
-
-
-
-
-
-
+            console.log(data);
+        });
+    });
 });

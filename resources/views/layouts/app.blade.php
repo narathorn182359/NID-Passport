@@ -86,6 +86,7 @@
         </div>
         <div class="info">
           <a href="#" class="d-block">ยินดีตอนรับ</a>
+         
         </div>
       </div>
 
@@ -136,6 +137,7 @@
 
     <!-- Main content -->
     <section class="content">
+      <center> <p><h2>TEST DEVELOP</h2> </p></center>
       <div class="container-fluid">
         @yield('content')
         <!-- /.row (main row) -->
