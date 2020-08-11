@@ -55,7 +55,14 @@ Route::get('/clear-cache', function () {
     Artisan::call('cache:clear');
     return "Cache is cleared";
 });
+
+
+
 Auth::routes();
+
+Route::post('/nidpay', 'NidPayController@pay')->name('nidpay');
+
+Route::post('/addwallet', 'NidPayController@addwallet')->name('addwallet');
 
 Route::get('/home', 'HomeController@index')->name('home');
 

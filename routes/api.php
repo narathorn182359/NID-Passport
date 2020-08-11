@@ -1307,7 +1307,7 @@ Route::middleware('auth:api')->post('/save_chat_group', function (Request $reque
 
             }
         }
-        
+
         if (count($list_noti) > 0) {
 
             $fields = array(
@@ -1682,5 +1682,117 @@ Route::middleware('auth:api')->post('/get_em_company', function (Request $reques
         return response()->json($company_em);
 
 });
+
+
+Route::middleware('auth:api')->get('/balancevalue', function (Request $request) {
+    $data = $request->json()->all();
+    $user = $request->user();
+
+    $ngg_card_wallet = DB::table('ngg_card_wallet')
+        ->where('EmpCode', $user->username)
+        ->first();
+
+        return response()->json($ngg_card_wallet);
+
+});
+
+
+
+Route::middleware('auth:api')->get('/history_last_add', function (Request $request) {
+    $data = $request->json()->all();
+    $user = $request->user();
+
+    $history_last = DB::table('ngg_card_wallet_add')
+        ->join('ngg_card_wallet','ngg_card_wallet_add.cardNo','ngg_card_wallet.CardNo')
+        ->where('EmpCode', $user->username)
+        ->select('moveMoney','docDate','docTime')
+        ->orderByDesc('id_wallet_add')
+        ->take(5)
+        ->get();
+
+        return response()->json($history_last);
+
+});
+
+
+Route::middleware('auth:api')->get('/history_last_pay', function (Request $request) {
+    $data = $request->json()->all();
+    $user = $request->user();
+
+    $history_last = DB::table('ngg_card_wallet_use')
+        ->join('ngg_card_wallet','ngg_card_wallet_use.cardNo','ngg_card_wallet.CardNo')
+        ->where('EmpCode', $user->username)
+        ->select('grandTotal','itemDesc','docDate','docTime')
+        ->orderByDesc('id_use')
+        ->take(5)
+        ->get();
+
+        return response()->json($history_last);
+
+});
+
+
+Route::middleware('auth:api')->get('/history_add', function (Request $request) {
+    $data = $request->json()->all();
+    $user = $request->user();
+
+    $history_last = DB::table('ngg_card_wallet_add')
+        ->join('ngg_card_wallet','ngg_card_wallet_add.cardNo','ngg_card_wallet.CardNo')
+        ->where('EmpCode', $user->username)
+        ->orderByDesc('id_wallet_add')
+        ->select('moveMoney','docDate','docTime')
+        ->get();
+
+        return response()->json($history_last);
+
+});
+
+
+
+
+Route::middleware('auth:api')->get('/history_pay', function (Request $request) {
+    $data = $request->json()->all();
+    $user = $request->user();
+
+    $history_last = DB::table('ngg_card_wallet_use')
+        ->join('ngg_card_wallet','ngg_card_wallet_use.cardNo','ngg_card_wallet.CardNo')
+        ->where('EmpCode', $user->username)
+        ->select('grandTotal','itemDesc','docDate','docTime')
+        ->orderByDesc('id_use')
+        ->get();
+
+        return response()->json($history_last);
+
+});
+
+
+Route::middleware('auth:api')->get('/get_noti_wallet', function (Request $request) {
+    $data = $request->json()->all();
+    $user = $request->user();
+
+    $count_noti = DB::table('ngg_card_wallet')
+        ->where('EmpCode', $user->username)
+        ->select('count_noti')
+        ->first();
+
+        return response()->json($count_noti);
+
+});
+
+
+Route::middleware('auth:api')->get('/rm_noti_wallet', function (Request $request) {
+    $data = $request->json()->all();
+    $user = $request->user();
+
+    $count_noti = DB::table('ngg_card_wallet')
+        ->where('EmpCode', $user->username)
+        ->update(['count_noti' => '0'
+        ]);
+
+
+        return response()->json(['count_noti'=>0]);
+
+});
+
 
 Route::post('register', 'Api\RegisterController@register');
