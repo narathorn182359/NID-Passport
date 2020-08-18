@@ -1741,6 +1741,7 @@ Route::middleware('auth:api')->get('/history_add', function (Request $request) {
         ->where('EmpCode', $user->username)
         ->orderByDesc('id_wallet_add')
         ->select('moveMoney','docDate','docTime')
+        ->take(50)
         ->get();
 
         return response()->json($history_last);
@@ -1758,6 +1759,7 @@ Route::middleware('auth:api')->get('/history_pay', function (Request $request) {
         ->join('ngg_card_wallet','ngg_card_wallet_use.cardNo','ngg_card_wallet.CardNo')
         ->where('EmpCode', $user->username)
         ->select('grandTotal','itemDesc','docDate','docTime')
+        ->take(50)
         ->orderByDesc('id_use')
         ->get();
 
