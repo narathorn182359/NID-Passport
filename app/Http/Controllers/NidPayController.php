@@ -70,6 +70,7 @@ class NidPayController extends Controller
                         'prevBalance' => $request->nid_PrevBalance,
                         'docTime' => $request->nid_DocTime,
                         'docDate' => $request->nid_DocDate,
+                        'datetime' => date("Y-m-d")
                     ]);
                     DB::table('ngg_card_wallet')
                         ->where('CardNo', $request->nid_Card_on)
@@ -89,6 +90,7 @@ class NidPayController extends Controller
                         'prevBalance' => $request->nid_PrevBalance,
                         'docTime' => $request->nid_DocTime,
                         'docDate' => $request->nid_DocDate,
+                        'datetime' => date("Y-m-d")
                     ]);
                     DB::table('ngg_card_wallet')
                         ->where('CardNo', $request->nid_Card_on)
@@ -122,6 +124,7 @@ class NidPayController extends Controller
                         'prevBalance' => $request->nid_PrevBalance,
                         'docTime' => $request->nid_DocTime,
                         'docDate' => $request->nid_DocDate,
+                        'datetime' => date("Y-m-d")
                     ]);
                     DB::table('ngg_card_wallet')
                         ->where('CardNo', $request->nid_Card_on)
@@ -142,6 +145,7 @@ class NidPayController extends Controller
                         'prevBalance' => $request->nid_PrevBalance,
                         'docTime' => $request->nid_DocTime,
                         'docDate' => $request->nid_DocDate,
+                        'datetime' => date("Y-m-d")
                     ]);
                     DB::table('ngg_card_wallet')
                         ->where('CardNo', $request->nid_Card_on)
@@ -174,6 +178,7 @@ class NidPayController extends Controller
                     'prevBalance' => $request->nid_PrevBalance,
                     'docTime' => $request->nid_DocTime,
                     'docDate' => $request->nid_DocDate,
+                    'datetime' => date("Y-m-d")
                 ]);
                 DB::table('ngg_card_wallet')
                     ->where('CardNo', $request->nid_Card_on)
@@ -194,6 +199,7 @@ class NidPayController extends Controller
                     'prevBalance' => $request->nid_PrevBalance,
                     'docTime' => $request->nid_DocTime,
                     'docDate' => $request->nid_DocDate,
+                    'datetime' => date("Y-m-d")
                 ]);
                 DB::table('ngg_card_wallet')
                     ->where('CardNo', $request->nid_Card_on)
@@ -273,6 +279,7 @@ class NidPayController extends Controller
                         'moveMoney' => $request->nid_moveMoney,
                         'docTime' => $request->nid_DocTime,
                         'docDate' => $request->nid_DocDate,
+                        'datetime' => date("Y-m-d")
                     ]);
                     DB::table('ngg_card_wallet')
                         ->where('CardNo', $request->nid_Card_on)
@@ -288,6 +295,7 @@ class NidPayController extends Controller
                         'moveMoney' => $request->nid_moveMoney,
                         'docTime' => $request->nid_DocTime,
                         'docDate' => $request->nid_DocDate,
+                        'datetime' => date("Y-m-d")
                     ]);
 
                     DB::table('ngg_card_wallet')
@@ -308,6 +316,7 @@ class NidPayController extends Controller
                     'moveMoney' => $request->nid_moveMoney,
                     'docTime' => $request->nid_DocTime,
                     'docDate' => $request->nid_DocDate,
+                    'datetime' => date("Y-m-d")
                 ]);
 
                 DB::table('ngg_card_wallet')
@@ -334,6 +343,7 @@ class NidPayController extends Controller
                     'moveMoney' => $request->nid_moveMoney,
                     'docTime' => $request->nid_DocTime,
                     'docDate' => $request->nid_DocDate,
+                    'datetime' => date("Y-m-d")
                 ]);
                 DB::table('ngg_card_wallet')
                     ->where('CardNo', $request->nid_Card_on)
@@ -350,6 +360,7 @@ class NidPayController extends Controller
                     'moveMoney' => $request->nid_moveMoney,
                     'docTime' => $request->nid_DocTime,
                     'docDate' => $request->nid_DocDate,
+                    'datetime' => date("Y-m-d")
                 ]);
                 DB::table('ngg_card_wallet')
                     ->where('CardNo', $request->nid_Card_on)

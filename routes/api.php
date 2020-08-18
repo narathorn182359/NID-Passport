@@ -1706,7 +1706,7 @@ Route::middleware('auth:api')->get('/history_last_add', function (Request $reque
         ->join('ngg_card_wallet','ngg_card_wallet_add.cardNo','ngg_card_wallet.CardNo')
         ->where('EmpCode', $user->username)
         ->select('moveMoney','docDate','docTime')
-        ->orderByDesc('id_wallet_add')
+        ->orderByDesc('datetime')
         ->take(5)
         ->get();
 
@@ -1723,13 +1723,14 @@ Route::middleware('auth:api')->get('/history_last_pay', function (Request $reque
         ->join('ngg_card_wallet','ngg_card_wallet_use.cardNo','ngg_card_wallet.CardNo')
         ->where('EmpCode', $user->username)
         ->select('grandTotal','itemDesc','docDate','docTime')
-        ->orderByDesc('id_use')
+        ->orderByDesc('datetime')
         ->take(5)
         ->get();
 
         return response()->json($history_last);
 
 });
+
 
 
 Route::middleware('auth:api')->get('/history_add', function (Request $request) {
@@ -1739,7 +1740,7 @@ Route::middleware('auth:api')->get('/history_add', function (Request $request) {
     $history_last = DB::table('ngg_card_wallet_add')
         ->join('ngg_card_wallet','ngg_card_wallet_add.cardNo','ngg_card_wallet.CardNo')
         ->where('EmpCode', $user->username)
-        ->orderByDesc('id_wallet_add')
+        ->orderByDesc('datetime')
         ->select('moveMoney','docDate','docTime')
         ->take(50)
         ->get();
@@ -1760,7 +1761,7 @@ Route::middleware('auth:api')->get('/history_pay', function (Request $request) {
         ->where('EmpCode', $user->username)
         ->select('grandTotal','itemDesc','docDate','docTime')
         ->take(50)
-        ->orderByDesc('id_use')
+        ->orderByDesc('datetime')
         ->get();
 
         return response()->json($history_last);
@@ -1795,6 +1796,7 @@ Route::middleware('auth:api')->get('/rm_noti_wallet', function (Request $request
         return response()->json(['count_noti'=>0]);
 
 });
+
 
 
 Route::post('register', 'Api\RegisterController@register');

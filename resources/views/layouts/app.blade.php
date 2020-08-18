@@ -15,6 +15,8 @@
   <link rel="stylesheet" href="{{asset('adminlte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')}}">
   <link rel="stylesheet" href="{{asset('adminlte/plugins/select2/css/select2.min.css')}}">
   <link rel="stylesheet" href="{{asset('adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
+  <link rel="stylesheet" href="{{ asset('adminlte/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('adminlte/plugins/daterangepicker/daterangepicker.css') }}">
     <!-- DataTables -->
     <link rel="stylesheet" href="{{asset('adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
     <link rel="stylesheet" href="{{asset('adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
@@ -86,7 +88,7 @@
         </div>
         <div class="info">
           <a href="#" class="d-block">ยินดีตอนรับ</a>
-         
+
         </div>
       </div>
 
@@ -109,12 +111,19 @@
               </a>
             </li>
           @endforeach
-
+          <li class="nav-item">
+            <a href="{{ 'index_evaluate' }}" class="nav-link">
+                <i class="nav-icon fas fa-user-tie"></i>
+                <p>
+                    จัดการประเมิน 60 90
+                </p>
+            </a>
+        </li>
           <li class="nav-item">
             <a class="nav-link" href="{{ route('logout') }}"
             onclick="event.preventDefault();
                           document.getElementById('logout-form').submit();">
-               <i class="nav-icon fas fa-th"></i> <p>Logout</p>
+               <i class="nav-icon fas fa-th"></i> <p>ออกจากระบบ</p>
          </a>
 
          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -205,6 +214,12 @@
 <script src="{{asset('adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
 <script src="{{asset('adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
 <script src="{{asset('adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
+
+  <!-- date-range-picker -->
+  <script src="{{ asset('adminlte/plugins/daterangepicker/daterangepicker.js') }}"></script>
+  <!-- bootstrap color picker -->
+  <script src="{{ asset('adminlte/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js') }}"></script>
+
 <!-- Select2 -->
 <script src="{{asset('adminlte/plugins/select2/js/select2.full.min.js')}}"></script>
 <script src="{{asset('js/listnew.js')}}"></script>
@@ -213,7 +228,15 @@
 <script src="{{asset('js/KM360.js')}}"></script>
 <script src="{{asset('js/get_user_detail.js')}}"></script>
 <script src="{{asset('js/libraryvideo.js')}}"></script>
+<script>
+    $('.select2').select2();
+    $(function() {
+        $('#reservation_60').daterangepicker()
+        $('#reservation_90').daterangepicker()
 
+    })
+
+</script>
 <script>
     $(function () {
       $('.select2').select2();
@@ -227,7 +250,7 @@
   </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.js"></script>
 @yield('js')
-
+@yield('javascript')
 </body>
 </html>
 
