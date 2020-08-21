@@ -39,7 +39,7 @@
         td,
         th {
             border: 1px solid black;
-         
+
         }
 
         table {
@@ -54,20 +54,18 @@
 
     </style>
 </head>
-<?php $sum = ($ngg_operational_score_60->evaluation_evascore + $ngg_operational_score_90->evaluation_evascore) / 2; 
-
-
-?>
+<?php $sum = ($ngg_operational_score_60->evaluation_evascore +
+$ngg_operational_score_90->evaluation_evascore) / 2; ?>
 
 <body>
     <table style="width: 100%">
-    
+
         <tr>
-         
-            
+
+
             <td align="center" colspan="3" style=" border: 1px solid rgb(255, 255, 255);"><img
-                    src="{{ public_path('/img/NGG.jpg') }}" alt="" width="90px" height="90px">       
-                </td>
+                    src="{{ public_path('/img/NGG.jpg') }}" alt="" width="90px" height="90px">
+            </td>
         </tr>
         <tr>
             <td colspan="3" align="center" style=" border: 1px solid rgb(255, 255, 255);">
@@ -95,85 +93,89 @@
 
 
     @isset($data_60_A)
-    <table style="width: 100%">
-        <tr>
-            <th>รายงานผลประเมิน 60 วัน </th>
-            <th>ตั้งแต่วันที่ {{ $ngg_operational_6090->pass_60 }} </th>
-
-        </tr>
-        <tr>
-            <th>หัวข้อประเมิน</th>
-            <th>คะแนน</th>
-
-        </tr>
-        @foreach ($data_60_A as $item)
+        <table style="width: 100%">
             <tr>
-                <td style="width: 50%">{{ $item->name_opf }}</td>
-                <?php $i = $item->score_ha * 100; ?>
-                <td align="center">{{ $i }}</td>
+                <th>รายงานผลประเมิน 60 วัน </th>
+                <th>ตั้งแต่วันที่ {{ $ngg_operational_6090->pass_60 }} </th>
 
             </tr>
-        @endforeach
-        <tr>
-            <td style="width: 50%" align="center"><b>คะแนนรวม</b> </td>
+            <tr>
+                <th>หัวข้อประเมิน</th>
+                <th>คะแนน</th>
 
-            <td align="center">{{ $ngg_operational_score_60->evaluation_evascore }}/100</td>
+            </tr>
+            @foreach ($data_60_A as $item)
+                <tr>
+                    <td style="width: 50%">{{ $item->name_opf }}</td>
+                    <?php $i = $item->score_ha * 100; ?>
+                    <td align="center">{{ $i }}</td>
 
-        </tr>
-    </table>
+                </tr>
+            @endforeach
+            <tr>
+                <td style="width: 50%" align="center"><b>คะแนนรวม</b> </td>
+
+                <td align="center">{{ $ngg_operational_score_60->evaluation_evascore }}/100</td>
+
+            </tr>
+        </table>
     @endisset
 
 
     @isset($data_90_A)
-    <div class="page_break"></div>
-    <table style="width: 100%">
-        <tr>
-            <th>รายงานผลประเมิน 90 วัน </th>
-            <th>ตั้งแต่วันที่ {{ $ngg_operational_6090->pass_60 }} </th>
-
-        </tr>
-        <tr>
-            <th>หัวข้อประเมิน</th>
-            <th>คะแนน</th>
-        </tr>
-        @foreach ($data_90_A as $item)
+        <div class="page_break"></div>
+        <table style="width: 100%">
             <tr>
-                <td style="width: 50%">{{ $item->name_opf }}</td>
-                <?php $i = $item->score_ha * 100; ?>
-                <td align="center">{{ $i }}</td>
+                <th>รายงานผลประเมิน 90 วัน </th>
+                <th>ตั้งแต่วันที่ {{ $ngg_operational_6090->pass_60 }} </th>
 
             </tr>
+            <tr>
+                <th>หัวข้อประเมิน</th>
+                <th>คะแนน</th>
+            </tr>
+            @foreach ($data_90_A as $item)
+                <tr>
+                    <td style="width: 50%">{{ $item->name_opf }}</td>
+                    <?php $i = $item->score_ha * 100; ?>
+                    <td align="center">{{ $i }}</td>
 
-        @endforeach
-        <tr>
-            <td style="width: 50%" align="center"> <b>คะแนนรวม</b> </td>
-            <td align="center">{{ $ngg_operational_score_90->evaluation_evascore }}/100</td>
-        </tr>
-        <tr>
-            <td style="width: 50%" align="center"> <b>สรุปคะแนน</b> {{ $ngg_operational_score_60->evaluation_evascore }}
-                X {{ $ngg_operational_score_90->evaluation_evascore }} / 2 
-            
-                @if ($sum >= 75)
-                <div class="text-center"> <h3>ผ่านการทดลองงาน</h3></div>        
+                </tr>
+
+            @endforeach
+            <tr>
+                <td style="width: 50%" align="center"> <b>คะแนนรวม</b> </td>
+                <td align="center">{{ $ngg_operational_score_90->evaluation_evascore }}/100</td>
+            </tr>
+            <tr>
+                <td style="width: 50%" align="center"> <b>สรุปคะแนน</b> {{ $ngg_operational_score_60->evaluation_evascore }}
+                    X {{ $ngg_operational_score_90->evaluation_evascore }} / 2
+
+                    @if ($sum >= 75)
+                        <div class="text-center">
+                            <h3>ผ่านการทดลองงาน</h3>
+                        </div>
                     @else
-                    <div class="text-center">  <h3>ไม่ผ่านการทดลองงาน</h3></div>        
+                        <div class="text-center">
+                            <h3>ไม่ผ่านการทดลองงาน</h3>
+                        </div>
                     @endif
-        
-            
-            </td>
 
-            <td align="center"> <b style="font-size: 30px"> {{ $sum }}/100</b></td>
 
-        </tr>
-        <tr>
-            <td colspan="2"><b> ความคิดเห็น 60 วัน:</b> {{ $ngg_operational_score_60->remark_evascore }}</td>
+                </td>
 
-        </tr>
-        <tr>
-            <td colspan="2"><b>ความคิดเห็น 90 วัน:</b> {{ $ngg_operational_score_90->remark_evascore }}</td>
+                <td align="center"> <b style="font-size: 30px"> {{ $sum }}/100</b></td>
 
-        </tr>
-    </table>
+            </tr>
+            <tr>
+                <td colspan="2"><b> ความคิดเห็น 60 วัน:</b> {{ $ngg_operational_score_60->remark_evascore }}</td>
+
+            </tr>
+            <tr>
+                <td colspan="2"><b>ความคิดเห็น 90 วัน:</b> {{ $ngg_operational_score_90->remark_evascore }}</td>
+
+            </tr>
+        </table>
 
 
     @endisset
@@ -207,7 +209,7 @@
         </table>
 
     @endisset
-   
+
 
 
 
@@ -239,15 +241,19 @@
             </tr>
             <tr>
                 <td style="width: 50%" align="center"> <b>สรุปคะแนน</b> {{ $ngg_operational_score_60->evaluation_evascore }}
-                    X {{ $ngg_operational_score_90->evaluation_evascore }} / 2 
-                
+                    X {{ $ngg_operational_score_90->evaluation_evascore }} / 2
+
                     @if ($sum >= 75)
-                    <div class="text-center"> <h3>ผ่านการทดลองงาน</h3></div>        
-                        @else
-                        <div class="text-center">  <h3>ไม่ผ่านการทดลองงาน</h3></div>        
-                        @endif
-            
-                
+                        <div class="text-center">
+                            <h3>ผ่านการทดลองงาน</h3>
+                        </div>
+                    @else
+                        <div class="text-center">
+                            <h3>ไม่ผ่านการทดลองงาน</h3>
+                        </div>
+                    @endif
+
+
                 </td>
 
                 <td align="center"> <b style="font-size: 30px"> {{ $sum }}/100</b></td>
@@ -280,23 +286,25 @@
 
 
 
-  
 
-            <table style="width: 100%">
-    
-                <tr>
-        
-                    <td style=" border: 1px solid rgb(255, 255, 255);" align="center"><b>ลงชื่อผู้ประเมิน:</b><br> ....................................................................<br>
-{{$assessor_evascore->Name_Thai}} ({{$assessor_evascore->Position}})
-                    </td>
-                    <td style=" border: 1px solid rgb(255, 255, 255);" colspan="2"  align="center"><b>ลงชื่อพนักงาน:</b><br>....................................................................<br>
-                     {{ $users_detail->Name_Thai }} ( {{ $users_detail->Position }} )
-                    </td>
-        
-                </tr>
-        
-            </table>
-        
+
+    <table style="width: 100%">
+
+        <tr>
+
+            <td style=" border: 1px solid rgb(255, 255, 255);" align="center"><b>ลงชื่อผู้ประเมิน:</b><br>
+                ....................................................................<br>
+                {{ $assessor_evascore->Name_Thai }} ({{ $assessor_evascore->Position }})
+            </td>
+            <td style=" border: 1px solid rgb(255, 255, 255);" colspan="2" align="center">
+                <b>ลงชื่อพนักงาน:</b><br>....................................................................<br>
+                {{ $users_detail->Name_Thai }} ( {{ $users_detail->Position }} )
+            </td>
+
+        </tr>
+
+    </table>
+
 
 </body>
 

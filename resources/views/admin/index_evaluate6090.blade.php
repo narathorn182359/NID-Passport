@@ -174,7 +174,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form id="form-addusername">
+                <form id="form-addusername2">
                     <input type="hidden" name="assessor" id="assessor">
                     <div class="modal-body">
                         <div class="form-group">

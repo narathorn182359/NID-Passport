@@ -2,15 +2,232 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Auth;
+
 class Evaluate6090Controller extends Controller
 {
 
     public function kpi_manual(request $request)
     {
+
+        $weight = 0;
+        $log_name = 'บันทึกข้อมูลเรียนร้อย';
+        $data = array();
+        $log_error = true;
+
+        if ($request->if_6090 == '60') {
+            foreach ($request->data as $item) {
+                $weight = $item['weight'] + $weight;
+            }
+
+            if ($weight != 100) {
+
+                $log_error = false;
+                return 'noweight';
+            } else {
+                foreach ($request->data as $item) {
+
+                    if ($item['unit'] == "%") {
+                        $weight = $item['weight'] + $weight;
+
+                        if ($item['target_60'] > 100 || $item['seccess_60'] > 100) {
+                            $log_error = false;
+                            $log_name = "เกิน 100 % ค่ะ  เป้าหมาย หรือ ทำได้  ";
+
+                        }
+
+                        if ($item['seccess_60'] > $item['target_60']) {
+                            $log_error = false;
+                            $log_name = "ตรวจพบ ทำได้ มากกว่า เป้าหมายที่ได้กำหนดไว้ค่ะกรุณาตรวจสอบ";
+
+                        }
+
+                        if (!is_numeric($item['target_60']) || !is_numeric($item['seccess_60'])) {
+                            $log_error = false;
+                            $log_name = "ตรวจพบเป้าหมายหรือทำได้ไม่ใช้ตัวเลข";
+
+                        }
+
+                        if ($log_error == true) {
+                            $answer['60or90_operation_manual'] = $request->if_6090;
+                            $answer['kpi_operation_manual'] = $item['kpi'];
+                            $answer['performance_indicators_operation_manual'] = $item['performance_indicators'];
+                            $answer['unit_operation_manual'] = $item['unit'];
+                            $answer['weight_operation_manual'] = $item['weight'];
+                            $answer['target_60_operation_manual'] = $item['target_60'];
+                            $answer['seccess_60_operation_manual'] = $item['seccess_60'];
+                            $answer['answer_operation_manual'] = number_format(((int) filter_var($item['seccess_60'], FILTER_SANITIZE_NUMBER_INT) / (int) filter_var($item['target_60'], FILTER_SANITIZE_NUMBER_INT)) * ((int) filter_var($item['weight'], FILTER_SANITIZE_NUMBER_INT) / 100) * 100, 2);
+                            $answer['code_staff_operation_manual'] = $request->code_staff;
+                            $data[] = $answer;
+                            DB::table('ngg_operation_manual')->insert($answer);
+                            DB::table('ngg_operational_6090')
+                                ->where('assessor', $request->assessor)
+                                ->where('assessed', $request->code_staff)
+                                ->update([
+                                    'pass_60_status' => '0',
+                                ]);
+                            $log_error = true;
+                            $log_name = $data;
+                        }
+
+                    } else {
+
+                        $weight = $item['weight'] + $weight;
+                        if ($item['seccess_60'] > $item['target_60']) {
+                            $log_error = false;
+                            $log_name = "ตรวจพบ ทำได้ มากกว่า เป้าหมายที่ได้กำหนดไว้ค่ะกรุณาตรวจสอบ";
+
+                        }
+
+                        /*    if (!is_numeric($item['target_60']) || !is_numeric($item['seccess_60'])) {
+                        $log_error = false;
+                        $log_name = $item['target_60'];
+
+                        } */
+
+                        if ($log_error == true) {
+                            $answer['60or90_operation_manual'] = $request->if_6090;
+                            $answer['kpi_operation_manual'] = $item['kpi'];
+                            $answer['performance_indicators_operation_manual'] = $item['performance_indicators'];
+                            $answer['unit_operation_manual'] = $item['unit'];
+                            $answer['weight_operation_manual'] = $item['weight'];
+                            $answer['target_60_operation_manual'] = $item['target_60'];
+                            $answer['seccess_60_operation_manual'] = $item['seccess_60'];
+                            $answer['answer_operation_manual'] = number_format(((int) filter_var($item['seccess_60'], FILTER_SANITIZE_NUMBER_INT) / (int) filter_var($item['target_60'], FILTER_SANITIZE_NUMBER_INT)) * ((int) filter_var($item['weight'], FILTER_SANITIZE_NUMBER_INT) / 100) * 100, 2);
+                            $answer['code_staff_operation_manual'] = $request->code_staff;
+                            $data[] = $answer;
+                            DB::table('ngg_operation_manual')->insert($answer);
+                            DB::table('ngg_operational_6090')
+                                ->where('assessor', $request->assessor)
+                                ->where('assessed', $request->code_staff)
+                                ->update([
+                                    'pass_60_status' => '0',
+                                ]);
+                            $log_error = true;
+                            $log_name = $data;
+                        }
+
+                    }
+
+                    //  is_numeric();
+                }
+
+            }
+
+        } else if ($request->if_6090 == '90') {
+            foreach ($request->data as $item) {
+                $weight = $item['weight'] + $weight;
+            }
+
+            if ($weight != 100) {
+
+                $log_error = false;
+                return 'noweight';
+            } else {
+                foreach ($request->data as $item) {
+
+                    if ($item['unit'] == "%") {
+                        $weight = $item['weight'] + $weight;
+
+                        if ($item['target_60'] > 100 || $item['seccess_60'] > 100) {
+                            $log_error = false;
+                            $log_name = "เกิน 100 % ค่ะ  เป้าหมาย หรือ ทำได้  ";
+
+                        }
+
+                        if ($item['seccess_60'] > $item['target_60']) {
+                            $log_error = false;
+                            $log_name = "ตรวจพบ ทำได้ มากกว่า เป้าหมายที่ได้กำหนดไว้ค่ะกรุณาตรวจสอบ";
+
+                        }
+
+                        if (!is_numeric($item['target_60']) || !is_numeric($item['seccess_60'])) {
+                            $log_error = false;
+                            $log_name = "ตรวจพบเป้าหมายหรือทำได้ไม่ใช้ตัวเลข";
+
+                        }
+
+                        if ($log_error == true) {
+                            $answer['60or90_operation_manual'] = $request->if_6090;
+                            $answer['kpi_operation_manual'] = $item['kpi'];
+                            $answer['performance_indicators_operation_manual'] = $item['performance_indicators'];
+                            $answer['unit_operation_manual'] = $item['unit'];
+                            $answer['weight_operation_manual'] = $item['weight'];
+                            $answer['target_60_operation_manual'] = $item['target_60'];
+                            $answer['seccess_60_operation_manual'] = $item['seccess_60'];
+                            $answer['answer_operation_manual'] = number_format(((int) filter_var($item['seccess_60'], FILTER_SANITIZE_NUMBER_INT) / (int) filter_var($item['target_60'], FILTER_SANITIZE_NUMBER_INT)) * ((int) filter_var($item['weight'], FILTER_SANITIZE_NUMBER_INT) / 100) * 100, 2);
+                            $answer['code_staff_operation_manual'] = $request->code_staff;
+                            $data[] = $answer;
+                            DB::table('ngg_operation_manual')->insert($answer);
+                            DB::table('ngg_operational_6090')
+                                ->where('assessor', $request->assessor)
+                                ->where('assessed', $request->code_staff)
+                                ->update([
+                                    'pass_60_status' => '0',
+                                    'pass_90_status' => '2',
+                                    'status_eva' => '1',
+                                ]);
+                            $log_error = true;
+                            $log_name = $data;
+                        }
+
+                    } else {
+
+                        $weight = $item['weight'] + $weight;
+                        if ($item['seccess_60'] > $item['target_60']) {
+                            $log_error = false;
+                            $log_name = "ตรวจพบ ทำได้ มากกว่า เป้าหมายที่ได้กำหนดไว้ค่ะกรุณาตรวจสอบ";
+
+                        }
+
+                        /*    if (!is_numeric($item['target_60']) || !is_numeric($item['seccess_60'])) {
+                        $log_error = false;
+                        $log_name = $item['target_60'];
+
+                        } */
+
+                        if ($log_error == true) {
+                            $answer['60or90_operation_manual'] = $request->if_6090;
+                            $answer['kpi_operation_manual'] = $item['kpi'];
+                            $answer['performance_indicators_operation_manual'] = $item['performance_indicators'];
+                            $answer['unit_operation_manual'] = $item['unit'];
+                            $answer['weight_operation_manual'] = $item['weight'];
+                            $answer['target_60_operation_manual'] = $item['target_60'];
+                            $answer['seccess_60_operation_manual'] = $item['seccess_60'];
+                            $answer['answer_operation_manual'] = number_format(((int) filter_var($item['seccess_60'], FILTER_SANITIZE_NUMBER_INT) / (int) filter_var($item['target_60'], FILTER_SANITIZE_NUMBER_INT)) * ((int) filter_var($item['weight'], FILTER_SANITIZE_NUMBER_INT) / 100) * 100, 2);
+                            $answer['code_staff_operation_manual'] = $request->code_staff;
+                            $data[] = $answer;
+                            DB::table('ngg_operation_manual')->insert($answer);
+                            DB::table('ngg_operational_6090')
+                                ->where('assessor', $request->assessor)
+                                ->where('assessed', $request->code_staff)
+                                ->update([
+                                    'pass_60_status' => '0',
+                                    'pass_90_status' => '2',
+                                    'status_eva' => '1',
+                                ]);
+                            $log_error = true;
+                            $log_name = $data;
+                        }
+
+                    }
+
+                    //  is_numeric();
+                }
+
+            }
+
+        }
+
+        return response()->json(
+            [
+                'log_error' => $log_error,
+                'log_name' => $log_name,
+            ]
+        );
 
     }
 
@@ -637,11 +854,16 @@ class Evaluate6090Controller extends Controller
                     $status_eva = "<p class='text-warning'>รอประเมิน 60 วัน</p>";
                     $i = '';
                     $j = "";
-                } else if ($post->status_eva == 1 && $post->active_op == 1) {
+                } else if ($post->status_eva == 1 && $post->active_op == 1 && $post->option_eva =="แบบตัวเลือก" ) {
                     $status_eva = "<p class='text-success'>ประเมินครบแล้ว</p>";
                     $i = '';
                     $j = "
-                    <a href='/evaluation/{$post->assessed}/{$post->degree}' class='btn btn-success btn-circle btn-xs'>รายงานผล</a>
+                    <a href='/evaluation/{$post->assessed}/{$post->degree}' class='btn btn-success btn-circle btn-xs'>รายงานผล </a>
+                    <a href='javascript:void(0)' class='btn btn-danger btn-circle btn-xs deleteEva'  data-id='{$post->assessed}' >ยกเลิกผลการประเมิน</a>";
+                }else if($post->status_eva == 1 && $post->active_op == 1 && $post->option_eva =="แบบกำหนดเอง" ){
+                    $i = '';
+                    $j = "
+                    <a href='/evaluationman/{$post->assessed}/{$post->degree}' class='btn btn-success btn-circle btn-xs'>รายงานผล </a>
                     <a href='javascript:void(0)' class='btn btn-danger btn-circle btn-xs deleteEva'  data-id='{$post->assessed}' >ยกเลิกผลการประเมิน</a>";
                 }
 

@@ -44,17 +44,17 @@ $(document).ready(function () {
 
     $("body").on("click", ".addusername", function () {
         var assessor = $(this).data("id");
-        $("#form-addusername").trigger("reset");
+        $("#form-addusername2").trigger("reset");
         $("#assessor").val(assessor);
         $("#modal-set6090").modal("show");
-     
+
     });
 
-    $("#form-addusername").submit(function (e) {
+    $("#form-addusername2").submit(function (e) {
         e.preventDefault();
         $.ajax({
             type: "POST",
-            data: $("#form-addusername").serialize(),
+            data: $("#form-addusername2").serialize(),
             url: "save_datasetevalu6090",
             success: function (data) {
               if(data == "200"){
@@ -64,7 +64,7 @@ $(document).ready(function () {
                     "success"
                 ).then(function () {
                     $('#get_data_userset_6090').DataTable().draw();
-                    $("#modal-set6090").modal('toggle'); 
+                    $("#modal-set6090").modal('toggle');
                 });
               }else{
                 Swal.fire(
@@ -73,7 +73,7 @@ $(document).ready(function () {
                     "warning"
                 )
               }
-                
+
             },
             error: function (data) {
                 Swal.fire({
@@ -135,7 +135,7 @@ $("body").on("click", ".deleteEva", function () {
                         "success"
                     ).then(function () {
                         $('#get_data_userset_6090').DataTable().draw();
-                      
+
                     });
                 },
                 error: function (data) {
@@ -158,7 +158,7 @@ $("body").on("click", ".save_eva90", function () {
     $("#assessed60").val(assessed60);
     $("#form-add90").trigger("reset");
     $("#modal-set90").modal("show");
- 
+
 });
 
 
@@ -183,7 +183,7 @@ $("#form-add90").submit(function (e) {
                 text: "บันทึกสำเร็จ",
                 confirmButtonText: "ตกลง",
             });
-            $("#modal-set90").modal('toggle'); 
+            $("#modal-set90").modal('toggle');
         },
         error: function (data) {
             Swal.fire({
@@ -227,7 +227,7 @@ $("body").on("click", ".s0", function () {
                         "success"
                     ).then(function () {
                         location.reload();
-                      
+
                     });
                 },
                 error: function (data) {
@@ -248,7 +248,7 @@ $("body").on("click", ".s0", function () {
 
 $("body").on("click", ".enable90", function () {
     var id = $(this).data("id");
-    
+
     //confirm("Are You sure want to delete !");
     Swal.fire({
         title: "ยืนยันการประเมินเปิดประเมิน",
@@ -274,7 +274,7 @@ $("body").on("click", ".enable90", function () {
                         "success"
                     ).then(function () {
                         $('#get_data_userset_6090').DataTable().draw();
-                      
+
                     });
                 },
                 error: function (data) {

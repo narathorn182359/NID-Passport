@@ -110,4 +110,101 @@ class PDFController extends Controller
         return @$pdf->stream('ผลการประเมิน' . $code_staff . '.pdf');
     }
 
+    public function evaluationman($code_staff, $degree)
+    {
+
+        if ($degree == 'ระดับปฏิบัติการ') {
+            $users_detail = DB::table('users_detail')
+            ->where('Code_Staff', $code_staff)
+            ->first();
+
+        $data_60_A = DB::table('ngg_operation_manual')
+            ->where('code_staff_operation_manual', $code_staff)
+            ->where('60or90_operation_manual', '60')
+            ->where('active_operation_manual', '1')->get();
+
+        $data_60_ASUM = DB::table('ngg_operation_manual')
+            ->where('code_staff_operation_manual', $code_staff)
+            ->where('60or90_operation_manual', '60')
+            ->where('active_operation_manual', '1')->sum('answer_operation_manual');
+
+        $data_90_A = DB::table('ngg_operation_manual')
+            ->where('code_staff_operation_manual', $code_staff)
+            ->where('60or90_operation_manual', '90')
+            ->where('active_operation_manual', '1')->get();
+
+        $data_90_ASUM = DB::table('ngg_operation_manual')
+            ->where('code_staff_operation_manual', $code_staff)
+            ->where('60or90_operation_manual', '90')
+            ->where('active_operation_manual', '1')->sum('answer_operation_manual');
+
+        $ngg_operational_6090 = DB::table('ngg_operational_6090')
+            ->where('assessed', $code_staff)
+            ->first();
+
+        $assessor_evascore = DB::table('users_detail')
+            ->where('Code_Staff', $ngg_operational_6090->assessor)
+            ->first();
+
+        $data = array(
+            'data_60_A' => $data_60_A,
+            'data_90_A' => $data_90_A,
+            'users_detail' => $users_detail,
+            'ngg_operational_6090' => $ngg_operational_6090,
+            'assessor_evascore' => $assessor_evascore,
+            'data_60_ASUM' =>    $data_60_ASUM,
+            'data_90_ASUM' =>   $data_90_ASUM
+
+        );
+
+        } else if ($degree == 'ระดับผู้บังคับบัญชา') {
+
+            $users_detail = DB::table('users_detail')
+                ->where('Code_Staff', $code_staff)
+                ->first();
+
+            $data_60_B = DB::table('ngg_operation_manual')
+                ->where('code_staff_operation_manual', $code_staff)
+                ->where('60or90_operation_manual', '60')
+                ->where('active_operation_manual', '1')->get();
+
+            $data_60_BSUM = DB::table('ngg_operation_manual')
+                ->where('code_staff_operation_manual', $code_staff)
+                ->where('60or90_operation_manual', '60')
+                ->where('active_operation_manual', '1')->sum('answer_operation_manual');
+
+            $data_90_B = DB::table('ngg_operation_manual')
+                ->where('code_staff_operation_manual', $code_staff)
+                ->where('60or90_operation_manual', '90')
+                ->where('active_operation_manual', '1')->get();
+
+            $data_90_BSUM = DB::table('ngg_operation_manual')
+                ->where('code_staff_operation_manual', $code_staff)
+                ->where('60or90_operation_manual', '90')
+                ->where('active_operation_manual', '1')->sum('answer_operation_manual');
+
+            $ngg_operational_6090 = DB::table('ngg_operational_6090')
+                ->where('assessed', $code_staff)
+                ->first();
+
+            $assessor_evascore = DB::table('users_detail')
+                ->where('Code_Staff', $ngg_operational_6090->assessor)
+                ->first();
+
+            $data = array(
+                'data_60_B' => $data_60_B,
+                'data_90_B' => $data_90_B,
+                'users_detail' => $users_detail,
+                'ngg_operational_6090' => $ngg_operational_6090,
+                'assessor_evascore' => $assessor_evascore,
+                'data_60_BSUM' =>    $data_60_BSUM,
+                'data_90_BSUM' =>   $data_90_BSUM
+
+            );
+        }
+
+        $pdf = PDF::loadView('assessor.index_pdf_man', $data);
+        return @$pdf->stream('ผลการประเมิน' . $code_staff . '.pdf');
+    }
+
 }

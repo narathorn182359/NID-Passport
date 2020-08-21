@@ -380,4 +380,68 @@ class NidPayController extends Controller
 
     }
 
+
+
+    public function nidpayupdateacc(Request $request)
+    {
+
+
+         $check =   DB::table('ngg_card_wallet')
+         ->where('Active','Y')
+         ->where('CardNo',$request->cardno)
+         ->count();
+
+         if(  $check > 0){
+            DB::table('ngg_card_wallet')
+            ->where('Active','Y')
+            ->where('CardNo',$request->cardno)
+            ->update([
+                'CardNo' =>$request->cardno,
+                'MemName' =>$request->memname,
+                'EmpCode'=>$request->empcode,
+                'BalanceValue'=>$request->balancevalue,
+                'AccuAmount'=>$request->accuamount,
+                'CardTypeCode'=>$request->cardttypeCode,
+                'Active'=>$request->active,
+                'CreateUpdate' =>  Carbon::now(),
+
+            ]);
+
+         }else{
+            DB::table('ngg_card_wallet')
+            ->insert([
+                'CardNo' =>$request->cardno,
+                'MemName' =>$request->memname,
+                'EmpCode'=>$request->empcode,
+                'BalanceValue'=>$request->balancevalue,
+                'AccuAmount'=>$request->accuamount,
+                'CardTypeCode'=>$request->cardttypeCode,
+                'Active'=>$request->active,
+                'CreateUpdate' =>  Carbon::now(),
+
+            ]);
+
+         }
+
+
+
+
+
+
+
+
+
+
+        return $request->cardno;
+    }
+
+
+
+
+
+
+
+
+
+
 }

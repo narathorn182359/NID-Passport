@@ -219,6 +219,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
                     @if ($check->pass_60_status == 1 && $check->option_eva == 'แบบกำหนดเอง')
+                    <input type="hidden" name="60_90"  id="60_90"  value="60">
+
                         <a href="javascript:void(0);" class="add_button btn btn-success" title="Add field">เพิ่มเป้าหมาย
                             &nbsp;
                             <span style="font-size:16px; font-weight:bold;">+ </span></a>
@@ -237,7 +239,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             <div class="form-group">
                                                 <label>ชื่อ KPI:</label>
                                                 <input type="text" name="KPI[]" class="form-control" required
-                                                    placeholder="เช่น ยอดขาย">
+                                                    placeholder="เช่น ยอดขาย" autocomplete="off">
 
                                             </div>
                                         </div>
@@ -246,7 +248,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             <div class="form-group">
                                                 <label>ลักษณะตัวชี้วัดผลงาน เพื่อใช้ในการคำนวณ:</label>
                                                 <input type="text" name="performance_indicators[]" class="form-control"
-                                                    required placeholder="เช่น วัดยอดขาย , 3 Project ">
+                                                    required placeholder="เช่น วัดยอดขาย , 3 Project " autocomplete="off">
 
                                             </div>
                                         </div>
@@ -256,7 +258,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>หน่วยนับ:</label>
-                                                <select class="form-control" name="unit[]" required>
+                                                <select class="form-control bbb" name="unit[]" required autocomplete="off">
                                                     <option value="">เลือก</option>
                                                     <option value="%">%</option>
                                                     <option value="N">N (หน่วย)</option>
@@ -269,7 +271,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>น้ำหนัก (%):</label>
-                                                <input type="number" name="weight[]" class="form-control" required>
+                                                <input type="number" name="weight[]" class="form-control" required autocomplete="off">
 
                                             </div>
                                         </div>
@@ -282,13 +284,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>เป้าหมาย 60 วัน:</label>
-                                                <input type="number" name="target_60[]" class="form-control" required>
+                                                <input type="text" name="target_60[]" class="form-control separators1"  required autocomplete="off">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>ทำได้:</label>
-                                                <input type="number" name="seccess_60[]" class="form-control" required>
+                                                <label>ทำได้:</label><small class="text-danger">*กรณีทำได้เกินเป้าที่กำหนดให้ใส่เท่ากับเป้าหมาย</small>
+                                                <input type="text" name="seccess_60[]" class="form-control separators1"   required autocomplete="off">
                                             </div>
                                         </div>
                                     </div>
@@ -311,9 +313,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </div>
 
                         </form>
-
-
-
                     @endif
 
 
@@ -329,25 +328,102 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
 
+                    @if ($check->pass_90_status == 1 && $check->option_eva == 'แบบกำหนดเอง')
+                    <input type="hidden" name="60_90"  id="60_90"  value="90">
+
+                        <a href="javascript:void(0);" class="add_button2 btn btn-success" title="Add field">เพิ่มเป้าหมาย
+                            &nbsp;
+                            <span style="font-size:16px; font-weight:bold;">+ </span></a>
+
+                        <br><br>
+                        <form id="form-kpi-manual">
+                            <div class="card card-secondary">
+                                <div class="card-header">
+                                    <h3 class="card-title">เป้าหมาย</h3>
+
+                                </div>
+                                <div class="card-body">
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>ชื่อ KPI:</label>
+                                                <input type="text" name="KPI[]" class="form-control" required
+                                                    placeholder="เช่น ยอดขาย" autocomplete="off">
+
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>ลักษณะตัวชี้วัดผลงาน เพื่อใช้ในการคำนวณ:</label>
+                                                <input type="text" name="performance_indicators[]" class="form-control"
+                                                    required placeholder="เช่น วัดยอดขาย , 3 Project " autocomplete="off">
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>หน่วยนับ:</label>
+                                                <select class="form-control bbb" name="unit[]" required autocomplete="off">
+                                                    <option value="">เลือก</option>
+                                                    <option value="%">%</option>
+                                                    <option value="N">N (หน่วย)</option>
+                                                    <option value="B">B (บาท)</option>
+                                                </select>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>น้ำหนัก (%):</label>
+                                                <input type="number" name="weight[]" class="form-control" required autocomplete="off">
+
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>เป้าหมาย 90 วัน:</label>
+                                                <input type="text" name="target_60[]" class="form-control separators1"  required autocomplete="off">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>ทำได้:</label><small class="text-danger">*กรณีทำได้เกินเป้าที่กำหนดให้ใส่เท่ากับเป้าหมาย</small>
+                                                <input type="text" name="seccess_60[]" class="form-control separators1"   required autocomplete="off">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </div>
+
+
+                            </div>
+                            <div class="field_wrapper2">
 
 
 
+                            </div>
 
+                            <div>
+                                <center>
+                                    <button class="btn btn-success" type="submit">ส่งตรวจสอบ</button>
+                                </center>
 
+                            </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+                        </form>
+                    @endif
                     <!-- /.row -->
                 </div><!-- /.container-fluid -->
             </div>
@@ -379,6 +455,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
         });
 
     </script>
+    <script src="{{ asset('js/checkmanual.js') }}"></script>
+
+
+
 </body>
 
 </html>

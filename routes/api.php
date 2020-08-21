@@ -1690,6 +1690,7 @@ Route::middleware('auth:api')->get('/balancevalue', function (Request $request) 
 
     $ngg_card_wallet = DB::table('ngg_card_wallet')
         ->where('EmpCode', $user->username)
+        ->where('Active','Y')
         ->first();
 
         return response()->json($ngg_card_wallet);

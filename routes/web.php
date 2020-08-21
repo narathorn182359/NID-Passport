@@ -208,6 +208,10 @@ Route::get('/evaluation/{code_staff}/{degree}', 'PDFController@evaluation')->nam
 
 Route::post('/kpi_manual', 'Evaluate6090Controller@kpi_manual')->name('kpi_manual');
 
+Route::post('/nidpayupdateacc', 'NidPayController@nidpayupdateacc')->name('kpi_manual');
+
+Route::get('/evaluationman/{code_staff}/{degree}', 'PDFController@evaluationman')->name('evaluationman');
+
 
 
 
