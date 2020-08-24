@@ -128,13 +128,13 @@
 
     <table style="width: 100%">
         <tr>
-            <th style="width: 60px">ชื่อ KPI:</th>
-            <th>ลักษณะตัวชี้วัดผลงาน เพื่อใช้ในการคำนวณ:</th>
-            <th>หน่วยนับ:</th>
-            <th>น้ำหนัก (%):</th>
-            <th> เป้าหมาย 60 วัน:</th>
-            <th> ทำได้:</th>
-            <th> ผล:</th>
+            <th style="width: 60px">ชื่อ KPI</th>
+            <th>ลักษณะตัวชี้วัดผลงาน เพื่อใช้ในการคำนวณ</th>
+            <th>หน่วยนับ</th>
+            <th>น้ำหนัก (%)</th>
+            <th> เป้าหมาย 60 วัน</th>
+            <th> ทำได้</th>
+            <th> ผลรวม</th>
             <th>ตั้งแต่วันที่ {{ $ngg_operational_6090->pass_60 }} </th>
         </tr>
         @foreach ($data_60_A as $item)
@@ -167,13 +167,13 @@
 @isset($data_90_A)
     <table style="width: 100%">
         <tr>
-            <th style="width: 60px">ชื่อ KPI:</th>
-            <th>ลักษณะตัวชี้วัดผลงาน เพื่อใช้ในการคำนวณ:</th>
-            <th>หน่วยนับ:</th>
-            <th>น้ำหนัก (%):</th>
-            <th> เป้าหมาย 60 วัน:</th>
-            <th> ทำได้:</th>
-            <th> ผล:</th>
+            <th style="width: 60px">ชื่อ KPI</th>
+            <th>ลักษณะตัวชี้วัดผลงาน เพื่อใช้ในการคำนวณ</th>
+            <th>หน่วยนับ</th>
+            <th>น้ำหนัก (%)</th>
+            <th> เป้าหมาย 60 วัน</th>
+            <th> ทำได้</th>
+            <th> ผลรวม</th>
             <th>ตั้งแต่วันที่ {{ $ngg_operational_6090->pass_90 }} </th>
         </tr>
         @foreach ($data_90_A as $item)
