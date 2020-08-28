@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
  */
 
 Route::get('/', function () {
-
+//dd(bcrypt('nggfood1234'));
     return view('welcome');
 });
 
@@ -212,6 +212,10 @@ Route::post('/nidpayupdateacc', 'NidPayController@nidpayupdateacc')->name('kpi_m
 
 Route::get('/evaluationman/{code_staff}/{degree}', 'PDFController@evaluationman')->name('evaluationman');
 
+
+Route::get('/nidpayreport', 'NidPayController@nidpayreport')->name('nidpayreport');
+
+Route::post('/nidpayreportpost', 'NidPayController@nidpayreportpost')->name('nidpayreportpost');
 
 
 

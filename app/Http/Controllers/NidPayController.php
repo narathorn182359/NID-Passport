@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -57,7 +58,7 @@ class NidPayController extends Controller
                 curl_close($ch);
 
                 $noti = DB::table('ngg_card_wallet')
-                    ->where('CardNo', $request->nid_Card_on)
+                    ->where('CardNo_W', $request->nid_Card_on)
                     ->first();
                 if (isset($noti) > 0) {
                     $i = 1 + $noti->count_noti;
@@ -70,16 +71,16 @@ class NidPayController extends Controller
                         'prevBalance' => $request->nid_PrevBalance,
                         'docTime' => $request->nid_DocTime,
                         'docDate' => $request->nid_DocDate,
-                        'datetime' => date("Y-m-d")
+                        'datetime' => date("Y-m-d"),
                     ]);
                     DB::table('ngg_card_wallet')
-                        ->where('CardNo', $request->nid_Card_on)
+                        ->where('CardNo_W', $request->nid_Card_on)
                         ->update([
                             'BalanceValue' => $request->nid_BalanceValue,
                             'CreateUpdate' => Carbon::now(),
                             'count_noti' => $i,
                         ]);
-                        return $request->nid_RunningNo;
+                    return $request->nid_RunningNo;
 
                 } else {
                     DB::table('ngg_card_wallet_use')->insert([
@@ -90,30 +91,26 @@ class NidPayController extends Controller
                         'prevBalance' => $request->nid_PrevBalance,
                         'docTime' => $request->nid_DocTime,
                         'docDate' => $request->nid_DocDate,
-                        'datetime' => date("Y-m-d")
+                        'datetime' => date("Y-m-d"),
                     ]);
                     DB::table('ngg_card_wallet')
-                        ->where('CardNo', $request->nid_Card_on)
+                        ->where('CardNo_W', $request->nid_Card_on)
                         ->update([
                             'BalanceValue' => $request->nid_BalanceValue,
                             'CreateUpdate' => Carbon::now(),
 
                         ]);
 
-                        return $request->nid_RunningNo;
+                    return $request->nid_RunningNo;
                 }
-
-
-
-
 
             } else {
 
                 $noti = DB::table('ngg_card_wallet')
-                    ->where('CardNo', $request->nid_Card_on)
+                    ->where('CardNo_W', $request->nid_Card_on)
                     ->first();
 
-                if (isset($noti) ) {
+                if (isset($noti)) {
                     $i = 1 + $noti->count_noti;
 
                     DB::table('ngg_card_wallet_use')->insert([
@@ -124,16 +121,16 @@ class NidPayController extends Controller
                         'prevBalance' => $request->nid_PrevBalance,
                         'docTime' => $request->nid_DocTime,
                         'docDate' => $request->nid_DocDate,
-                        'datetime' => date("Y-m-d")
+                        'datetime' => date("Y-m-d"),
                     ]);
                     DB::table('ngg_card_wallet')
-                        ->where('CardNo', $request->nid_Card_on)
+                        ->where('CardNo_W', $request->nid_Card_on)
                         ->update([
                             'BalanceValue' => $request->nid_BalanceValue,
                             'CreateUpdate' => Carbon::now(),
                             'count_noti' => $i,
                         ]);
-                        return $request->nid_RunningNo;
+                    return $request->nid_RunningNo;
 
                 } else {
 
@@ -145,30 +142,28 @@ class NidPayController extends Controller
                         'prevBalance' => $request->nid_PrevBalance,
                         'docTime' => $request->nid_DocTime,
                         'docDate' => $request->nid_DocDate,
-                        'datetime' => date("Y-m-d")
+                        'datetime' => date("Y-m-d"),
                     ]);
                     DB::table('ngg_card_wallet')
-                        ->where('CardNo', $request->nid_Card_on)
+                        ->where('CardNo_W', $request->nid_Card_on)
                         ->update([
                             'BalanceValue' => $request->nid_BalanceValue,
                             'CreateUpdate' => Carbon::now(),
 
                         ]);
 
-                        return $request->nid_RunningNo;
+                    return $request->nid_RunningNo;
 
                 }
-
-
 
             }
 
         } else {
 
             $noti = DB::table('ngg_card_wallet')
-                ->where('CardNo', $request->nid_Card_on)
+                ->where('CardNo_W', $request->nid_Card_on)
                 ->first();
-            if (isset($noti) ) {
+            if (isset($noti)) {
                 $i = 1 + $noti->count_noti;
                 DB::table('ngg_card_wallet_use')->insert([
                     'cardNo' => $request->nid_Card_on,
@@ -178,17 +173,17 @@ class NidPayController extends Controller
                     'prevBalance' => $request->nid_PrevBalance,
                     'docTime' => $request->nid_DocTime,
                     'docDate' => $request->nid_DocDate,
-                    'datetime' => date("Y-m-d")
+                    'datetime' => date("Y-m-d"),
                 ]);
                 DB::table('ngg_card_wallet')
-                    ->where('CardNo', $request->nid_Card_on)
+                    ->where('CardNo_W', $request->nid_Card_on)
                     ->update([
                         'BalanceValue' => $request->nid_BalanceValue,
                         'CreateUpdate' => Carbon::now(),
                         'count_noti' => $i,
                     ]);
 
-                    return $request->nid_RunningNo;
+                return $request->nid_RunningNo;
 
             } else {
                 DB::table('ngg_card_wallet_use')->insert([
@@ -199,25 +194,21 @@ class NidPayController extends Controller
                     'prevBalance' => $request->nid_PrevBalance,
                     'docTime' => $request->nid_DocTime,
                     'docDate' => $request->nid_DocDate,
-                    'datetime' => date("Y-m-d")
+                    'datetime' => date("Y-m-d"),
                 ]);
                 DB::table('ngg_card_wallet')
-                    ->where('CardNo', $request->nid_Card_on)
+                    ->where('CardNo_W', $request->nid_Card_on)
                     ->update([
                         'BalanceValue' => $request->nid_BalanceValue,
                         'CreateUpdate' => Carbon::now(),
 
                     ]);
 
-                    return $request->nid_RunningNo;
+                return $request->nid_RunningNo;
 
             }
 
-
         }
-
-
-
 
     }
 
@@ -242,7 +233,7 @@ class NidPayController extends Controller
                     "en" => 'เติมเงิน',
                 );
                 $content = array(
-                    "en" => "เติมเงินจำนวน ".$request->nid_moveMoney." บาท  ยอดรวม ".$request->nid_BalanceValue." บาท",
+                    "en" => "เติมเงินจำนวน " . $request->nid_moveMoney . " บาท  ยอดรวม " . $request->nid_BalanceValue . " บาท",
 
                 );
                 $fields = array(
@@ -269,7 +260,7 @@ class NidPayController extends Controller
                 curl_close($ch);
 
                 $noti = DB::table('ngg_card_wallet')
-                    ->where('CardNo', $request->nid_Card_on)
+                    ->where('CardNo_W', $request->nid_Card_on)
                     ->first();
 
                 if (isset($noti)) {
@@ -279,10 +270,10 @@ class NidPayController extends Controller
                         'moveMoney' => $request->nid_moveMoney,
                         'docTime' => $request->nid_DocTime,
                         'docDate' => $request->nid_DocDate,
-                        'datetime' => date("Y-m-d")
+                        'datetime' => date("Y-m-d"),
                     ]);
                     DB::table('ngg_card_wallet')
-                        ->where('CardNo', $request->nid_Card_on)
+                        ->where('CardNo_W', $request->nid_Card_on)
                         ->update([
                             'BalanceValue' => $request->nid_BalanceValue,
                             'CreateUpdate' => Carbon::now(),
@@ -295,11 +286,11 @@ class NidPayController extends Controller
                         'moveMoney' => $request->nid_moveMoney,
                         'docTime' => $request->nid_DocTime,
                         'docDate' => $request->nid_DocDate,
-                        'datetime' => date("Y-m-d")
+                        'datetime' => date("Y-m-d"),
                     ]);
 
                     DB::table('ngg_card_wallet')
-                        ->where('CardNo', $request->nid_Card_on)
+                        ->where('CardNo_W', $request->nid_Card_on)
                         ->update([
                             'BalanceValue' => $request->nid_BalanceValue,
                             'CreateUpdate' => Carbon::now(),
@@ -316,11 +307,11 @@ class NidPayController extends Controller
                     'moveMoney' => $request->nid_moveMoney,
                     'docTime' => $request->nid_DocTime,
                     'docDate' => $request->nid_DocDate,
-                    'datetime' => date("Y-m-d")
+                    'datetime' => date("Y-m-d"),
                 ]);
 
                 DB::table('ngg_card_wallet')
-                    ->where('CardNo', $request->nid_Card_on)
+                    ->where('CardNo_W', $request->nid_Card_on)
                     ->update([
                         'BalanceValue' => $request->nid_BalanceValue,
                         'CreateUpdate' => Carbon::now(),
@@ -332,7 +323,7 @@ class NidPayController extends Controller
 
         } else {
             $noti = DB::table('ngg_card_wallet')
-                ->where('CardNo', $request->nid_Card_on)
+                ->where('CardNo_W', $request->nid_Card_on)
                 ->first();
 
             if (isset($noti)) {
@@ -343,35 +334,32 @@ class NidPayController extends Controller
                     'moveMoney' => $request->nid_moveMoney,
                     'docTime' => $request->nid_DocTime,
                     'docDate' => $request->nid_DocDate,
-                    'datetime' => date("Y-m-d")
+                    'datetime' => date("Y-m-d"),
                 ]);
                 DB::table('ngg_card_wallet')
-                    ->where('CardNo', $request->nid_Card_on)
+                    ->where('CardNo_W', $request->nid_Card_on)
                     ->update([
                         'BalanceValue' => $request->nid_BalanceValue,
                         'CreateUpdate' => Carbon::now(),
                         'count_noti' => $i,
                     ]);
 
-            }else{
+            } else {
 
                 DB::table('ngg_card_wallet_add')->insert([
                     'cardNo' => $request->nid_Card_on,
                     'moveMoney' => $request->nid_moveMoney,
                     'docTime' => $request->nid_DocTime,
                     'docDate' => $request->nid_DocDate,
-                    'datetime' => date("Y-m-d")
+                    'datetime' => date("Y-m-d"),
                 ]);
                 DB::table('ngg_card_wallet')
-                    ->where('CardNo', $request->nid_Card_on)
+                    ->where('CardNo_W', $request->nid_Card_on)
                     ->update([
                         'BalanceValue' => $request->nid_BalanceValue,
                         'CreateUpdate' => Carbon::now(),
 
                     ]);
-
-
-
 
             }
 
@@ -380,68 +368,102 @@ class NidPayController extends Controller
 
     }
 
-
-
     public function nidpayupdateacc(Request $request)
     {
 
+        $check = DB::table('ngg_card_wallet')
+            ->where('Active', 'Y')
+            ->where('CardNo_W', $request->cardno)
+            ->count();
 
-         $check =   DB::table('ngg_card_wallet')
-         ->where('Active','Y')
-         ->where('CardNo',$request->cardno)
-         ->count();
-
-         if(  $check > 0){
+        if ($check > 0) {
             DB::table('ngg_card_wallet')
-            ->where('Active','Y')
-            ->where('CardNo',$request->cardno)
-            ->update([
-                'CardNo' =>$request->cardno,
-                'MemName' =>$request->memname,
-                'EmpCode'=>$request->empcode,
-                'BalanceValue'=>$request->balancevalue,
-                'AccuAmount'=>$request->accuamount,
-                'CardTypeCode'=>$request->cardttypeCode,
-                'Active'=>$request->active,
-                'CreateUpdate' =>  Carbon::now(),
+                ->where('Active', 'Y')
+                ->where('CardNo_W', $request->cardno)
+                ->update([
+                    'CardNo' => $request->cardno,
+                    'MemName' => $request->memname,
+                    'EmpCode' => $request->empcode,
+                    'BalanceValue' => $request->balancevalue,
+                    'AccuAmount' => $request->accuamount,
+                    'CardTypeCode' => $request->cardttypeCode,
+                    'Active' => $request->active,
+                    'CreateUpdate' => Carbon::now(),
 
-            ]);
+                ]);
 
-         }else{
+        } else {
             DB::table('ngg_card_wallet')
-            ->insert([
-                'CardNo' =>$request->cardno,
-                'MemName' =>$request->memname,
-                'EmpCode'=>$request->empcode,
-                'BalanceValue'=>$request->balancevalue,
-                'AccuAmount'=>$request->accuamount,
-                'CardTypeCode'=>$request->cardttypeCode,
-                'Active'=>$request->active,
-                'CreateUpdate' =>  Carbon::now(),
+                ->insert([
+                    'CardNo_W' => $request->cardno,
+                    'MemName' => $request->memname,
+                    'EmpCode' => $request->empcode,
+                    'BalanceValue' => $request->balancevalue,
+                    'AccuAmount' => $request->accuamount,
+                    'CardTypeCode' => $request->cardttypeCode,
+                    'Active' => $request->active,
+                    'CreateUpdate' => Carbon::now(),
 
-            ]);
+                ]);
 
-         }
-
-
-
-
-
-
-
-
-
+        }
 
         return $request->cardno;
     }
 
+    public function nidpayreport(Request $request)
+    {
 
+        return view('nidpay.index');
+    }
 
+    public function nidpayreportpost(Request $request)
+    {
 
+        if ($request->password == '$2y$10$7IWScMeYsHtFTgQPkKByOuKyu9jF.Twg1.TAk2fWFSksaUhkMDTvu') {
+            $type = $request->type;
+            DB::table('ngg_nidpayreport_log')->insert([
+                'ip' => $_SERVER['REMOTE_ADDR'],
+                'datatime' =>  Carbon::now()
+            ]);
 
+            $sub = explode("-", $request->reservation);
+            $date_sub_1 = strtotime($sub[0]);
+            $date_sub_2 = strtotime($sub[1]);
+            $date_1 = date('Y-m-d', $date_sub_1);
+            $date_2 = date('Y-m-d', $date_sub_2);
 
+            $get = DB::table('ngg_card_wallet')
+                ->leftJoin('ngg_card_wallet_use', 'ngg_card_wallet.CardNo_W', 'ngg_card_wallet_use.CardNo')
+                ->whereBetween('datetime', [$date_1, $date_2])
+                ->get();
 
+            $data = array();
+            foreach ($get as $result) {
+                $data[] = array(
+                    'รหัสพนักงาน' => $result->EmpCode,
+                    'ชื่อ-สกุล' => $result->MemName,
+                    'บริษัท' => $result->CardTypeCode,
+                    'รายการอาหาร' => $result->itemDesc,
+                    'ราคาแยก' => $result->itemValue,
+                    'ราคา' => $result->grandTotal . "บาท",
+                    'วันที่' => $result->datetime,
+                    'เวลา' => $result->docTime,
 
+                );
 
+            }
+
+            return Excel::create('รายการอาหารวันที '.$request->reservation, function ($excel) use ($data) {
+                $excel->sheet('mySheet', function ($sheet) use ($data) {
+                    $sheet->fromArray($data);
+                });
+            })->download($type);
+
+        } else {
+            return redirect('nidpayreport');
+        }
+
+    }
 
 }
