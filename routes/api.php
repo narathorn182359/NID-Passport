@@ -288,12 +288,13 @@ Route::middleware('auth:api')->post('/getkm360list', function (Request $request)
     return response()->json($json);
 });
 
-Route::middleware('auth:api')->get('/getkm360list_search', function (Request $request) {
+Route::middleware('auth:api')->post('/getkm360list_search', function (Request $request) {
 
     $user = $request->user();
     $data = $request->json()->all();
     $json = DB::table('ngg_km_category_detail')
         ->leftJoin('ngg_km_img_category_detail', 'ngg_km_category_detail.id', 'ngg_km_img_category_detail.id_km_detail')
+        ->Where('km_title', 'LIKE', '%' . $data['value'] . '%')
         ->select('id', 'km_title', 'km_remark', 'km_name_img', 'created_at')
         ->get();
     return response()->json($json);
@@ -323,7 +324,7 @@ Route::middleware('auth:api')->get('/get_km360', function (Request $request) {
     $user = $request->user();
     $data = $request->json()->all();
     $json = DB::table('ngg_km_category')
-        ->select('id_km_cat', 'img','section')
+        ->select('id_km_cat', 'img','section','name_category_thai')
         ->orderBy('section', 'asc')
         ->get();
     return response()->json($json);
@@ -630,7 +631,7 @@ Route::middleware('auth:api')->post('/get_positin', function (Request $request) 
 
     foreach ($position as $i) {
 
-        array_push($a, $i->Department);
+        array_push($a,  $i->Department);
     }
     $brand_r = array_unique($a);
     $array = $a;
