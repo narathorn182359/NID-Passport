@@ -364,15 +364,21 @@ Route::middleware('auth:api')->get('/get_list_benefits', function (Request $requ
         foreach ($ngg_benefits as $items) {
 
             $datas = array(
-                'head' => $items->be_name,
-                'detail' => $items->be_detail,
+                'detail' => $items->be_name.''.$items->be_detail,
+               
             );
 
             $i[] = $datas;
 
         }
         if (isset($i)) {
+            $i[] =  array(
+                'detail' => $item->name_benefits,
+               
+            );
+
             $lastdata = array(
+              
                 'icon' => $item->icon,
                 'name' => $item->name_benefits,
                 'list' => $i,
@@ -384,8 +390,8 @@ Route::middleware('auth:api')->get('/get_list_benefits', function (Request $requ
                 'icon' => $item->icon,
                 'name' => $item->name_benefits,
                 'list' => array(
-                    'head' => "ไม่พบข้อมูล",
                     'detail' => "ไม่พบข้อมูล",
+                   
                 ),
 
             );
@@ -457,7 +463,9 @@ Route::middleware('auth:api')->post('/password_ch', function (Request $request) 
     if (Hash::check($data['password_old'], $user->password)) {
         DB::table('users')
             ->where('username', $user->username)
-            ->update(['password' => Hash::make($data['password_new'])]);
+            ->update(['password' => Hash::make($data['password_new']),
+                     'updated_at' =>  date('Y-m-d H:i:s')
+                     ]);
         return response()->json([
             'success' => '200',
         ]);
