@@ -239,7 +239,7 @@ class NidPayController extends Controller
                 $fields = array(
                     'app_id' => "16adf426-0420-49fa-b189-d71af438789a",
                     'include_player_ids' => $list_noti,
-                    'data' => array("foo" => "bar"),
+                    'data' => array("page" => "/wallet"),
                     'contents' => $content,
                     'headings' => $heading,
 

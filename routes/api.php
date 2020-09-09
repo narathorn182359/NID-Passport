@@ -355,7 +355,8 @@ Route::middleware('auth:api')->get('/get_list_benefits', function (Request $requ
     $user = $request->user();
     $data = $request->json()->all();
     $ngg_list_benefits = DB::table('ngg_list_benefits')->get();
-
+    $arr_namelistrepair = array();
+    $str_namelistrepair = "";
     foreach ($ngg_list_benefits as $item) {
         $ngg_benefits = DB::table('ngg_benefits')
             ->where('id_list_be', $item->id)
@@ -363,36 +364,28 @@ Route::middleware('auth:api')->get('/get_list_benefits', function (Request $requ
             ->get();
         foreach ($ngg_benefits as $items) {
 
-            $datas = array(
-                'detail' => $items->be_name.''.$items->be_detail,
-               
-            );
-
-            $i[] = $datas;
+        
+            $arr_namelistrepair[] = $items->be_name.''.$items->be_detail;
 
         }
-        if (isset($i)) {
-            $i[] =  array(
-                'detail' => $item->name_benefits,
-               
-            );
+     
 
+        if (isset($arr_namelistrepair)) {
+         
+            $str_namelistrepair = implode( ",", $arr_namelistrepair);
             $lastdata = array(
               
                 'icon' => $item->icon,
                 'name' => $item->name_benefits,
-                'list' => $i,
+                'list' => $str_namelistrepair,
 
             );
-            unset($i);
+            unset($arr_namelistrepair);
         } else {
             $lastdata = array(
                 'icon' => $item->icon,
                 'name' => $item->name_benefits,
-                'list' => array(
-                    'detail' => "ไม่พบข้อมูล",
-                   
-                ),
+                'list' => "ไม่พบข้อมูล",
 
             );
         }
