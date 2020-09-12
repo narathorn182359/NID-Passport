@@ -290,7 +290,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>ทำได้:</label><small class="text-danger">*กรณีทำได้เกินเป้าที่กำหนดให้ใส่เท่ากับเป้าหมาย</small>
-                                                <input type="text" name="seccess_60[]" class="form-control separators1"   required autocomplete="off">
+                                                <input type="text" name="seccess_60[]" class="form-control separators1"   required autocomplete="off" >
                                             </div>
                                         </div>
                                     </div>

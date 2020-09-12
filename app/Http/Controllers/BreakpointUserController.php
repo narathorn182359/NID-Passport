@@ -331,6 +331,9 @@ class BreakpointUserController extends Controller
             DB::table('users_detail')
             ->where('id',$request->id)
             ->delete();
+            DB::table('users')
+            ->where('username',$request->id)
+            ->delete();
         }else{
             return   response()->json('404');
         }
@@ -482,6 +485,7 @@ class BreakpointUserController extends Controller
         ]);
         $path = $request->file('import_file')->getRealPath();
         $data = Excel::load($path)->get();
+        
         if($data->count()){
             foreach ($data as $key => $value) {
            
@@ -501,24 +505,46 @@ class BreakpointUserController extends Controller
                         'JGStatus' => strval($value->jgstatus),
                         'Workplace' => strval($value->workplace),
                         'Working_status' => strval($value->working_status),
-                        'img' => strval($value->img),
+                        'StartDate' => strval($value->startdate),
+                        'DateofBirth' => strval($value->dateofbirth),
                         'Company' => strval($value->company),
+                        'updated_at' => date('Y-m-d H:i:s'),
                         ]);
     
-                        DB::table('users')
-                        ->insert([
-                            'username' => $value->code_staff, 
-                            'id_card' => $value->code_staff, 
-                            'password' => bcrypt('0000'),
+                        $countCheck = DB::table('users')->where('username',$value->code_staff)->count();
+                        if($countCheck == 0){
+                            if($value->card_staff == '' ){
+                                DB::table('users')
+                                ->insert([
+                                    'username' => $value->code_staff, 
+                                    'id_card' => $value->code_staff, 
+                                    'password' => bcrypt('0000'),
+            
+                                ]);
+                            
+                            }else{
+                                DB::table('users')
+                                ->insert([
+                                    'username' => $value->code_staff, 
+                                    'id_card' => $value->card_staff, 
+                                    'password' => bcrypt('0000'),
+            
+                                ]);
+                            }
+                          
+                        }
+                     
     
-                        ]);
-    
-                        DB::table('user_role')
-                        ->insert([
-                            'username_id' => $value->code_staff, 
-                            'card_id_id' => $value->code_staff, 
-                            'name_menu_id' => '7',
-                        ]);
+                        if($value->card_staff != '' ){
+
+                            DB::table('user_role')
+                            ->insert([
+                                'username_id' => $value->code_staff, 
+                                'card_id_id' => $value->card_staff, 
+                                'name_menu_id' => '7',
+                            ]);
+                        }
+                      
                     
                 }
         
@@ -539,8 +565,10 @@ class BreakpointUserController extends Controller
                         'JGStatus' => strval($value->jgstatus),
                         'Workplace' => strval($value->workplace),
                         'Working_status' => strval($value->working_status),
-                        'img' => strval($value->img),
+                        'StartDate' => strval($value->startdate),
+                        'DateofBirth' => strval($value->dateofBirth),
                         'Company' => strval($value->company),
+                        'updated_at' => date('Y-m-d H:i:s'),
                         ]);
 
 

@@ -266,19 +266,6 @@ $(document).ready(function () {
     });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         $( ".separators1" ).on( "click", function() {
             $(".separators1").on("keydown", function(e) {
                 var keycode = (event.which) ? event.which : event.keyCode;

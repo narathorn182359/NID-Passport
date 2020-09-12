@@ -39,17 +39,12 @@ class Evaluate6090Controller extends Controller
 
                         }
 
-                        if ($item['seccess_60'] > $item['target_60']) {
+                        if ((int) filter_var($item['seccess_60'], FILTER_SANITIZE_NUMBER_INT) > (int) filter_var($item['target_60'], FILTER_SANITIZE_NUMBER_INT)) {
                             $log_error = false;
                             $log_name = "ตรวจพบ ทำได้ มากกว่า เป้าหมายที่ได้กำหนดไว้ค่ะกรุณาตรวจสอบ";
 
                         }
 
-                        if (!is_numeric($item['target_60']) || !is_numeric($item['seccess_60'])) {
-                            $log_error = false;
-                            $log_name = "ตรวจพบเป้าหมายหรือทำได้ไม่ใช้ตัวเลข";
-
-                        }
 
                         if ($log_error == true) {
                             $answer['60or90_operation_manual'] = $request->if_6090;
@@ -76,7 +71,7 @@ class Evaluate6090Controller extends Controller
                     } else {
 
                         $weight = $item['weight'] + $weight;
-                        if ($item['seccess_60'] > $item['target_60']) {
+                        if ((int) filter_var($item['seccess_60'], FILTER_SANITIZE_NUMBER_INT) > (int) filter_var($item['target_60'], FILTER_SANITIZE_NUMBER_INT)) {
                             $log_error = false;
                             $log_name = "ตรวจพบ ทำได้ มากกว่า เป้าหมายที่ได้กำหนดไว้ค่ะกรุณาตรวจสอบ";
 
@@ -112,7 +107,6 @@ class Evaluate6090Controller extends Controller
 
                     }
 
-                    //  is_numeric();
                 }
 
             }
