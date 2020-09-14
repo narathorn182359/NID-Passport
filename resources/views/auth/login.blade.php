@@ -47,7 +47,7 @@
     </div>
      @endif
       <p class="login-box-msg">Sign in to start your session</p>
-     <center> <p><h2>TEST DEVELOP</h2> </p></center>
+    
       <form class="user"  method="POST" action="{{ route('login') }}" aria-label="{{ __('Login') }}">
         @csrf
         <div class="input-group mb-3">

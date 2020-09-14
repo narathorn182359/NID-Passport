@@ -86,6 +86,60 @@ $(document).ready(function () {
         });
     });
 
+
+
+    $("body").on("click", ".Resetpassword", function () {
+        var id = $(this).data("id");
+        Swal.fire({
+            title: "ยืนยัน",
+            text: "กรุณาตรวจสอบก่อนยืนยัน!",
+            icon: "info",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "ตกลง",
+            cancelButtonText: "ยกเลิก",
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    type: "POST",
+                    data: {
+                        _token: $("#token").val(),
+                        code_staff: id,
+                    },
+                    url: "resetpassword",
+                    success: function (data) {
+            
+                            Swal.fire(
+                                "ลบข้อมูลสำเร็จ!",
+                                "หากสงสัยข้อมูลกรุณาติดต่อทีมพัฒนา",
+                                "success"
+                            ).then(function () {
+                                location.reload();
+                            });
+                        
+                    },
+                    error: function (data) {
+                        Swal.fire({
+                            type: "error",
+                            title: "ผิดพลาด",
+                            text: "ไม่สามารถลบได้กรุณาติดต่อทีมพัฒนา",
+                            confirmButtonText: "ตกลง",
+                        });
+                    },
+                });
+            }
+        });
+    
+    });
+    
+
+
+
+
+
+
+
     $("body").on("click", ".DeleteUsername", function () {
         var id = $(this).data("id");
         //confirm("Are You sure want to delete !");

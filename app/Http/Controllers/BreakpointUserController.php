@@ -302,6 +302,7 @@ class BreakpointUserController extends Controller
                         $nestedData['Department'] = $post->Department;
                         $nestedData['active'] =$status;
                         $nestedData['options'] = "
+                        <a href='javascript:void(0)' class='btn btn-success btn-circle btn-xs Resetpassword' data-id='{$post->Code_Staff}'>รีเซตรหัสผ่าน</a>
                         <a href='javascript:void(0)' class='btn btn-warning btn-circle btn-xs Edituser' data-id='{$post->id}'>แก้ไข</a>
                         <a href='javascript:void(0)' class='btn btn-info btn-circle btn-xs EnableOrDis'  data-id='{$post->Code_Staff}'>ปิดหรือเปิด</a>
                         <a href='javascript:void(0)' class='btn btn-danger btn-circle btn-xs DeleteUsername'   data-id='{$post->id}'>ลบ</a>";

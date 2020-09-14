@@ -1802,4 +1802,7 @@ Route::middleware('auth:api')->get('/rm_noti_wallet', function (Request $request
 
 
 
-Route::post('register', 'Api\RegisterController@register');
+Route::post('resetpasswordissue', 'Api\RegisterController@resetpasswordissue');
+
+
+

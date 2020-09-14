@@ -111,14 +111,7 @@
               </a>
             </li>
           @endforeach
-          <li class="nav-item">
-            <a href="{{ 'index_evaluate' }}" class="nav-link">
-                <i class="nav-icon fas fa-user-tie"></i>
-                <p>
-                    จัดการประเมิน 60 90
-                </p>
-            </a>
-        </li>
+       
           <li class="nav-item">
             <a class="nav-link" href="{{ route('logout') }}"
             onclick="event.preventDefault();

@@ -217,6 +217,8 @@ Route::get('/nidpayreport', 'NidPayController@nidpayreport')->name('nidpayreport
 
 Route::post('/nidpayreportpost', 'NidPayController@nidpayreportpost')->name('nidpayreportpost');
 
+Route::post('/resetpassword', 'Api\RegisterController@resetpassword')->name('resetpassword');
+
 
 
 
