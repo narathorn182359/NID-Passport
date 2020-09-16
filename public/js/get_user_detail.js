@@ -111,7 +111,7 @@ $(document).ready(function () {
                     success: function (data) {
             
                             Swal.fire(
-                                "ลบข้อมูลสำเร็จ!",
+                                "เปลี่ยนสำเร็จ!",
                                 "หากสงสัยข้อมูลกรุณาติดต่อทีมพัฒนา",
                                 "success"
                             ).then(function () {

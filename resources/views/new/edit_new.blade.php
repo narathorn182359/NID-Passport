@@ -9,13 +9,13 @@
         enableExif: true,
         enableOrientation: true,
         viewport: { // Default { width: 100, height: 100, type: 'square' }
-            width: 581,
-            height: 227,
+            width: 1280,
+            height: 720,
             type: 'square' //square
         },
         boundary: {
-            width: 600,
-            height: 300
+          width: 1380,
+            height: 820,
         }
     });
 
