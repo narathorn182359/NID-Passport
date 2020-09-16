@@ -123,6 +123,8 @@ $(document).ready(function () {
     });
 });
 
+
+
 $("#form-kpi-manual").submit(function (e) {
     e.preventDefault();
     $("#overlay").show();
@@ -137,6 +139,7 @@ $("#form-kpi-manual").submit(function (e) {
     var assessor =    document.querySelector('[name="assessor"]').value;
     var code_staff =    document.querySelector('[name="assessed"]').value;
     var if_6090 =  document.querySelector('[name="60_90"]').value;
+  
     var cartscore = [];
     for (var i = 0; i < KPI.length; i++) {
         var getvaluescore = {};
@@ -146,6 +149,7 @@ $("#form-kpi-manual").submit(function (e) {
         getvaluescore.weight = weight[i].value;
         getvaluescore.target_60 = target_60[i].value;
         getvaluescore.seccess_60 = seccess_60[i].value;
+       
         cartscore.push(getvaluescore);
     }
     //console.log(cartscore);
@@ -158,7 +162,7 @@ $("#form-kpi-manual").submit(function (e) {
             code_staff:code_staff,
             assessor:assessor
         },
-        url: "/kpi_manual",
+        url: "/set6090manual",
         success: function (data) {
             console.log(data);
             if (data == "noweight") {
@@ -203,12 +207,111 @@ $("#form-kpi-manual").submit(function (e) {
     });
 });
 
+
+
+$("#form-kpi-manual-final").submit(function (e) {
+    e.preventDefault();
+    $("#overlay").show();
+    var KPI = document.getElementsByName("KPI[]");
+    var performance_indicators = document.getElementsByName(
+        "performance_indicators[]"
+    );
+    var unit = document.getElementsByName("unit[]");
+    var weight = document.getElementsByName("weight[]");
+    var target_60 = document.getElementsByName("target_60[]");
+    var seccess_60 = document.getElementsByName("seccess_60[]");
+    var idsec =  document.getElementsByName("idsec[]");
+    var assessor =    document.querySelector('[name="assessor"]').value;
+    var code_staff =    document.querySelector('[name="assessed"]').value;
+    var if_6090 =  document.querySelector('[name="60_90"]').value;
+   
+    var cartscore = [];
+    for (var i = 0; i < KPI.length; i++) {
+        var getvaluescore = {};
+        getvaluescore.kpi = KPI[i].value;
+        getvaluescore.performance_indicators = performance_indicators[i].value;
+        getvaluescore.unit = unit[i].value;
+        getvaluescore.weight = weight[i].value;
+        getvaluescore.target_60 = target_60[i].value;
+        getvaluescore.seccess_60 = seccess_60[i].value;
+        getvaluescore.idsec = idsec[i].value;
+        cartscore.push(getvaluescore);
+    }
+    //console.log(cartscore);
+
+    $.ajax({
+        type: "POST",
+        data: {
+            data: cartscore,
+            if_6090:if_6090,
+            code_staff:code_staff,
+            assessor:assessor
+        },
+        url: "/kpi_manual",
+        success: function (data) {
+            console.log(data);
+            if (data == "noweight") {
+                Swal.fire({
+                    icon: "error",
+                    title: "ผิดพลาด",
+                    text: "น้ำหนัก(%) ไม่ครบ 100% หรือ เกิน 100%",
+                    confirmButtonText: "ตกลง",
+                });
+            }
+
+            if (data.log_error == false) {
+                Swal.fire({
+                    icon: "error",
+                    title: "ผิดพลาด",
+                    text: data.log_name,
+                    confirmButtonText: "ตกลง",
+                });
+            }
+
+            console.log(data.log_name);
+            if (data.log_error == true) {
+                Swal.fire({
+                    icon: "success",
+                    title: "ระบบได้รับข้อมูลแล้ว",
+                    text: "หากสงสัยกรุณาติดต่อฝ่ายบุคคล",
+                    confirmButtonText: "ตกลง",
+                }).then(function () {
+                    $("#overlay").hide();
+                    window.location.href = "/index_option/"+assessor+"/"+code_staff;
+                });
+            }
+        },
+        error: function (data) {
+            Swal.fire({
+                icon: "error",
+                title: "ผิดพลาด",
+                text: "ไม่สามารถบันทึกได้",
+                confirmButtonText: "ตกลง",
+            });
+        },
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 $(document).ready(function () {
     var maxField = 10; //Input fields increment limitation
     var addButton = $(".add_button"); //Add button selector
     var wrapper = $(".field_wrapper"); //Input field wrapper
     var fieldHTML =
-        '<div><div class="card card-secondary"> <div class="card-header"> <h3 class="card-title">เป้าหมาย</h3> </div> <div class="card-body"> <div class="row"> <div class="col-md-6"> <div class="form-group"> <label>ชื่อ KPI:</label> <input type="text" name="KPI[]" class="form-control" required placeholder="เช่น ยอดขาย"> </div> </div> <div class="col-md-6"> <div class="form-group"> <label>ลักษณะตัวชี้วัดผลงาน เพื่อใช้ในการคำนวณ:</label> <input type="text" name="performance_indicators[]" class="form-control" required placeholder="เช่น วัดยอดขาย , 3 Project "> </div> </div> </div> <div class="row"> <div class="col-md-6"> <div class="form-group"> <label>หน่วยนับ:</label> <select class="form-control" name="unit[]" required> <option value="">เลือก</option> <option value="%">%</option> <option value="N">N (หน่วย)</option> <option value="B">B (บาท)</option> </select> </div> </div> <div class="col-md-6"> <div class="form-group"> <label>น้ำหนัก (%):</label> <input type="number" name="weight[]" class="form-control" required> </div> </div> </div> <div class="row"> <div class="col-md-6"> <div class="form-group"> <label>เป้าหมาย 60 วัน:</label> <input type="text" name="target_60[]" class="form-control separators1" required> </div> </div> <div class="col-md-6"> <div class="form-group"> <label>ทำได้:<small class="text-danger">*กรณีทำได้เกินเป้าที่กำหนดให้ใส่เท่ากับเป้าหมาย</small></label> <input type="text" name="seccess_60[]" class="form-control separators1" required> </div> </div> </div> <hr> </div> <a href="javascript:void(0);" class="remove_button btn btn-danger">ลบ</a></div></div>'; //New input field html
+        '<div><div class="card card-secondary"> <div class="card-header"> <h3 class="card-title">เป้าหมาย</h3> </div> <div class="card-body"> <div class="row"> <div class="col-md-6"> <div class="form-group"> <label>ชื่อ KPI:</label> <input type="text" name="KPI[]" class="form-control" required placeholder="เช่น ยอดขาย"> </div> </div> <div class="col-md-6"> <div class="form-group"> <label>ลักษณะตัวชี้วัดผลงาน เพื่อใช้ในการคำนวณ:</label> <input type="text" name="performance_indicators[]" class="form-control" required placeholder="เช่น วัดยอดขาย , 3 Project "> </div> </div> </div> <div class="row"> <div class="col-md-6"> <div class="form-group"> <label>หน่วยนับ:</label> <select class="form-control" name="unit[]" required> <option value="">เลือก</option> <option value="%">%</option> <option value="N">N (หน่วย)</option> <option value="B">B (บาท)</option> </select> </div> </div> <div class="col-md-6"> <div class="form-group"> <label>น้ำหนัก (%):</label> <input type="number" name="weight[]" class="form-control" required> </div> </div> </div> <div class="row"> <div class="col-md-6"> <div class="form-group"> <label>เป้าหมาย 60 วัน:</label> <input type="text" name="target_60[]" class="form-control separators1" required> </div> </div> <div class="col-md-6"> <div class="form-group"> <label>ทำได้:<small class="text-danger">*กรณีทำได้เกินเป้าที่กำหนดให้ใส่เท่ากับเป้าหมาย</small></label> <input type="text" name="seccess_60[]" class="form-control separators1" disabled required> </div> </div> </div> <hr> </div> <a href="javascript:void(0);" class="remove_button btn btn-danger">ลบ</a></div></div>'; //New input field html
     var x = 1; //Initial field counter is 1
 
     //Once add button is clicked
@@ -240,7 +343,7 @@ $(document).ready(function () {
     var addButton2 = $(".add_button2"); //Add button selector
     var wrapper2 = $(".field_wrapper2"); //Input field wrapper
     var fieldHTML2 =
-        '<div><div class="card card-secondary"> <div class="card-header"> <h3 class="card-title">เป้าหมาย</h3> </div> <div class="card-body"> <div class="row"> <div class="col-md-6"> <div class="form-group"> <label>ชื่อ KPI:</label> <input type="text" name="KPI[]" class="form-control" required placeholder="เช่น ยอดขาย"> </div> </div> <div class="col-md-6"> <div class="form-group"> <label>ลักษณะตัวชี้วัดผลงาน เพื่อใช้ในการคำนวณ:</label> <input type="text" name="performance_indicators[]" class="form-control" required placeholder="เช่น วัดยอดขาย , 3 Project "> </div> </div> </div> <div class="row"> <div class="col-md-6"> <div class="form-group"> <label>หน่วยนับ:</label> <select class="form-control" name="unit[]" required> <option value="">เลือก</option> <option value="%">%</option> <option value="N">N (หน่วย)</option> <option value="B">B (บาท)</option> </select> </div> </div> <div class="col-md-6"> <div class="form-group"> <label>น้ำหนัก (%):</label> <input type="number" name="weight[]" class="form-control" required> </div> </div> </div> <div class="row"> <div class="col-md-6"> <div class="form-group"> <label>เป้าหมาย 60 วัน:</label> <input type="text" name="target_60[]" class="form-control separators1" required> </div> </div> <div class="col-md-6"> <div class="form-group"> <label>ทำได้:<small class="text-danger">*กรณีทำได้เกินเป้าที่กำหนดให้ใส่เท่ากับเป้าหมาย</small></label> <input type="text" name="seccess_60[]" class="form-control separators1" required> </div> </div> </div> <hr> </div> <a href="javascript:void(0);" class="remove_button2 btn btn-danger">ลบ</a></div></div>'; //New input field html
+        '<div><div class="card card-secondary"> <div class="card-header"> <h3 class="card-title">เป้าหมาย</h3> </div> <div class="card-body"> <div class="row"> <div class="col-md-6"> <div class="form-group"> <label>ชื่อ KPI:</label> <input type="text" name="KPI[]" class="form-control" required placeholder="เช่น ยอดขาย"> </div> </div> <div class="col-md-6"> <div class="form-group"> <label>ลักษณะตัวชี้วัดผลงาน เพื่อใช้ในการคำนวณ:</label> <input type="text" name="performance_indicators[]" class="form-control" required placeholder="เช่น วัดยอดขาย , 3 Project "> </div> </div> </div> <div class="row"> <div class="col-md-6"> <div class="form-group"> <label>หน่วยนับ:</label> <select class="form-control" name="unit[]" required> <option value="">เลือก</option> <option value="%">%</option> <option value="N">N (หน่วย)</option> <option value="B">B (บาท)</option> </select> </div> </div> <div class="col-md-6"> <div class="form-group"> <label>น้ำหนัก (%):</label> <input type="number" name="weight[]" class="form-control" required> </div> </div> </div> <div class="row"> <div class="col-md-6"> <div class="form-group"> <label>เป้าหมาย 60 วัน:</label> <input type="text" name="target_60[]" class="form-control separators1" required> </div> </div> <div class="col-md-6"> <div class="form-group"> <label>ทำได้:<small class="text-danger">*กรณีทำได้เกินเป้าที่กำหนดให้ใส่เท่ากับเป้าหมาย</small></label> <input type="text" name="seccess_60[]" class="form-control separators1" required disabled> </div> </div> </div> <hr> </div> <a href="javascript:void(0);" class="remove_button2 btn btn-danger">ลบ</a></div></div>'; //New input field html
     var x = 1; //Initial field counter is 1
 
     //Once add button is clicked

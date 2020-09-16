@@ -60,7 +60,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                    @foreach ($staff as $item)
                    <p class="card-text">
 
-                   <a href="{{url('/index_option/'.$item->assessor.'/'.$item->assessed)}}" class="btn btn-info">{{$item->Name_Thai}}</a>
+                   <a href="{{url('/index_option/'.$item->assessor.'/'.$item->assessed)}}" class="btn btn-info">{{$item->Name_Thai}}  {{ $item->option_eva}}</a>
                    </p>
 
                    @endforeach
@@ -68,12 +68,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
                    @foreach ($staff_90 as $item)
                    <p class="card-text">
 
-                   <a href="{{url('/index_option/'.$item->assessor.'/'.$item->assessed)}}" class="btn btn-info">{{$item->Name_Thai}}</a>
+                   <a href="{{url('/index_option/'.$item->assessor.'/'.$item->assessed)}}" class="btn btn-info">{{$item->Name_Thai}} {{ $item->option_eva}}</a>
+                   </p>
+
+                   @endforeach
+                   @foreach ($staff_90_manual as $item)
+                   <p class="card-text">
+
+                   <a href="{{url('/index_option/'.$item->assessor.'/'.$item->assessed)}}" class="btn btn-info">{{$item->Name_Thai}} {{ $item->option_eva}}</a>
                    </p>
 
                    @endforeach
 
+                   @foreach ($staff_90_in as $item)
+                   <p class="card-text">
 
+                   <a href="{{url('/index_option/'.$item->assessor.'/'.$item->assessed)}}" class="btn btn-info">{{$item->Name_Thai}} {{ $item->option_eva}}</a>
+                   </p>
+
+                   @endforeach
+                   
                 </div>
               </div><!-- /.card -->
             </div>

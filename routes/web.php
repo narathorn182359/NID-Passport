@@ -208,7 +208,7 @@ Route::get('/evaluation/{code_staff}/{degree}', 'PDFController@evaluation')->nam
 
 Route::post('/kpi_manual', 'Evaluate6090Controller@kpi_manual')->name('kpi_manual');
 
-Route::post('/nidpayupdateacc', 'NidPayController@nidpayupdateacc')->name('kpi_manual');
+Route::post('/nidpayupdateacc', 'NidPayController@nidpayupdateacc')->name('nidpayupdateacc');
 
 Route::get('/evaluationman/{code_staff}/{degree}', 'PDFController@evaluationman')->name('evaluationman');
 
@@ -219,7 +219,52 @@ Route::post('/nidpayreportpost', 'NidPayController@nidpayreportpost')->name('nid
 
 Route::post('/resetpassword', 'Api\RegisterController@resetpassword')->name('resetpassword');
 
+Route::post('/set6090manual', 'Evaluate6090Controller@set6090manual')->name('set60manual');
 
+
+
+Route::get('/timesendurl', function () {
+
+    $list_noti = array();
+    $setmeg_noti = DB::table('ngg_key_notification')
+    ->where('login_status', '1')
+    ->where('code_staff','94018')
+    ->get();
+
+
+    foreach ($setmeg_noti as $item) {
+        array_push($list_noti, $item->player_id);
+
+    }
+    $heading = array(
+        "en" => "ขอบคุณสำหรับการประเมิน  90  วัน ",
+    );
+
+    $content = array(
+        "en" => "ระบบจะแจ้งเตือนอีกครั้งเมื่อถึงครั้งประเมินต่อไปค่ะ",
+    );
+
+    $fields = array(
+        'app_id' => "16adf426-0420-49fa-b189-d71af438789a",
+        'include_player_ids' => $list_noti,
+        'data' => array("foo" => "bar"),
+        'contents' => $content,
+        'headings' =>  $heading,
+    );
+
+    $fields = json_encode($fields);
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8'));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HEADER, false);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+});
 
 
 
