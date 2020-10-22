@@ -1,6 +1,8 @@
 <?php
 use App\Classes\PushBots;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -265,6 +267,16 @@ Route::get('/timesendurl', function () {
     curl_close($ch);
 
 });
+
+
+
+Route::group(['middleware' => ['role_or_permission:edit kpi']], function () {
+    Route::get('/ttt',function() {
+  
+  
+         return response()->json('nj');
+     });
+  });
 
 
 

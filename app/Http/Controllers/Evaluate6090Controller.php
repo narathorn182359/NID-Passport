@@ -1060,6 +1060,7 @@ class Evaluate6090Controller extends Controller
             $date1 = explode(" ", $eva->pass_60);
             $date2 = date("m/d/Y");
             $date3 = explode(" ", $eva->pass_90);
+          // dd($date1[2]);
            if($date1[2] <= $date2 &&  $eva->pass_60_status == 1)
             {
       
@@ -1076,13 +1077,16 @@ class Evaluate6090Controller extends Controller
                
 
             );
-          //  dd( $ngg_operation_manual_60);
+           // dd( $ngg_operation_manual_60);
             return view('assessor.index_option', $data);
           
             }
            
 
             if($date3[0] <= $date2 &&  $eva->pass_90_status == 1){
+
+
+
 
             }
            }else
@@ -1092,7 +1096,7 @@ class Evaluate6090Controller extends Controller
                 'assessor' => $assessor,
 
             );
-            return view('assessor.index_option', $data);
+           return view('assessor.index_option', $data);
 
 
            }
@@ -1127,11 +1131,10 @@ class Evaluate6090Controller extends Controller
        }
        else if($check_manual90final->pass_90_status == 2){
         $date1 = date("m/d/Y");
-        $date2 = explode(" ", $check_manual90final->pass_90);
+        $date2 = explode(" ",$check_manual90final->pass_90);
        //dd($date2);
         if($date2[2] <= $date1 &&  $check_manual90final->pass_90_status == 2)
         {
-
             $ngg_operation_manual_90 =  DB::table('ngg_operation_manual')
             ->where('code_staff_operation_manual',$assessed)
             ->where('active_operation_manual',1)
@@ -1145,9 +1148,7 @@ class Evaluate6090Controller extends Controller
             );
     
     
-    
-    
-    
+
            return view('assessor.index_option', $data);
 
 
@@ -1157,13 +1158,14 @@ class Evaluate6090Controller extends Controller
 
 
        }else{
+
         $data = array(
             'check' => $check_2,
             'assessor' => $assessor,
             'set90' => '0'
 
         );
-       return view('assessor.index_option', $data);
+          return view('assessor.index_option', $data);
        }
        
 

@@ -1801,6 +1801,115 @@ Route::middleware('auth:api')->get('/rm_noti_wallet', function (Request $request
 });
 
 
+Route::middleware('auth:api')->get('/apisales_month', function (Request $request) {
+    $data = $request->json()->all();
+    $user = $request->user();
+    $month_text = array("ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค.");
+    $month_num = array('1','2','3','4','5','6','7','8','9','10','11','12');
+   
+
+             foreach($month_num as $loop) {
+                $result =  DB::connection('mysql2')->table('KPI_API_Sales')
+                ->where('SALEPERSONCODE',$user->username)
+                ->where('MONTH',$loop)
+                ->where('YEAR',date("Y"))
+                ->sum('AMOUNT');
+                $data_in = array(
+                         'month' =>  $month_text[$loop-1],
+                         'year' => date("Y"),
+                         'total' =>  (int)$result
+
+                );
+
+                $data_out[]= $data_in;
+
+             }
+
+        return response()->json(
+            $data_out
+        );
+
+});
+
+
+
+Route::middleware('auth:api')->post('/apisales_month_detail', function (Request $request) {
+    $data = $request->json()->all();
+    $user = $request->user();
+   
+    $month = array(
+        'January'=>'1',
+        'February'=>'2',
+        'March'=>'3',
+        'April'=>'4',
+        'May'=>'5',
+        'June'=>'6',
+        'July'=>'7',
+        'August'=>'8',
+        'September'=>'9',
+        'October'=>'10',
+        'November'=>'11',
+        'December'=>'12'
+
+    );
+    $dateNow = date("Y-m-d");
+    $newDate = date("Y-m-d",strtotime("-1 days",strtotime($dateNow)));
+          
+                $result =  DB::connection('mysql2')->table('KPI_API_Sales')
+                ->where('SALEPERSONCODE',$user->username)
+              //  ->where('DUEDATE',$newDate)
+                ->sum('AMOUNT');
+                if( $data['value'] == ''){
+                    $product =  DB::connection('mysql2')->table('KPI_API_Sales')
+                    ->where('SALEPERSONCODE',$user->username)
+                    ->where('MONTH', date("m"))
+                    ->get();
+                }else{
+                    $product =  DB::connection('mysql2')->table('KPI_API_Sales')
+                    ->where('SALEPERSONCODE',$user->username)
+                    ->where('MONTH',  $month[$data['value']])
+                    ->get();
+                }
+             
+
+        return response()->json(
+[
+    'product'=>$product,
+    'total'=> $result
+]
+           
+        );
+
+});
+
+Route::middleware('auth:api')->get('/getstaffbranch', function (Request $request) {
+    $user = $request->user();
+
+    $user = DB::table('users')
+        ->leftJoin('users_detail', 'users.username', '=', 'users_detail.Code_Staff')
+        ->leftJoin('users_group', 'users_detail.Code_Staff', '=', 'users_group.username_id')
+        ->leftJoin('ngg_staff_group', 'users_detail.Code_Staff', '=', 'ngg_staff_group.staff_sg')
+        ->leftJoin('ngg_branch', 'ngg_staff_group.id_branch_sg', '=', 'ngg_branch.id_branch')
+        ->orWhere('username', $user->username)
+        ->orWhere('id_card', $user->username)
+        ->first();
+
+   $branch =  DB::table('ngg_staff_group')
+   ->leftJoin('users_detail', 'ngg_staff_group.staff_sg', '=', 'users_detail.Code_Staff')
+   ->leftJoin('ngg_branch', 'ngg_staff_group.id_branch_sg', '=', 'ngg_branch.id_branch')
+   ->where('id_branch_sg', $user->id_branch_sg)
+   ->select('name_branch','staff_sg','Name_Thai','img')
+   ->get();
+
+
+
+   return response()->json( ['branch'=>$branch,
+                              'namebranch'=>  $user->name_branch
+   ]);
+
+
+});
+
 
 Route::post('resetpasswordissue', 'Api\RegisterController@resetpasswordissue');
 

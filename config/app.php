@@ -178,6 +178,7 @@ return [
         'JD\Cloudder\CloudderServiceProvider',
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        Spatie\Permission\PermissionServiceProvider::class,
     ],
 
     /*
