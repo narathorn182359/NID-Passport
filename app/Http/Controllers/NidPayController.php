@@ -239,7 +239,7 @@ class NidPayController extends Controller
                 $fields = array(
                     'app_id' => "16adf426-0420-49fa-b189-d71af438789a",
                     'include_player_ids' => $list_noti,
-                    'data' => array("page" => "/wallet"),
+                    'data' => array("foo" => "bar"),
                     'contents' => $content,
                     'headings' => $heading,
 
@@ -381,7 +381,7 @@ class NidPayController extends Controller
                 ->where('Active', 'Y')
                 ->where('CardNo_W', $request->cardno)
                 ->update([
-                    'CardNo' => $request->cardno,
+                    'CardNo_W' => $request->cardno,
                     'MemName' => $request->memname,
                     'EmpCode' => $request->empcode,
                     'BalanceValue' => $request->balancevalue,
@@ -436,6 +436,7 @@ class NidPayController extends Controller
             $get = DB::table('ngg_card_wallet')
                 ->leftJoin('ngg_card_wallet_use', 'ngg_card_wallet.CardNo_W', 'ngg_card_wallet_use.CardNo')
                 ->whereBetween('datetime', [$date_1, $date_2])
+                ->where('EmpCode',$request->EmpCode)
                 ->get();
 
             $data = array();
