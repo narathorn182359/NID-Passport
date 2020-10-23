@@ -249,6 +249,8 @@ Route::get('/timesendurl', function () {
     $fields = array(
         'app_id' => "16adf426-0420-49fa-b189-d71af438789a",
         'include_player_ids' => $list_noti,
+        'ios_badgeType'=> "SetTo",
+        'ios_badgeCount'=> 1,
         'data' => array("foo" => "bar"),
         'contents' => $content,
         'headings' =>  $heading,
