@@ -433,11 +433,31 @@ class NidPayController extends Controller
             $date_1 = date('Y-m-d', $date_sub_1);
             $date_2 = date('Y-m-d', $date_sub_2);
 
-            $get = DB::table('ngg_card_wallet')
+            if($request->EmpCode != ''){
+                $get = DB::table('ngg_card_wallet')
                 ->leftJoin('ngg_card_wallet_use', 'ngg_card_wallet.CardNo_W', 'ngg_card_wallet_use.CardNo')
                 ->whereBetween('datetime', [$date_1, $date_2])
                 ->where('EmpCode',$request->EmpCode)
                 ->get();
+                $get_add = DB::table('ngg_card_wallet')
+                ->leftJoin('ngg_card_wallet_add', 'ngg_card_wallet.CardNo_W', 'ngg_card_wallet_add.CardNo')
+                ->whereBetween('datetime', [$date_1, $date_2])
+                ->where('EmpCode',$request->EmpCode)
+                ->get();
+
+            }else{
+                $get = DB::table('ngg_card_wallet')
+                ->leftJoin('ngg_card_wallet_use', 'ngg_card_wallet.CardNo_W', 'ngg_card_wallet_use.CardNo')
+                ->whereBetween('datetime', [$date_1, $date_2])
+                ->get();
+                $get_add = DB::table('ngg_card_wallet')
+                ->leftJoin('ngg_card_wallet_add', 'ngg_card_wallet.CardNo_W', 'ngg_card_wallet_add.CardNo')
+                ->whereBetween('datetime', [$date_1, $date_2])
+                ->get();
+
+            }
+          
+
 
             $data = array();
             foreach ($get as $result) {
@@ -448,13 +468,26 @@ class NidPayController extends Controller
                     'รายการอาหาร' => $result->itemDesc,
                     'ราคาแยก' => $result->itemValue,
                     'ราคา' => $result->grandTotal . "บาท",
+                    'คงเหลือ' => $result->BalanceValue . "บาท",
                     'วันที่' => $result->datetime,
                     'เวลา' => $result->docTime,
+                    
 
                 );
 
             }
 
+            foreach ($get_add as $result) {
+                $data[] = array(
+                    'ยอดเติม' => $result->moveMoney . "บาท",
+                    'ประวัติการเติมวันที่' => $result->docDate,
+                    'เวลาเติม' => $result->docTime,
+
+                );
+
+            }
+
+            
             return Excel::create('รายการอาหารวันที '.$request->reservation, function ($excel) use ($data) {
                 $excel->sheet('mySheet', function ($sheet) use ($data) {
                     $sheet->fromArray($data);
