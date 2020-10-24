@@ -1887,7 +1887,6 @@ Route::middleware('auth:api')->get('/getstaffbranch', function (Request $request
 
     $user = DB::table('users')
         ->leftJoin('users_detail', 'users.username', '=', 'users_detail.Code_Staff')
-        ->leftJoin('users_group', 'users_detail.Code_Staff', '=', 'users_group.username_id')
         ->leftJoin('ngg_staff_group', 'users_detail.Code_Staff', '=', 'ngg_staff_group.staff_sg')
         ->leftJoin('ngg_branch', 'ngg_staff_group.id_branch_sg', '=', 'ngg_branch.id_branch')
         ->orWhere('username', $user->username)
