@@ -1810,6 +1810,8 @@ Route::middleware('auth:api')->get('/apisales_month', function (Request $request
 
              foreach($month_num as $loop) {
                 $result =  DB::connection('mysql2')->table('KPI_API_Sales')
+                ->select('SALEPERSONCODE','M_MATERIALCODE','M_MATERIALCODE','AMOUNT','NETAMOUNT_BEFORE_VAT','M_QUANTITY','M_ORDER_UNITNAME','DISCOUNT_AMOUNT','M_PRICE_PER_UNIT','M_DISCOUNT_VALUE_PER_UNIT','DUEDATE','MONTH','YEAR')
+                ->distinct('M_MATERIALCODE')
                 ->where('SALEPERSONCODE',$user->username)
                 ->where('MONTH',$loop)
                 ->where('YEAR',date("Y"))
@@ -1856,18 +1858,22 @@ Route::middleware('auth:api')->post('/apisales_month_detail', function (Request 
     $newDate = date("Y-m-d",strtotime("-1 days",strtotime($dateNow)));
           
                 $result =  DB::connection('mysql2')->table('KPI_API_Sales')
+                ->select('M_MATERIALNAME,SALEPERSONCODE','M_MATERIALCODE','M_MATERIALCODE','AMOUNT','NETAMOUNT_BEFORE_VAT','M_QUANTITY','M_ORDER_UNITNAME','DISCOUNT_AMOUNT','M_PRICE_PER_UNIT','M_DISCOUNT_VALUE_PER_UNIT','DUEDATE','MONTH','YEAR')
+                ->distinct('M_MATERIALCODE')
+                ->where('MONTH', date("m"))
                 ->where('SALEPERSONCODE',$user->username)
               //  ->where('DUEDATE',$newDate)
                 ->sum('AMOUNT');
                 if( $data['value'] == ''){
                     $product =  DB::connection('mysql2')->table('KPI_API_Sales')
                     ->where('SALEPERSONCODE',$user->username)
-                    ->where('MONTH', date("m"))
+                    ->where('MONTH', date('Y'))
                     ->get();
                 }else{
                     $product =  DB::connection('mysql2')->table('KPI_API_Sales')
+                 
                     ->where('SALEPERSONCODE',$user->username)
-                    ->where('MONTH',  $month[$data['value']])
+                    ->where('MONTH', $month[$data['value']])
                     ->get();
                 }
              
@@ -1875,7 +1881,7 @@ Route::middleware('auth:api')->post('/apisales_month_detail', function (Request 
         return response()->json(
 [
     'product'=>$product,
-    'total'=> $result
+    'total'=> (String)$result
 ]
            
         );
@@ -1908,6 +1914,159 @@ Route::middleware('auth:api')->get('/getstaffbranch', function (Request $request
 
 
 });
+
+
+
+Route::middleware('auth:api')->post('/sumkpipersonal', function (Request $request) {
+    $user = $request->user();
+    $data = $request->json()->all();
+    $month = array(
+        '1'=>'มกราคม',
+        '2'=>'กุมภาพันธ์',
+        '3'=>'มีนาคม',
+        '4'=>'เมษายน',
+        '5'=>'พฤษภาคม',
+        '6'=>'มิถุนายน',
+        '7'=>'กรกฎาคม',
+        '8'=>'สิงหาคม',
+        '9'=>'กันยายน',
+        '10'=>'ตุลาคม',
+        '11'=>'พฤศจิกายน',
+        '12'=>'ธันวาคม'
+
+    );
+
+    $month_2 = array(
+        'January'=>'มกราคม',
+        'February'=>'กุมภาพันธ์',
+        'March'=>'มีนาคม',
+        'April'=>'เมษายน',
+        'May'=>'พฤษภาคม',
+        'June'=>'พฤษภาคม',
+        'July'=>'มิถุนายน',
+        'August'=>'กรกฎาคม',
+        'September'=>'กันยายน',
+        'October'=>'ตุลาคม',
+        'November'=>'พฤศจิกายน',
+        'December'=>'ธันวาคม'
+
+    );
+
+    if(  $data['value'] == ''){
+        $data_kpi = DB::connection('mysql2')->table('KPI_New_Kpi_User_Team')
+        ->leftJoin('KPI_Month_User','KPI_New_Kpi_User_Team.id_uut','KPI_Month_User.id_npd_department')
+        ->where('id_user',$user->username)
+        ->where('year_mont',date('Y'))
+        ->where('namet_month',$month[date('m')])
+        ->sum('sum_success');
+    
+        $data_kpi_info = DB::connection('mysql2')->table('KPI_New_Kpi_User_Team')
+        ->leftJoin('KPI_Month_User','KPI_New_Kpi_User_Team.id_uut','KPI_Month_User.id_npd_department')
+        ->where('id_user',$user->username)
+        ->where('kpi_name_uut','Sale Target')
+        ->where('year_mont',date('Y'))
+        ->where('namet_month',$month[date('m')])
+        ->first();
+    }else{
+        $data_kpi = DB::connection('mysql2')->table('KPI_New_Kpi_User_Team')
+        ->leftJoin('KPI_Month_User','KPI_New_Kpi_User_Team.id_uut','KPI_Month_User.id_npd_department')
+        ->where('id_user',$user->username)
+        ->where('year_mont',date('Y'))
+        ->where('namet_month',$month_2[$data['value']])
+        ->sum('sum_success');
+    
+        $data_kpi_info = DB::connection('mysql2')->table('KPI_New_Kpi_User_Team')
+        ->leftJoin('KPI_Month_User','KPI_New_Kpi_User_Team.id_uut','KPI_Month_User.id_npd_department')
+        ->where('id_user',$user->username)
+        ->where('kpi_name_uut','Sale Target')
+        ->where('year_mont',date('Y'))
+        ->where('namet_month',$month_2[$data['value']])
+        ->first();
+    }
+   
+  // dd($data_kpi_info);
+
+
+
+    $sub = number_format( $data_kpi , 2 );
+    $per = $data_kpi / 100;
+    $per_sum_success = $data_kpi_info->sum_success / $data_kpi_info->target_month * 100;
+    $data  = array(
+       'sum' => $sub,
+       'per' => (double)number_format($per,2),
+       'target' => $data_kpi_info->target_month,
+       'sum_success' => $data_kpi_info->sum_success,
+       'per_sum_success' =>   $per_sum_success,
+       'success_month' => $data_kpi_info->success_month
+   );
+    return response()->json($data);
+});
+
+
+
+
+Route::middleware('auth:api')->get('/getstaffteam', function (Request $request) {
+    $user = $request->user();
+    $data = $request->json()->all();
+
+    $month = array(
+        '1'=>'มกราคม',
+        '2'=>'กุมภาพันธ์',
+        '3'=>'มีนาคม',
+        '4'=>'เมษายน',
+        '5'=>'พฤษภาคม',
+        '6'=>'พฤษภาคม',
+        '7'=>'กรกฎาคม',
+        '8'=>'สิงหาคม',
+        '9'=>'กันยายน',
+        '10'=>'ตุลาคม',
+        '11'=>'พฤศจิกายน',
+        '12'=>'ธันวาคม'
+
+    );
+    $data_kpi_info = DB::connection('mysql2')->table('KPI_New_Kpi_User_Team')
+    ->leftJoin('KPI_Month_User','KPI_New_Kpi_User_Team.id_uut','KPI_Month_User.id_npd_department')
+    ->where('id_user',$user->username)
+    ->where('kpi_name_uut','Sale Target')
+    ->where('year_mont',date('Y'))
+    ->where('namet_month',$month[date('m')])
+    ->first();
+
+
+
+    $data_kpi_team = DB::connection('mysql2')->table('KPI_New_Kpi_Team')
+    ->leftJoin('KPI_Month_Team','KPI_New_Kpi_Team.id_kpt','KPI_Month_Team.id_npd_department')
+    ->where('id_det_departmaent_team',$data_kpi_info->id_put_user_team)
+    ->where('year_mont',date('Y'))
+    ->where('namet_month',$month[date('m')])
+    ->sum('sum_success');
+    $dat = DB::connection('mysql2')->table('KPI_New_Kpi_Team')
+    ->leftJoin('KPI_Month_Team','KPI_New_Kpi_Team.id_kpt','KPI_Month_Team.id_npd_department')
+    ->where('id_det_departmaent_team',$data_kpi_info->id_put_user_team)
+    ->where('year_mont',date('Y'))
+    ->where('namet_month',$month[date('m')])
+    ->get();
+
+ 
+  
+    $sub = number_format( $data_kpi_team , 2 );
+    $per = $data_kpi_team /100;
+
+   $data  = array(
+       'sum' => $sub,
+       'per' => (double)number_format($per,2),
+      
+      
+   );
+    return response()->json($data);
+
+
+
+
+
+});
+
+
 
 
 Route::post('resetpasswordissue', 'Api\RegisterController@resetpasswordissue');

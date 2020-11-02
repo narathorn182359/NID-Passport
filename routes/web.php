@@ -224,6 +224,68 @@ Route::post('/resetpassword', 'Api\RegisterController@resetpassword')->name('res
 Route::post('/set6090manual', 'Evaluate6090Controller@set6090manual')->name('set60manual');
 
 
+Route::get('/demo', function () {
+
+    $month = array(
+        '1'=>'มกราคม',
+        '2'=>'กุมภาพันธ์',
+        '3'=>'มีนาคม',
+        '4'=>'เมษายน',
+        '5'=>'พฤษภาคม',
+        '6'=>'พฤษภาคม',
+        '7'=>'กรกฎาคม',
+        '8'=>'สิงหาคม',
+        '9'=>'กันยายน',
+        '10'=>'ตุลาคม',
+        '11'=>'พฤศจิกายน',
+        '12'=>'ธันวาคม'
+
+    );
+    $data_kpi_info = DB::connection('mysql2')->table('KPI_New_Kpi_User_Team')
+    ->leftJoin('KPI_Month_User','KPI_New_Kpi_User_Team.id_uut','KPI_Month_User.id_npd_department')
+    ->where('id_user','91515')
+    ->where('kpi_name_uut','Sale Target')
+    ->where('year_mont',date('Y'))
+    ->where('namet_month',$month[date('m')])
+    ->first();
+
+
+
+    $data_kpi_team = DB::connection('mysql2')->table('KPI_New_Kpi_Team')
+    ->leftJoin('KPI_Month_Team','KPI_New_Kpi_Team.id_kpt','KPI_Month_Team.id_npd_department')
+    ->where('id_det_departmaent_team',$data_kpi_info->id_put_user_team)
+    ->where('year_mont',date('Y'))
+    ->where('namet_month',$month[date('m')])
+    ->sum('sum_success');
+    
+    $dat = DB::connection('mysql2')->table('KPI_New_Kpi_Team')
+    ->leftJoin('KPI_Month_Team','KPI_New_Kpi_Team.id_kpt','KPI_Month_Team.id_npd_department')
+    ->where('id_det_departmaent_team',$data_kpi_info->id_put_user_team)
+    ->where('year_mont',date('Y'))
+    ->where('namet_month',$month[date('m')])
+    ->get();
+    dd($dat);
+ 
+  
+    $sub = number_format( $data_kpi_team , 2 );
+    $per = $data_kpi_team /100;
+
+   $data  = array(
+       'sum' => $sub,
+       'per' => (double)number_format($per,2),
+      
+      
+   );
+    return response()->json($data);
+
+
+
+});
+
+
+
+
+
 
 Route::get('/timesendurl', function () {
 
