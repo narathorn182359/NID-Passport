@@ -1810,8 +1810,6 @@ Route::middleware('auth:api')->get('/apisales_month', function (Request $request
 
              foreach($month_num as $loop) {
                 $result =  DB::connection('mysql2')->table('KPI_API_Sales')
-                ->select('SALEPERSONCODE','M_MATERIALCODE','M_MATERIALCODE','AMOUNT','NETAMOUNT_BEFORE_VAT','M_QUANTITY','M_ORDER_UNITNAME','DISCOUNT_AMOUNT','M_PRICE_PER_UNIT','M_DISCOUNT_VALUE_PER_UNIT','DUEDATE','MONTH','YEAR')
-                ->distinct('M_MATERIALCODE')
                 ->where('SALEPERSONCODE',$user->username)
                 ->where('MONTH',$loop)
                 ->where('YEAR',date("Y"))
@@ -1858,8 +1856,6 @@ Route::middleware('auth:api')->post('/apisales_month_detail', function (Request 
     $newDate = date("Y-m-d",strtotime("-1 days",strtotime($dateNow)));
           
                 $result =  DB::connection('mysql2')->table('KPI_API_Sales')
-                ->select('M_MATERIALNAME,SALEPERSONCODE','M_MATERIALCODE','M_MATERIALCODE','AMOUNT','NETAMOUNT_BEFORE_VAT','M_QUANTITY','M_ORDER_UNITNAME','DISCOUNT_AMOUNT','M_PRICE_PER_UNIT','M_DISCOUNT_VALUE_PER_UNIT','DUEDATE','MONTH','YEAR')
-                ->distinct('M_MATERIALCODE')
                 ->where('MONTH', date("m"))
                 ->where('SALEPERSONCODE',$user->username)
               //  ->where('DUEDATE',$newDate)
