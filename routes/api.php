@@ -1860,10 +1860,10 @@ Route::middleware('auth:api')->post('/apisales_month_detail', function (Request 
                 ->where('SALEPERSONCODE',$user->username)
               //  ->where('DUEDATE',$newDate)
                 ->sum('AMOUNT');
-                if( $data['value'] == ''){
+                if($data['value'] == ''){
                     $product =  DB::connection('mysql2')->table('KPI_API_Sales')
                     ->where('SALEPERSONCODE',$user->username)
-                    ->where('MONTH', date('Y'))
+                    ->where('MONTH', date('m'))
                     ->get();
                 }else{
                     $product =  DB::connection('mysql2')->table('KPI_API_Sales')
@@ -1981,7 +1981,13 @@ Route::middleware('auth:api')->post('/sumkpipersonal', function (Request $reques
     }
    
   // dd($data_kpi_info);
-
+  
+  if($data_kpi_info->success_month == null){
+       $success =  0;
+  }else{
+    $success =$data_kpi_info->success_month;
+  }
+  
 
 
     $sub = number_format( $data_kpi , 2 );
@@ -1993,10 +1999,38 @@ Route::middleware('auth:api')->post('/sumkpipersonal', function (Request $reques
        'target' => $data_kpi_info->target_month,
        'sum_success' => $data_kpi_info->sum_success,
        'per_sum_success' =>   $per_sum_success,
-       'success_month' => $data_kpi_info->success_month
+       'success_month' =>   $success
    );
     return response()->json($data);
 });
+
+
+
+Route::middleware('auth:api')->get('/getkpiuser', function (Request $request) {
+
+    $user = $request->user();
+    $kpiuser = DB::connection('mysql2')
+    ->table('KPI_New_Kpi_User_Team')
+    ->where('id_user',$user->username)
+    ->get();
+    return response()->json($kpiuser);
+});
+
+
+Route::middleware('auth:api')->get('/getkpiteam', function (Request $request) {
+
+    $user = $request->user();
+    $kpiuser = DB::connection('mysql2')
+    ->table('KPI_New_Kpi_User_Team')
+    ->where('id_user',$user->username)
+    ->get();
+    return response()->json($kpiuser);
+});
+
+
+
+
+
 
 
 
@@ -2028,6 +2062,10 @@ Route::middleware('auth:api')->get('/getstaffteam', function (Request $request) 
     ->where('namet_month',$month[date('m')])
     ->first();
 
+    $kpiteam = DB::connection('mysql2')
+    ->table('KPI_New_Kpi_Team')
+    ->where('id_parental_team',$data_kpi_info->id_parental_group)
+    ->get();
 
 
     $data_kpi_team = DB::connection('mysql2')->table('KPI_New_Kpi_Team')
@@ -2051,6 +2089,7 @@ Route::middleware('auth:api')->get('/getstaffteam', function (Request $request) 
    $data  = array(
        'sum' => $sub,
        'per' => (double)number_format($per,2),
+       'kpi' =>$kpiteam
       
       
    );
