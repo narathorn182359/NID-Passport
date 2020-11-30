@@ -422,7 +422,18 @@ Route::middleware('auth:api')->post('/getProduct', function (Request $request) {
     $user = $request->user();
     $data = $request->json()->all();
     $json = DB::table('ngg_km_separate')->get();
-    return response()->json($json);
+    foreach($json as $items){
+         $data  = array(
+             'id' => $items->id_s,
+             'km_separat' => $items->km_separat,
+             'img'  => $items->img
+         );
+
+         $arr[] =   $data;
+    }
+
+
+    return response()->json($arr);
 
 });
 

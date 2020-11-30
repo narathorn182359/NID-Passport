@@ -525,10 +525,12 @@ class HomeController extends Controller
             ->where('username_id', Auth::user()->username)
             ->get();
         $km = DB::table('ngg_km_category')->get();
-
+        $ngg_km_separate     =  DB::table('ngg_km_separate')->get();
+        
         $data = array(
             'listmenu' => $listmenu,
             'km' => $km,
+            'ngg_km_separate' => $ngg_km_separate 
 
         );
 
@@ -548,6 +550,7 @@ class HomeController extends Controller
                     'id_km_cat' => $request->type_id,
                     'km_title' => $request->km_title,
                     'km_important' => $request->km_important,
+                    'km_separate_id' => $request->ngg_km_separate,
                     'km_hr' => '1',
 
                 ]);
@@ -556,6 +559,7 @@ class HomeController extends Controller
                     'id_km_cat' => $request->type_id,
                     'km_title' => $request->km_title,
                     'km_important' => $request->km_important,
+                    'km_separate_id' => $request->ngg_km_separate,
 
                 ]);
             }
@@ -632,13 +636,16 @@ class HomeController extends Controller
         $km = DB::table('ngg_km_category')->get();
         $category = DB::table('ngg_km_category_detail')
             ->leftJoin('ngg_km_category', 'ngg_km_category_detail.id_km_cat', 'ngg_km_category.id_km_cat')
+            ->leftJoin('ngg_km_separate', 'ngg_km_category_detail.km_separate_id', 'ngg_km_separate.id_s')
             ->where('id', $id)
             ->first();
+        $ngg_km_separate =  DB::table('ngg_km_separate')->get();
 
         $data = array(
             'listmenu' => $listmenu,
             'km' => $km,
             'category' => $category,
+            'ngg_km_separate' => $ngg_km_separate
 
         );
 
@@ -656,7 +663,7 @@ class HomeController extends Controller
                     'id_km_cat' => $request->type_id,
                     'km_title' => $request->km_title,
                     'km_important' => $request->km_important,
-
+                    'km_separate_id' => $request->ngg_km_separate,
                 ]);
 
             $file = $request->file('image');
@@ -680,6 +687,7 @@ class HomeController extends Controller
                     'id_km_cat' => $request->type_id,
                     'km_title' => $request->km_title,
                     'km_important' => $request->km_important,
+                    'km_separate_id' => $request->ngg_km_separate,
 
                 ]);
 
