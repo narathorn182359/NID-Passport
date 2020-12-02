@@ -1,98 +1,27 @@
 @extends('layouts.app')
 @section('js')
-
-
-<script type="text/javascript">
-
-
-    var resize1 = $('#upload-demo').croppie({
-        enableExif: true,
-        enableOrientation: true,
-        viewport: { // Default { width: 100, height: 100, type: 'square' }
-            width: 1280,
-            height: 720,
-            type: 'square' //square
-        },
-        boundary: {
-          width: 1380,
-            height: 820,
-        }
-    });
-
-
-    $('#image').on('change', function () {
-      var reader = new FileReader();
-        reader.onload = function (e) {
-          resize1.croppie('bind',{
-            url: e.target.result
-          }).then(function(){
-            console.log('jQuery bind complete');
-          });
-        }
-        reader.readAsDataURL(this.files[0]);
-
-
-    });
-
-
-    var resize_info = $('#upload-info').croppie({
-        enableExif: true,
-        enableOrientation: true,
-        viewport: { // Default { width: 100, height: 100, type: 'square' }
-            width: 500,
-            height: 500,
-            type: 'square' //square
-        },
-        boundary: {
-            width: 600,
-            height: 600
-        }
-    });
-
-
-    $('#image_').on('change', function () {
-      var reader_i = new FileReader();
-           reader_i.onload = function (e) {
-            resize_info.croppie('bind',{
-            url: e.target.result
-          }).then(function(){
-            console.log('jQuery bind complete');
-          });
-        }
-        reader_i.readAsDataURL(this.files[0]);
-
-
-    });
-
-    </script>
-
 <script>
-    function mycroppie() {
+  function encodeImageFileAsURL1(element) {
+      var file = element.files[0];
+      var reader = new FileReader();
+      reader.onloadend = function() {
 
-        resize1.croppie('result', {
-        type: 'canvas',
-        size: 'viewport'
-      }).then(function (img) {
-        document.getElementById("imagebanner").value = img;
-        console.log(img)
+          $('#imagebanner').val(reader.result);
+      }
+      reader.readAsDataURL(file);
+  }
 
-      });
+  function encodeImageFileAsURL2(element) {
+      var file = element.files[0];
+      var reader = new FileReader();
+      reader.onloadend = function() {
 
-      resize_info.croppie('result', {
-        type: 'canvas',
-        size: 'viewport'
-      }).then(function (img) {
-        document.getElementById("image_info").value = img;
-        console.log(img)
+          $('#image_info').val(reader.result);
+      }
+      reader.readAsDataURL(file);
+  }
 
-      });
-
-
-
-
-    }
-    </script>
-
+</script>
 @endsection
 @section('content')
 
@@ -111,15 +40,12 @@
         <form class="user"  action="{{url('/editnew_list_save/'.$advertise->id_ad)}}" method="POST"  enctype="multipart/form-data">
             @csrf
             <div class="form-group">
-                <label>รูปข่าว banner</label>
+              <label>รูปข่าว banner  ขนาด 1280 *  720</label>
                 <div class="col-md-6">
                   <div class="form-group">
                    <div class="col-md-4 text-center">
-                    <div id="upload-demo" ></div>
-                    </div>
-                    <div class="col-md-4" style="padding:5%;">
-                    <strong>Select image to crop:</strong>
-                    <input type="file" id="image"  name="image" >
+               
+                    <input type="file" id="image"  name="image"  onchange="encodeImageFileAsURL1(this)">
                     </div>
                   </div>
                 </div>
@@ -134,18 +60,14 @@
 
               </div>
               <div class="form-group">
-                <label>รูปข่าวเนื้อหา</label>
+                <label>รูปข่าวเนื้อหา  ขนาด 500 *  500</label>
                 <div class="col-md-6">
                   <div class="form-group">
                    <div class="col-md-4 text-center">
-                       <div  style="width: 50%">
-
-                       </div>
-                    <div id="upload-info" ></div>
-                    </div>
+                 
                     <div class="col-md-4" style="padding:5%;">
-                    <strong>Select image to crop:</strong>
-                    <input type="file" id="image_"   name="image_" >
+                  
+                    <input type="file" id="image_"   name="image_"  onchange="encodeImageFileAsURL2(this)">
                     </div>
                   </div>
                 </div>

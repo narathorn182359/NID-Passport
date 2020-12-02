@@ -420,7 +420,7 @@ class NidPayController extends Controller
     public function nidpayreportpost(Request $request)
     {
 
-        if ($request->password == '$2y$10$7IWScMeYsHtFTgQPkKByOuKyu9jF.Twg1.TAk2fWFSksaUhkMDTvu') {
+        if ($request->password == "123456") {
             $type = $request->type;
             DB::table('ngg_nidpayreport_log')->insert([
                 'ip' => $_SERVER['REMOTE_ADDR'],
@@ -456,11 +456,16 @@ class NidPayController extends Controller
                 ->get();
 
             }
-          
-
-
+            $users_total = DB::table('ngg_card_wallet')
+            ->leftJoin('ngg_card_wallet_use', 'ngg_card_wallet.CardNo_W', 'ngg_card_wallet_use.CardNo')
+            ->whereBetween('datetime', [$date_1, $date_2])
+            ->select('EmpCode')->distinct()->get();
+            
             $data = array();
+            $i=1;
             foreach ($get as $result) {
+
+               if($get->count() == $i){
                 $data[] = array(
                     'รหัสพนักงาน' => $result->EmpCode,
                     'ชื่อ-สกุล' => $result->MemName,
@@ -471,13 +476,30 @@ class NidPayController extends Controller
                     'คงเหลือ' => $result->BalanceValue . "บาท",
                     'วันที่' => $result->datetime,
                     'เวลา' => $result->docTime,
-                    
+                    'จำนวนผู้ใช้งาน' => $users_total->count()." คน",
 
                 );
+               }else{
+                $data[] = array(
+                    'รหัสพนักงาน' => $result->EmpCode,
+                    'ชื่อ-สกุล' => $result->MemName,
+                    'บริษัท' => $result->CardTypeCode,
+                    'รายการอาหาร' => $result->itemDesc,
+                    'ราคาแยก' => $result->itemValue,
+                    'ราคา' => $result->grandTotal . "บาท",
+                    'คงเหลือ' => $result->BalanceValue . "บาท",
+                    'วันที่' => $result->datetime,
+                    'เวลา' => $result->docTime,
+                    'จำนวนผู้ใช้งาน' => "-",
+
+                );
+               }
+               
+                $i++;
 
             }
 
-            foreach ($get_add as $result) {
+          /*   foreach ($get_add as $result) {
                 $data[] = array(
                     'ยอดเติม' => $result->moveMoney . "บาท",
                     'ประวัติการเติมวันที่' => $result->docDate,
@@ -485,7 +507,7 @@ class NidPayController extends Controller
 
                 );
 
-            }
+            } */
 
             
             return Excel::create('รายการอาหารวันที '.$request->reservation, function ($excel) use ($data) {
@@ -499,5 +521,4 @@ class NidPayController extends Controller
         }
 
     }
-
 }

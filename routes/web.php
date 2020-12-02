@@ -214,7 +214,6 @@ Route::post('/nidpayupdateacc', 'NidPayController@nidpayupdateacc')->name('nidpa
 
 Route::get('/evaluationman/{code_staff}/{degree}', 'PDFController@evaluationman')->name('evaluationman');
 
-
 Route::get('/nidpayreport', 'NidPayController@nidpayreport')->name('nidpayreport');
 
 Route::post('/nidpayreportpost', 'NidPayController@nidpayreportpost')->name('nidpayreportpost');
@@ -223,6 +222,9 @@ Route::post('/resetpassword', 'Api\RegisterController@resetpassword')->name('res
 
 Route::post('/set6090manual', 'Evaluate6090Controller@set6090manual')->name('set60manual');
 
+Route::get('file-upload', 'FileController@index');
+
+Route::post('file-upload/upload', 'FileController@upload')->name('upload');
 
 Route::get('/demo', function () {
 
@@ -283,7 +285,7 @@ Route::get('/demo', function () {
 });
 
 
-
+Route::post('/deletevideo', 'FileController@deletevideo')->name('deletevideo');
 
 
 

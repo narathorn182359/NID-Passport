@@ -1,4 +1,23 @@
 @extends('layouts.app')
+
+@section('js')
+    <script>
+        function encodeImageFileAsURL1(element) {
+            var file = element.files[0];
+            var reader = new FileReader();
+            reader.onloadend = function() {
+
+                $('#image').val(reader.result);
+            }
+            reader.readAsDataURL(file);
+        }
+
+        
+
+    </script>
+@endsection
+
+
 @section('content')
 
     <a href="{{ url('/km360') }}">ย้อนกลับ</a>
@@ -16,7 +35,8 @@
                         enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
-                            <input type="file" class="form-control form-control-user" name="image[]" required multiple>
+                            <input type="file" class="form-control form-control-user" name="image_" onchange="encodeImageFileAsURL1(this)" required multiple>
+                            <input type="hidden" name="image" value="" id="image">
                         </div>
                         <div class="form-group">
                             <input type="text" class="form-control form-control-user" id="km_title"
@@ -64,6 +84,8 @@
         </div>
     </div>
 
+
+   
 
 
 

@@ -487,7 +487,7 @@ class HomeController extends Controller
 
     public function editnew_head_km_category(Request $request, $id)
     {
-        if ($request->file('image')) {
+        if ($request->file('image_')) {
             $file = $request->file('image');
             $imageName = time() . '.' . $file->getClientOriginalExtension();
             DB::table('ngg_km_category')
@@ -541,10 +541,15 @@ class HomeController extends Controller
     public function addnew_detail_km_category(request $request)
     {
 
-        $i = 0;
-        if ($request->file('image')) {
+       
+        if ($request->image != '') {
 
-
+            $image_2 = $request->image;
+            list($type, $image_2) = explode(';', $image_2);
+            list(, $image_2) = explode(',', $image_2);
+            $image_2 = base64_decode($image_2);
+            $image_name_2 = 'info' . time() . '.png';
+            file_put_contents('imgnew/' . $image_name_2, $image_2);
             if($request->type_id == "3"){
                 DB::table('ngg_km_category_detail')->insert([
                     'id_km_cat' => $request->type_id,
@@ -552,6 +557,7 @@ class HomeController extends Controller
                     'km_important' => $request->km_important,
                     'km_separate_id' => $request->ngg_km_separate,
                     'km_hr' => '1',
+                    'img'  =>  $image_name_2
 
                 ]);
             }else{
@@ -560,22 +566,12 @@ class HomeController extends Controller
                     'km_title' => $request->km_title,
                     'km_important' => $request->km_important,
                     'km_separate_id' => $request->ngg_km_separate,
-
+                    'img'  =>  $image_name_2
                 ]);
             }
 
 
-            $file = $request->file('image');
-            $id_ad = DB::table('ngg_km_category_detail')->Where('km_title', $request->km_title)->first();
-            foreach ($file as $files) {
-                $i++;
-                DB::table('ngg_km_img_category_detail')->insert([
-                    'id_km_detail' => $id_ad->id,
-                    'km_name_img' => $files->getClientOriginalName(),
-                    'km_count' => $i,
-                ]);
-                $files->move(public_path() . '/imgnew', $files->getClientOriginalName());
-            }
+         
 
         }
 
@@ -654,9 +650,14 @@ class HomeController extends Controller
 
     public function editnew_detail_km_category(request $request, $id)
     {
-        $i = 0;
-        if ($request->file('image')) {
-
+  
+        if ($request->file('image_')) {
+            $image_2 = $request->image;
+            list($type, $image_2) = explode(';', $image_2);
+            list(, $image_2) = explode(',', $image_2);
+            $image_2 = base64_decode($image_2);
+            $image_name_2 = 'info' . time() . '.png';
+            file_put_contents('imgnew/' . $image_name_2, $image_2);
             DB::table('ngg_km_category_detail')
                 ->where('id', $id)
                 ->update([
@@ -664,21 +665,10 @@ class HomeController extends Controller
                     'km_title' => $request->km_title,
                     'km_important' => $request->km_important,
                     'km_separate_id' => $request->ngg_km_separate,
+                    'img'  =>  $image_name_2
                 ]);
 
-            $file = $request->file('image');
-            foreach ($file as $files) {
-                $i++;
-                DB::table('ngg_km_img_category_detail')
-                    ->where('id_km_detail', $id)
-                    ->where('km_count', $i)
-                    ->update([
-                        'id_km_detail' => $id,
-                        'km_name_img' => $files->getClientOriginalName(),
-                        'km_count' => $i,
-                    ]);
-                $files->move(public_path() . '/imgnew', $files->getClientOriginalName());
-            }
+       
 
         } else {
             DB::table('ngg_km_category_detail')
@@ -688,6 +678,7 @@ class HomeController extends Controller
                     'km_title' => $request->km_title,
                     'km_important' => $request->km_important,
                     'km_separate_id' => $request->ngg_km_separate,
+                    'img'  =>  $image_name_2
 
                 ]);
 
