@@ -517,7 +517,7 @@ class NidPayController extends Controller
             })->download($type);
 
         } else {
-            return redirect('nidpayreport');
+            return redirect('xlsx');
         }
 
     }

@@ -116,6 +116,14 @@
               </p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="{{url('hrservice')}}" class="nav-link">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+               HR service
+              </p>
+            </a>
+          </li>
 
        
           <li class="nav-item">

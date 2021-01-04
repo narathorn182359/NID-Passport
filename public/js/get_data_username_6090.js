@@ -98,8 +98,6 @@ $(document).ready(function () {
             $("#departmentText").val(data.Department);
             $("#positionText").val(data.Position);
             $("#companyText").val(data.Company);
-
-            console.log(data);
         });
     });
 });

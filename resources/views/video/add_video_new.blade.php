@@ -1,12 +1,9 @@
 @extends('layouts.app')
 @section('content')
-
-
 <a href="{{url('/addnew_list')}}">ย้อนกลับ</a>
 <br>
 <br>
 <div class="row">
-
     <div class="col-lg-6">
       <!-- Basic Card Example -->
       <div class="card shadow mb-4">

@@ -289,13 +289,12 @@ Route::middleware('auth:api')->post('/getkm360list', function (Request $request)
 });
 
 Route::middleware('auth:api')->post('/getkm360list_search', function (Request $request) {
-
     $user = $request->user();
     $data = $request->json()->all();
     $json = DB::table('ngg_km_category_detail')
         ->leftJoin('ngg_km_img_category_detail', 'ngg_km_category_detail.id', 'ngg_km_img_category_detail.id_km_detail')
         ->Where('km_title', 'LIKE', '%' . $data['value'] . '%')
-        ->select('id', 'km_title', 'km_remark', 'km_name_img', 'created_at')
+        ->select('id', 'km_title', 'km_remark', 'km_name_img', 'created_at','img')
         ->get();
     return response()->json($json);
 });
@@ -444,7 +443,7 @@ Route::middleware('auth:api')->post('/getProduct_list', function (Request $reque
     $json = DB::table('ngg_km_category_detail')
         ->leftJoin('ngg_km_img_category_detail', 'ngg_km_category_detail.id', 'ngg_km_img_category_detail.id_km_detail')
         ->where('km_separate_id', $data['id'])
-        ->select('id', 'km_separate_id', 'km_title', 'id_km_cat', 'km_name_img')
+        ->select('id', 'km_separate_id', 'km_title', 'id_km_cat', 'img')
         ->get();
     return response()->json($json);
 
@@ -2099,12 +2098,12 @@ Route::middleware('auth:api')->get('/getstaffteam', function (Request $request) 
  
   
     $sub = number_format( $data_kpi_team , 2 );
-    $per = $data_kpi_team /100;
+    $per = $data_kpi_team / 100;
 
    $data  = array(
        'sum' => $sub,
        'per' => (double)number_format($per,2),
-       'kpi' =>$kpiteam,
+       'kpi' => $kpiteam,
        'target' =>  (double)$dat->target_month,
        
       
@@ -2118,10 +2117,121 @@ Route::middleware('auth:api')->get('/getstaffteam', function (Request $request) 
 
 });
 
+Route::middleware('auth:api')->post('/getpdfpay', function (Request $request) {
+    $user = $request->user();
+    $data_1 = $request->json()->all();
+
+    if($data_1['value'] == 'รายจ่าย'){
+
+        $sub_1 = explode(",", $data_1['date']);
+        $sub_t1 = explode(" ", $sub_1[0]);
+        $sub_t2 = explode(" ", $sub_1[1]);
+                $date_sub_1 = strtotime(substr($sub_t1[0],1));
+                $date_sub_2 = strtotime($sub_t2[1]);
+                $date_1 = date('Y-m-d', $date_sub_1);
+                $date_2 = date('Y-m-d', $date_sub_2);
+        $nidpay =  DB::table('ngg_card_wallet')
+        ->leftJoin('ngg_card_wallet_use', 'ngg_card_wallet.CardNo_W', 'ngg_card_wallet_use.CardNo')
+        ->whereBetween('datetime', [$date_1, $date_2])
+        ->where('EmpCode',$user->username)
+        ->get();
+        $data = array(
+            'nidpay' => $nidpay,
+            'date_2' => $date_2,
+            'date_1' => $date_1
+    
+         );
+    
+        $pdf = PDF::loadView('pdf.nippay', $data);
+        $content = $pdf->download()->getOriginalContent();
+        $fileName =  time().$user->username .'.' . 'pdf' ;
+        file_put_contents('pdf/'.$fileName, $content);
+
+        return response()->json([
+            'status' => 200,
+            'date' =>  $date_1,
+            'date2' => $date_2,
+            'file' =>    $fileName
+        ]);
+    
+    }else{
+
+        $sub_1 =  explode(",", $data_1['date']);
+        $sub_t1 = explode(" ", $sub_1[0]);
+        $sub_t2 = explode(" ", $sub_1[1]);
+                $date_sub_1 = strtotime(substr($sub_t1[0],1));
+                $date_sub_2 = strtotime($sub_t2[1]);
+                $date_1 = date('Y-m-d', $date_sub_1);
+                $date_2 = date('Y-m-d', $date_sub_2);
+        $nidpay =  DB::table('ngg_card_wallet')
+        ->leftJoin('ngg_card_wallet_add', 'ngg_card_wallet.CardNo_W', 'ngg_card_wallet_add.CardNo')
+        ->whereBetween('datetime', [$date_1, $date_2])
+        ->where('EmpCode',$user->username)
+        ->get();
+        $data = array(
+            'nidpay' => $nidpay,
+            'date_2' => $date_2,
+            'date_1' => $date_1
+    
+         );
+    
+        $pdf = PDF::loadView('pdf.nippayadd', $data);
+        $content = $pdf->download()->getOriginalContent();
+        $fileName =  time().$user->username .'.' . 'pdf' ;
+        file_put_contents('pdf/'.$fileName, $content);
+
+        return response()->json([
+            'status' => 200,
+            'date' =>  $date_1,
+            'date2' => $date_2,
+            'file' =>    $fileName
+        ]);
 
 
 
-Route::post('resetpasswordissue', 'Api\RegisterController@resetpasswordissue');
+
+  return response()->json([
+            'status' => 200,
+            'date' =>  $date_1,
+            'date2' => $date_2,
+            'file' =>    $fileName
+        ]);
+
+    }
+   
+});
+
+
+
+
+Route::middleware('auth:api')->get('/gethrservice', function (Request $request) {
+
+    $user = $request->user();
+    $kpiuser = DB::table('hrsevices')
+    ->get();
+    return response()->json($kpiuser);
+});
+
+Route::middleware('auth:api')->post('/gethrservicelist', function (Request $request) {
+    $data = $request->json()->all();
+    $user = $request->user();
+    $hrsevices_detail = DB::table('hrsevices_detail')
+    ->where('type_id',$data['id'])
+    ->get();
+    return response()->json($hrsevices_detail);
+});
+
+Route::middleware('auth:api')->post('/get_detail_hrservice', function (Request $request) {
+    $data = $request->json()->all();
+    $user = $request->user();
+    $hrsevices_detail = DB::table('hrsevices_detail')
+    ->where('id',$data['id'])
+    ->get();
+    return response()->json($hrsevices_detail);
+});
+
+
+
 
 
 

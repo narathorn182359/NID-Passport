@@ -4,9 +4,34 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use PDF;
-
+use Auth;
 class PDFController extends Controller
 {
+
+  /*   public function reportnidpay(Request $request){
+
+      
+        $nidpay =  DB::table('ngg_card_wallet')
+        ->leftJoin('ngg_card_wallet_use', 'ngg_card_wallet.CardNo_W', 'ngg_card_wallet_use.CardNo')
+        //->whereBetween('datetime', [$date_1, $date_2])
+        ->where('EmpCode','94018')
+        ->get();
+        $data = array(
+
+            'nidpay' => $nidpay,
+
+          );
+
+        $pdf = PDF::loadView('pdf.nippay', $data);
+        $content = $pdf->download()->getOriginalContent();
+        $fileName =  $user->username .'pdf' ;
+        file_put_contents('pdf/nippay.pdf', $content);
+        return response()->json([
+            'status' => 200,
+            'file' =>   $fileName
+        ]);
+
+    } */
 
     public function evaluation($code_staff, $degree)
     {
