@@ -226,6 +226,21 @@ Route::get('file-upload', 'FileController@index');
 
 Route::post('file-upload/upload', 'FileController@upload')->name('upload');
 
+Route::get('indexhrservice', 'HRserviceController@indexhrservice');
+
+Route::get('getdetailservice/{id}','HRserviceController@getdetailservice');
+
+Route::post('alldataheadhrservice', 'HRserviceController@alldataheadhrservice')->name('alldataheadhrservice');
+
+Route::post('alldatadetailhrservice', 'HRserviceController@alldatadetailhrservice')->name('alldatadetailhrservice');
+Route::post('save-xl-headhrservice', 'HRserviceController@savexlheadhrservice')->name('savexlheadhrservice');
+Route::get('getdataheadhrservice/{id}', 'HRserviceController@getdataheadhrservice')->name('getdataheadhrservice');
+Route::post('deleteheadhrservice', 'HRserviceController@deleteheadhrservice')->name('deleteheadhrservice');
+Route::post('ckeditor/upload', 'HRserviceController@upload')->name('ckeditor.upload');
+Route::post('save-xl-detailhrservice', 'HRserviceController@savexldetailhrservice')->name('savexldetailhrservice');
+
+Route::post('deletedetailservice','HRserviceController@deletedetailservice')->name('deletedetailservice');
+
 Route::get('/demo', function () {
 
     $month = array(
