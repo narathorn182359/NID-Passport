@@ -249,10 +249,15 @@
       $('.select2').select2();
       // Replace the <textarea id="editor1"> with a CKEditor
       // instance, using default configuration.
-      CKEDITOR.replace('explain')
-      //bootstrap WYSIHTML5 - text editor
-      CKEDITOR.replace('km_important')
-
+     
+      CKEDITOR.replace('km_important',  {
+          filebrowserUploadUrl: "{{route('ckeditor.upload', ['_token' => csrf_token() ])}}",
+          filebrowserUploadMethod: 'form'
+      });
+      CKEDITOR.replace('explain',  {
+          filebrowserUploadUrl: "{{route('ckeditor.upload', ['_token' => csrf_token() ])}}",
+          filebrowserUploadMethod: 'form'
+      });
     })
   </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.js"></script>
