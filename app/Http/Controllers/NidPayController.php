@@ -71,6 +71,7 @@ class NidPayController extends Controller
                         'prevBalance' => $request->nid_PrevBalance,
                         'docTime' => $request->nid_DocTime,
                         'docDate' => $request->nid_DocDate,
+                        'cashierCode' => $request->nid_CashierCode,
                         'datetime' => date("Y-m-d"),
                     ]);
                     DB::table('ngg_card_wallet')
@@ -91,6 +92,7 @@ class NidPayController extends Controller
                         'prevBalance' => $request->nid_PrevBalance,
                         'docTime' => $request->nid_DocTime,
                         'docDate' => $request->nid_DocDate,
+                        'cashierCode' => $request->nid_CashierCode,
                         'datetime' => date("Y-m-d"),
                     ]);
                     DB::table('ngg_card_wallet')
@@ -121,6 +123,7 @@ class NidPayController extends Controller
                         'prevBalance' => $request->nid_PrevBalance,
                         'docTime' => $request->nid_DocTime,
                         'docDate' => $request->nid_DocDate,
+                        'cashierCode' => $request->nid_CashierCode,
                         'datetime' => date("Y-m-d"),
                     ]);
                     DB::table('ngg_card_wallet')
@@ -142,6 +145,7 @@ class NidPayController extends Controller
                         'prevBalance' => $request->nid_PrevBalance,
                         'docTime' => $request->nid_DocTime,
                         'docDate' => $request->nid_DocDate,
+                        'cashierCode' => $request->nid_CashierCode,
                         'datetime' => date("Y-m-d"),
                     ]);
                     DB::table('ngg_card_wallet')
@@ -173,6 +177,7 @@ class NidPayController extends Controller
                     'prevBalance' => $request->nid_PrevBalance,
                     'docTime' => $request->nid_DocTime,
                     'docDate' => $request->nid_DocDate,
+                    'cashierCode' => $request->nid_CashierCode,
                     'datetime' => date("Y-m-d"),
                 ]);
                 DB::table('ngg_card_wallet')
@@ -194,6 +199,7 @@ class NidPayController extends Controller
                     'prevBalance' => $request->nid_PrevBalance,
                     'docTime' => $request->nid_DocTime,
                     'docDate' => $request->nid_DocDate,
+                    'cashierCode' => $request->nid_CashierCode,
                     'datetime' => date("Y-m-d"),
                 ]);
                 DB::table('ngg_card_wallet')
@@ -438,17 +444,21 @@ class NidPayController extends Controller
                 ->leftJoin('ngg_card_wallet_use', 'ngg_card_wallet.CardNo_W', 'ngg_card_wallet_use.CardNo')
                 ->whereBetween('datetime', [$date_1, $date_2])
                 ->where('EmpCode',$request->EmpCode)
+                ->where('cashierCode',$request->point)
                 ->get();
                 $get_add = DB::table('ngg_card_wallet')
                 ->leftJoin('ngg_card_wallet_add', 'ngg_card_wallet.CardNo_W', 'ngg_card_wallet_add.CardNo')
                 ->whereBetween('datetime', [$date_1, $date_2])
                 ->where('EmpCode',$request->EmpCode)
+
                 ->get();
 
             }else{
+               // dd();
                 $get = DB::table('ngg_card_wallet')
                 ->leftJoin('ngg_card_wallet_use', 'ngg_card_wallet.CardNo_W', 'ngg_card_wallet_use.CardNo')
                 ->whereBetween('datetime', [$date_1, $date_2])
+                ->where('cashierCode',$request->point)
                 ->get();
                 $get_add = DB::table('ngg_card_wallet')
                 ->leftJoin('ngg_card_wallet_add', 'ngg_card_wallet.CardNo_W', 'ngg_card_wallet_add.CardNo')
@@ -459,14 +469,22 @@ class NidPayController extends Controller
             $users_total = DB::table('ngg_card_wallet')
             ->leftJoin('ngg_card_wallet_use', 'ngg_card_wallet.CardNo_W', 'ngg_card_wallet_use.CardNo')
             ->whereBetween('datetime', [$date_1, $date_2])
+            ->where('cashierCode',$request->point)
             ->select('EmpCode')->distinct()->get();
-            
+
             $data = array();
             $i=1;
+            $name_p='null';
+            if($request->point == '001'){
+                $name_p = 'ร้านค้า#001#อาหาร';
+            }else{
+                $name_p = 'ร้านค้า#001#เครื่องดื่ม';
+            }
             foreach ($get as $result) {
 
                if($get->count() == $i){
                 $data[] = array(
+                    'ร้าน'=>  $name_p,
                     'รหัสพนักงาน' => $result->EmpCode,
                     'ชื่อ-สกุล' => $result->MemName,
                     'บริษัท' => $result->CardTypeCode,
@@ -481,6 +499,7 @@ class NidPayController extends Controller
                 );
                }else{
                 $data[] = array(
+                    'ร้าน'=>  $name_p,
                     'รหัสพนักงาน' => $result->EmpCode,
                     'ชื่อ-สกุล' => $result->MemName,
                     'บริษัท' => $result->CardTypeCode,
@@ -494,7 +513,7 @@ class NidPayController extends Controller
 
                 );
                }
-               
+
                 $i++;
 
             }
@@ -509,7 +528,7 @@ class NidPayController extends Controller
 
             } */
 
-            
+
             return Excel::create('รายการอาหารวันที '.$request->reservation, function ($excel) use ($data) {
                 $excel->sheet('mySheet', function ($sheet) use ($data) {
                     $sheet->fromArray($data);
