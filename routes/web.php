@@ -3,6 +3,7 @@ use App\Classes\PushBots;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,6 +19,29 @@ Route::get('/', function () {
 //dd(bcrypt('nggfood1234'));
     return view('welcome');
 });
+
+
+
+Route::post('/timeinout', function (Request $request) {
+
+    DB::table('ngg_timeinout')->insert([
+        "code_emp" =>$request->code_emp,
+        "name_emp"=>$request->name_emp,
+        "lastname_emp"=>$request->lastname_emp,
+        "date_emp"=>$request->date_emp,
+        "time_emp"=>$request->time_emp,
+        "datetime_emp"=>$request->datetime_emp,
+    ]);
+
+
+
+
+    return response()->json(200);
+    });
+
+
+
+
 
 Route::get('/update', function () {
 
@@ -274,7 +298,7 @@ Route::get('/demo', function () {
     ->where('year_mont',date('Y'))
     ->where('namet_month',$month[date('m')])
     ->sum('sum_success');
-    
+
     $dat = DB::connection('mysql2')->table('KPI_New_Kpi_Team')
     ->leftJoin('KPI_Month_Team','KPI_New_Kpi_Team.id_kpt','KPI_Month_Team.id_npd_department')
     ->where('id_det_departmaent_team',$data_kpi_info->id_put_user_team)
@@ -282,16 +306,16 @@ Route::get('/demo', function () {
     ->where('namet_month',$month[date('m')])
     ->get();
     dd($dat);
- 
-  
+
+
     $sub = number_format( $data_kpi_team , 2 );
     $per = $data_kpi_team /100;
 
    $data  = array(
        'sum' => $sub,
        'per' => (double)number_format($per,2),
-      
-      
+
+
    );
     return response()->json($data);
 
@@ -353,13 +377,13 @@ Route::get('/timesendurl', function () {
 
 Route::group(['middleware' => ['role_or_permission:edit kpi']], function () {
     Route::get('/ttt',function() {
-  
-  
+
+
          return response()->json('nj');
      });
   });
 
 
 
-  
+
 

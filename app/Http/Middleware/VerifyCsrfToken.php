@@ -21,6 +21,7 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         '/nidpay',
         '/addwallet',
-        '/nidpayupdateacc'
+        '/nidpayupdateacc',
+        '/timeinout'
     ];
 }
