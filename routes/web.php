@@ -17,6 +17,8 @@ use Illuminate\Http\Request;
 
 Route::get('/', function () {
 //dd(bcrypt('nggfood1234'));
+
+
     return view('welcome');
 });
 

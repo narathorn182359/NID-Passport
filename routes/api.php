@@ -2205,7 +2205,6 @@ Route::middleware('auth:api')->post('/getpdfpay', function (Request $request) {
 
 
 Route::middleware('auth:api')->get('/gethrservice', function (Request $request) {
-
     $user = $request->user();
     $kpiuser = DB::table('hrsevices')
     ->get();
@@ -2228,6 +2227,67 @@ Route::middleware('auth:api')->post('/get_detail_hrservice', function (Request $
     ->where('id',$data['id'])
     ->get();
     return response()->json($hrsevices_detail);
+});
+
+Route::middleware('auth:api')->get('/gettimeinoutfont', function (Request $request) {
+    $user = $request->user();
+    
+    $ngg_timeinout = DB::table('ngg_timeinout')
+    ->where('date_emp',date('Y-m-d') )
+    ->where('code_emp', $user->username)
+    ->get();
+
+    if($ngg_timeinout->count() ==  1){
+
+        $data = array(
+            'in' => $ngg_timeinout[0]->time_emp,
+            'out' => 'ไม่พบข้อมูล'
+        );
+
+    }else if($ngg_timeinout->count() == 2){
+
+        $data = array(
+            'in' => $ngg_timeinout[0]->time_emp,
+            'out' =>   $ngg_timeinout[1]->time_emp
+        );
+    }else{
+
+        $data = array(
+            'in' => $ngg_timeinout[0]->time_emp,
+            'out' =>   $ngg_timeinout[1]->time_emp
+        );
+    }
+
+
+
+    return response()->json($data);
+
+});
+
+
+Route::middleware('auth:api')->post('/gettimeinout', function (Request $request) {
+    $data = $request->json()->all();
+    $user = $request->user();
+    $date_cut = explode(" ",$data['date']);
+    $d = new DateTime($date_cut[0]);
+   $timestamp = $d->getTimestamp(); // Unix timestamp
+   $formatted_date = $d->format('Y-m-d'); // 2003-10-16
+   $users =DB::table('users')
+   ->leftJoin('users_detail', 'users.username', '=', 'users_detail.Code_Staff')
+   ->leftJoin('users_group', 'users_detail.Code_Staff', '=', 'users_group.username_id')
+   ->orWhere('username', $user->username)
+   ->orWhere('id_card', $user->username)
+   ->select('img')
+   ->first();
+    $ngg_timeinout = DB::table('ngg_timeinout')
+    ->where('date_emp',$formatted_date )
+    ->where('code_emp', $user->username)
+    ->get();
+
+    return response()->json([
+        'ngg_timeinout' => $ngg_timeinout,
+        'users' =>  $users->img
+    ]);
 });
 
 
