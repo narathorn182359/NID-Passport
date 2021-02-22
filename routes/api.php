@@ -281,8 +281,7 @@ Route::middleware('auth:api')->post('/getkm360list', function (Request $request)
     $json = DB::table('ngg_km_category_detail')
         ->leftJoin('ngg_km_img_category_detail', 'ngg_km_category_detail.id', 'ngg_km_img_category_detail.id_km_detail')
         ->Where('id_km_cat', $data['id'])
-
-        ->select('id', 'id_km_cat', 'km_title', 'km_separate_id', 'km_name_img')
+        ->select('id', 'id_km_cat', 'km_title', 'km_separate_id', 'km_name_img','img')
         ->get();
 
     return response()->json($json);
