@@ -15,15 +15,9 @@ use Illuminate\Http\Request;
 |
  */
 
-Route::get('/', function () {
-//dd(bcrypt('nggfood1234'));
 
 
-    return view('auth.login');
-});
-
-
-
+Route::get('/', 'HomeController@index');
 Route::post('/timeinout', function (Request $request) {
 
     DB::table('ngg_timeinout')->insert([
