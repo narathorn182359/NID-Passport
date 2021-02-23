@@ -19,7 +19,7 @@ Route::get('/', function () {
 //dd(bcrypt('nggfood1234'));
 
 
-    return view('welcome');
+    return view('auth.login');
 });
 
 
@@ -386,6 +386,11 @@ Route::group(['middleware' => ['role_or_permission:edit kpi']], function () {
   });
 
 
+  Route::get('/indexkmuser', 'Km360Controller@index')->name('indexkmuser');
 
+  Route::get('/indexkmlistuser/{id}', 'Km360Controller@indexkmlistuser')->name('indexkmlistuser');
 
+  Route::get('/indexkmdetailseparate/{id}', 'Km360Controller@indexkmdetailseparate')->name('indexkmdetailseparate');
 
+  Route::get('/indexkmdetailseparategroup/{id}', 'Km360Controller@indexkmdetailseparategroup')->name('indexkmdetailseparategroup');
+  

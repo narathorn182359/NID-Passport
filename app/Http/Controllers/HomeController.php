@@ -28,12 +28,15 @@ class HomeController extends Controller
      */
     public function index()
     {
+
+        $count_km =  DB::table('ngg_km_category_detail')->count();
         $listmenu = DB::table('user_role')
             ->leftJoin('menu_master', 'user_role.name_menu_id', '=', 'menu_master.id')
             ->where('username_id', Auth::user()->username)
             ->get();
         $data = array(
             'listmenu' => $listmenu,
+            'count_km' =>    $count_km
         );
         return view('home', $data);
     }

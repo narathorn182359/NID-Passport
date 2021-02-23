@@ -47,7 +47,7 @@
   border: 1px solid #ddd;
   border-radius: 4px;
   padding: 5px;
-  width: 150px;
+
 }
 </style>
 <style>
@@ -73,7 +73,7 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="{{url('/')}}" class="brand-link">
+    <a href="{{url('/home')}}" class="brand-link">
     <img src="{{url('/imgnew/Logo_NID.png')}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
            style="opacity: .8">
       <span class="brand-text font-weight-light">NiD</span>
@@ -87,7 +87,7 @@
 
         </div>
         <div class="info">
-          <a href="#" class="d-block">ยินดีตอนรับ</a>
+          <a href="{{url('/home')}}" class="d-block">ยินดีตอนรับ</a>
 
         </div>
       </div>
@@ -107,7 +107,7 @@
               </a>
             </li>
           @endforeach
-
+          @role('Admin')
           <li class="nav-item">
             <a href="file-upload" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
@@ -124,6 +124,9 @@
               </p>
             </a>
           </li>
+          @endrole
+
+     
 
        
           <li class="nav-item">
